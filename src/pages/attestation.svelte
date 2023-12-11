@@ -38,7 +38,7 @@ Loading...
         gap: 1em;
     }
     .attestation {
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #ccc;
         padding-block: 1em;
     }
     .attestation__title {
