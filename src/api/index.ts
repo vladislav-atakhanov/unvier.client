@@ -1,9 +1,10 @@
+import type { Attestation } from "../@types"
 import { api } from "./config"
 import { getToken, isAuth, refreshToken } from "./token"
 
 export { login, refreshToken, isAuth } from "./token"
 
-const authFetch = async (path: string) => {
+const authFetch = async <T>(path: string): Promise<T | null> => {
     while (1) {
         try {
             const accessToken = await getToken()
@@ -19,15 +20,8 @@ const authFetch = async (path: string) => {
             }
         }
     }
+    return null
 }
 
-export const getAttestation = async () => {
-    const attestation = await authFetch(api("/api/attestation"))
-    return attestation as {
-        subject: string
-        summary: {
-            title: string
-            value: number
-        }[]
-    }[]
-}
+export const getAttestation = () =>
+    authFetch<Attestation[]>(api("/api/attestation"))

@@ -11,11 +11,11 @@
 
 <div class="attestations__container container">
 {#if attestation}
-    {#each attestation as {subject, summary} (subject)}
+    {#each attestation as {subject, attestation} (subject)}
         <section class="attestation">
             <h2 class="attestation__title">{subject}</h2>
             <ul class="attestation__summary">
-                {#each summary as {title, value} (title)}
+                {#each attestation as {title, value} (title)}
                 <li class="summary">
                     <span class="summary__title">{title}</span>
                     <span class="summary__value">{value}</span>
