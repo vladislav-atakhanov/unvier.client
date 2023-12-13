@@ -1,0 +1,31 @@
+{
+    "theme_color": "#7f67be",
+    "background_color": "#fff",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "name": "Univer",
+    "short_name": "Univer",
+    "icons": [
+        {
+            "src": "images/icons/64.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        },
+        {
+            "src": "images/icons/128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "images/icons/192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "images/icons/512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

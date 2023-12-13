@@ -1,21 +1,34 @@
 <script>
 	import { login, refreshToken } from "../api"
-	let username = "atakhanov.vladislav"
+    import { onMount } from "svelte"
+	let username = ""
 	let password = ""
 	let error = ""
 
+    let sent = false
+
 	const onSubmit = async () => {
-		try {
-			await login(username, password)
+        try {
+            sent = true
+            error = ""
+            await login(username, password)
+            localStorage.setItem("username", username)
 		} catch (e) {
-			error = "Неверный логин или пароль"
+            error = "Неверный логин или пароль"
 		} finally {
-			// username = ""
-			// password = ""
+            sent = false
 		}
 	}
 
+    onMount(() => {
+        const localUsername = localStorage.getItem("username")
+        if (username.length < 1 && localUsername)
+            username = localUsername
+    })
+
+
 	$: active = username.length && password.length
+    $: disabled = sent ? true : !active
 </script>
 
 <div class="container login__container">
@@ -31,9 +44,8 @@
 		{#if error}
 			<p class="error">{error}</p>
 		{/if}
-		<button type="submit" disabled={!active}>Войти</button>
+		<button type="submit" {disabled}>Войти</button>
 	</form>
-    <button type="" on:click={refreshToken}>Войти</button>
 </div>
 
 <style>

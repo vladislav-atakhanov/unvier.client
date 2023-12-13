@@ -1,21 +1,26 @@
 {
-  "name": "client",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
-  },
-  "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^3.0.0",
-    "@tsconfig/svelte": "^5.0.2",
-    "svelte": "^4.2.3",
-    "svelte-check": "^3.6.0",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.0"
-  }
+    "name": "client",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "check": "svelte-check --tsconfig ./tsconfig.json"
+    },
+    "devDependencies": {
+        "@sveltejs/vite-plugin-svelte": "^3.0.0",
+        "@tsconfig/svelte": "^5.0.2",
+        "svelte": "^4.0.5",
+        "svelte-check": "^3.6.0",
+        "tslib": "^2.6.2",
+        "typescript": "^5.2.2",
+        "vite": "^5.0.0",
+        "vite-plugin-pwa": "^0.17.4"
+    },
+    "dependencies": {
+        "material": "file:../../material",
+        "svelte-routing": "^2.10.0"
+    }
 }

@@ -1,7 +1,12 @@
-import type { Attestation } from "../@types"
-import { authFetch } from "./auth-fetch"
-import { api } from "./config"
-export { login, refreshToken, isAuth } from "./token"
+export { login, refreshToken, logout, isAuth } from "./auth"
+import { createFetchData, createUseData } from "./data"
 
-export const getAttestation = () =>
-    authFetch<Attestation[]>(api("/api/attestation"))
+import type { Attestation, Schedule } from "../@types"
+import { ATTESTATION_KEY, SCHEDULE_KEY } from "./local-storage"
+
+export const fetchAttestation =
+    createFetchData<Attestation[]>("/api/attestation")
+export const useAttestation = createUseData(fetchAttestation, ATTESTATION_KEY)
+
+export const fetchSchedule = createFetchData<Schedule>("/api/schedule")
+export const useSchedule = createUseData(fetchSchedule, SCHEDULE_KEY)
