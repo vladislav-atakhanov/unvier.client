@@ -23,14 +23,22 @@
         document.activeElement?.blur()
     }
 
+    let isMount = false
     onMount(() => {
         const localWish = localStorage.getItem(WISH_KEY)
         if (wishString === DEFAULT_WISH && localWish) wishString = localWish
+        isMount = true
     })
 
-    $: wishString === DEFAULT_WISH
-        ? localStorage.removeItem(WISH_KEY)
-        : localStorage.setItem(WISH_KEY, wishString)
+    /** @param {string} wish*/
+    const setWish = (wish) => {
+        if (isMount === false) return
+        wish === DEFAULT_WISH
+            ? localStorage.removeItem(WISH_KEY)
+            : localStorage.setItem(WISH_KEY, wishString)
+    }
+
+    $: setWish(wishString)
 </script>
 
 <Scaffold>
