@@ -24,25 +24,45 @@
         )
         return sum >= 100 && isLastIndex(marks, i)
     }
+
+    export const getTotal = (marks: Attestation["attestation"]) => {
+        const examWeight = 0.4
+        const exam = marks.at(-1)?.value || 0
+        const otherSum = marks
+            .slice(0, -1)
+            .reduce((sum, { value }) => sum + value, 0)
+        return Math.round(
+            exam * examWeight +
+                (otherSum * (1 - examWeight)) / (marks.length - 1),
+        )
+    }
 </script>
 
 {#each attestation as { subject, attestation: _attestation }, index (subject)}
+    {@const total = getTotal(_attestation)}
     <section class="attestation">
         <h2 class="attestation__title">{subject}</h2>
         <ul class="attestation__summary">
             {#each _attestation as { title, value }, i (title)}
                 <li class="summary">
-                    <p>
+                    <p class="summary__label">
                         <span class="summary__title">{title}:</span>
                         <span class="summary__value">{value}</span>
                     </p>
-                    <p class="summary__wish">
-                        {#if needShow(_attestation, i)}
+                    {#if needShow(_attestation, i)}
+                        <p class="summary__wish">
                             (+{getNeed(_attestation, wish)})
-                        {/if}
-                    </p>
+                        </p>
+                    {/if}
                 </li>
             {/each}
+            <li class="summary">
+                <p class="summary__label">
+                    <span class="summary__title">Итог:</span>
+                    <span class="summary__value">{total}</span>
+                </p>
+                <p class="summary__wish">(+{Math.max(wish - total, 0)})</p>
+            </li>
         </ul>
     </section>
 {/each}
@@ -54,6 +74,7 @@
         padding: 0;
         display: flex;
         gap: 1em;
+        justify-content: space-between;
     }
     .attestation {
         border-top: 1px solid var(--md-sys-color-outline);
@@ -67,10 +88,12 @@
         margin: 0;
     }
     .summary {
-        flex: 1 0 0;
         display: grid;
     }
     .summary__value {
         font-weight: bold;
+    }
+    .summary__label {
+        white-space: nowrap;
     }
 </style>
