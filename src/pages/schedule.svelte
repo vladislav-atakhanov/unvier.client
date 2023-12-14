@@ -82,8 +82,6 @@
         const maxScrollPosition =
             titles.at(-1)?.getBoundingClientRect()?.left || 0
 
-        console.log(maxScrollPosition)
-
         const translate =
             minScrollPosition +
             (scrollLeft / offsetWidth) * (maxScrollPosition - minScrollPosition)
@@ -96,12 +94,19 @@
         slide(current)
         setLinePosition()
     }
+    let isMount = false
     onMount(() => {
         const local = localStorage.getItem("show-no-lessons")
         if (local) showNoLessons = JSON.parse(local)
-        setTimeout(setLinePosition, 100)
+        setTimeout(() => {
+            setLinePosition()
+            isMount = true
+        }, 100)
         addEventListener("resize", onResize)
-        return () => removeEventListener("resize", onResize)
+        return () => {
+            isMount = false
+            removeEventListener("resize", onResize)
+        }
     })
 </script>
 
@@ -119,7 +124,7 @@
                     ><span>{title}</span></button
                 >
             {/each}
-            <div class="line"></div>
+            <div class="line" class:line--show={isMount}></div>
         </div></AppBar
     >
     <div class="schedule">
@@ -147,7 +152,7 @@
             {/each}
         </div>
     </div>
-    <Navigation slot="navigation-bar" />
+    <Navigation on:update={schedule.update} slot="navigation-bar" />
 </Scaffold>
 
 <style>
@@ -178,8 +183,11 @@
         height: 2px;
         bottom: 5px;
         background-color: var(--md-sys-color-primary);
-        opacity: 1;
+        opacity: 0;
         left: calc(-1 * var(--padding-inline));
+    }
+    .line--show {
+        opacity: 1;
     }
     @media (width >= 760px) {
         .line {
