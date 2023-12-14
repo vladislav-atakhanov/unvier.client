@@ -8,6 +8,13 @@ export interface Attestation {
     attestation: Mark[]
 }
 
+export interface Exam {
+    date: number
+    subject: string
+    teacher: string
+    audience: string
+}
+
 export interface Lesson {
     subject: string
     teacher: string

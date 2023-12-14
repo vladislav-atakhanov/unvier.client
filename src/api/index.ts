@@ -1,12 +1,24 @@
 export { login, refreshToken, logout, isAuth } from "./auth"
 import { createFetchData, createUseData } from "./data"
 
-import type { Attestation, Schedule } from "../@types"
-import { ATTESTATION_KEY, SCHEDULE_KEY } from "./local-storage"
+import type { Attestation, Schedule, Exam } from "../@types"
+import { ATTESTATION_KEY, SCHEDULE_KEY, EXAMS } from "./local-storage"
 
-export const fetchAttestation =
-    createFetchData<Attestation[]>("/api/attestation")
-export const useAttestation = createUseData(fetchAttestation, ATTESTATION_KEY)
+export const useAttestation = createUseData(
+    createFetchData<Attestation[]>("/api/attestation"),
+    ATTESTATION_KEY
+)
 
-export const fetchSchedule = createFetchData<Schedule>("/api/schedule")
-export const useSchedule = createUseData(fetchSchedule, SCHEDULE_KEY)
+export const useExams = createUseData(
+    createFetchData<Exam[]>("/api/exams"),
+    EXAMS
+)
+
+export const useSchedule = createUseData(
+    createFetchData<Schedule>("/api/schedule"),
+    SCHEDULE_KEY,
+    (schedule) => {
+        if (!schedule) return false
+        return schedule.lessons.length > 0
+    }
+)

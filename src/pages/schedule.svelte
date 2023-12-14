@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { Scaffold, AppBar } from "material/components"
+    import { Scaffold, AppBar, IconButton } from "material/components"
     import Navigation from "../components/navigation.svelte"
     import LoadingText from "../components/loading-text.svelte"
     import { useSchedule } from "../api"
     import { onMount } from "svelte"
     import type { Schedule } from "../@types"
+    import { EXAMS } from "../url"
 
     const [schedule, loading] = useSchedule()
     const DAYS = [
@@ -63,11 +64,12 @@
 
     let header: HTMLElement
     const setLinePosition = () => {
+        if (!header) return
         const line = header.querySelector(".line") as HTMLElement
         const titles = Array.from(
             header.querySelectorAll(".header__week span"),
         ) as HTMLElement[]
-        const { scrollLeft, offsetWidth, offsetLeft } = weeks
+        const { scrollLeft, offsetWidth } = weeks
 
         current = weeks.scrollLeft >= innerWidth / 2
 
@@ -102,6 +104,7 @@
 <Scaffold padding={false}>
     <AppBar slot="app-bar">
         <LoadingText {loading} title="Расписание" />
+        <IconButton slot="actions" href={EXAMS} icon="playlist_add_check" />
         <div slot="bottom" class="header__weeks" bind:this={header}>
             {#each factors as { title, value }}
                 <button
@@ -244,6 +247,7 @@
     .schedule__container {
         display: grid;
         gap: 1em;
-        padding: var(--container-padding);
+        padding-inline: var(--container-padding-inline);
+        padding-block: var(--container-padding-block);
     }
 </style>

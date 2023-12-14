@@ -62,7 +62,6 @@
     .attestation__title {
         margin: 0;
         font-size: 1em;
-        padding-bottom: 1em;
     }
     p {
         margin: 0;

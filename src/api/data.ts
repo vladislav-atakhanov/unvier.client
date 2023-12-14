@@ -10,7 +10,7 @@ export const createFetchData =
         authFetch<T>(api(path))
 
 export const createUseData =
-    <T>(fetchData: () => Promise<T>, key: string) =>
+    <T>(fetchData: () => Promise<T>, key: string, check = (d: T) => !!d) =>
     (): [Readable<T | null> & { refresh: () => void }, Readable<boolean>] => {
         const { subscribe, set } = writable<T | null>(null)
         const loading = writable(true)
@@ -18,7 +18,7 @@ export const createUseData =
         const refresh = async () => {
             loading.set(true)
             const data = await fetchData()
-            if (data) {
+            if (data && check(data)) {
                 set(data)
                 localStorage.setItem(key, JSON.stringify(data))
             }
