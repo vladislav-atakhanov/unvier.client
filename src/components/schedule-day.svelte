@@ -56,6 +56,7 @@
     }
     .day--active {
         border: 1px solid var(--md-sys-color-primary);
+        background-color: var(--md-sys-color-secondary-container);
     }
     .day__nolessons {
         border-top: 1px solid var(--md-sys-color-outline);
