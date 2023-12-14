@@ -8,7 +8,7 @@
 
     const isToday = (day: number) => {
         const now = new Date()
-        return day === now.getDay()
+        return day === now.getDay() - 1
     }
 </script>
 
