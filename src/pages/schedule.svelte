@@ -6,6 +6,7 @@
     import { onMount } from "svelte"
     import type { Schedule } from "../@types"
     import { EXAMS } from "../url"
+    import ScheduleDay from "../components/schedule-day.svelte"
 
     const [schedule, loading] = useSchedule()
     const DAYS = [
@@ -89,7 +90,10 @@
         line.style.transform = `translateX(${translate}px)`
     }
 
-    const onResize = () => slide(current)
+    const onResize = () => {
+        slide(current)
+        setLinePosition()
+    }
     onMount(() => {
         const local = localStorage.getItem("show-no-lessons")
         if (local) showNoLessons = JSON.parse(local)
@@ -128,27 +132,7 @@
                                 day,
                             )}
                             {#if lessons.length > 0 || showNoLessons}
-                                <section class="day" style:order={day}>
-                                    <h2 class="day__title">{weekday}</h2>
-                                    {#each lessons as { subject, time, audience, teacher }}
-                                        <section class="lesson">
-                                            <div class="lesson__content">
-                                                <h3 class="lesson__title">
-                                                    {subject}
-                                                </h3>
-                                                <p class="lesson__audience">
-                                                    {audience}
-                                                </p>
-                                                <p class="lesson__teacher">
-                                                    {teacher}
-                                                </p>
-                                            </div>
-                                            <p class="lesson__time">{time}</p>
-                                        </section>
-                                    {:else}
-                                        <p class="nolessons">Занятий нет 🎉</p>
-                                    {/each}
-                                </section>
+                                <ScheduleDay {weekday} {day} {lessons} />
                             {/if}
                         {/each}
                     </div>
@@ -160,28 +144,8 @@
 </Scaffold>
 
 <style>
-    .day__title,
-    .lesson__title {
-        margin: 0;
-        font-size: 1em;
-        font-weight: normal;
-    }
-    .day__title {
-        padding-bottom: var(--padding);
-    }
-    .day {
-        --padding: 0.5em;
-        padding: var(--padding);
-        border: 1px solid var(--md-sys-color-outline);
-        border-radius: 5px;
-    }
     .header__weeks {
         display: flex;
-    }
-    .nolessons {
-        border-top: 1px solid var(--md-sys-color-outline);
-        padding-top: var(--padding);
-        margin: 0;
     }
     .header__week {
         margin: 0;
@@ -210,22 +174,6 @@
         opacity: 1;
         left: calc(-1 * var(--padding-inline));
     }
-    .lesson {
-        padding-block: var(--padding);
-        border-top: 1px solid var(--md-sys-color-outline);
-        display: flex;
-        gap: 1em;
-        justify-content: space-between;
-    }
-    .lesson__time {
-        white-space: nowrap;
-    }
-    .lesson__audience {
-        font-weight: bold;
-    }
-    .lesson p {
-        margin: 0;
-    }
     .weeks {
         display: flex;
         width: 100vw;
@@ -233,15 +181,22 @@
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
     }
+    @media (width >= 760px) {
+        .line {
+            display: none;
+        }
+    }
+    @media (width < 760px) {
+        .week {
+            width: 100vw;
+            flex: 100vw 0 0;
+            scroll-snap-align: start;
+        }
+    }
     .weeks::-webkit-scrollbar {
         display: none;
     }
 
-    .week {
-        width: 100vw;
-        flex: 100vw 0 0;
-        scroll-snap-align: start;
-    }
     .schedule__container {
         display: grid;
         gap: 1em;
