@@ -16,7 +16,6 @@ export const authFetch = async <T>(path: string): Promise<T | null> => {
                 }
             }
             const data = await response.json()
-            console.log(data)
             return data
         } catch (e) {
             // !!TODO show error

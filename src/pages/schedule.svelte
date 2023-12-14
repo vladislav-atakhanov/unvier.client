@@ -1,9 +1,10 @@
-<script>
+<script lang="ts">
     import { Scaffold, AppBar } from "material/components"
     import Navigation from "../components/navigation.svelte"
     import LoadingText from "../components/loading-text.svelte"
     import { useSchedule } from "../api"
     import { onMount } from "svelte"
+    import type { Schedule } from "../@types"
 
     const [schedule, loading] = useSchedule()
     const DAYS = [
@@ -15,13 +16,11 @@
         "Суббота",
         // "Воскресенье",
     ]
-    /**
-     *
-     * @param {import("../@types").Schedule | null} schedule
-     * @param {boolean} _factor
-     * @param {number} _day
-     */
-    const getLessonsByDay = (schedule, _factor, _day) => {
+    const getLessonsByDay = (
+        schedule: Schedule | null,
+        _factor: boolean,
+        _day: number,
+    ) => {
         if (!schedule || schedule.lessons.length < 1) return []
         return schedule.lessons.filter(
             ({ factor, day }) => factor === _factor && day === _day,
@@ -29,10 +28,6 @@
     }
 
     let showNoLessons = true
-    onMount(() => {
-        const local = localStorage.getItem("show-no-lessons")
-        if (local) showNoLessons = JSON.parse(local)
-    })
 
     const factors = [
         {
@@ -45,14 +40,9 @@
         },
     ]
     let current = false
-    /** @type {HTMLElement} */
-    let weeks
+    let weeks: HTMLElement
 
-    /**
-     * @param {boolean} value
-     * @param {unknown} _
-     */
-    const setFactor = (value, _) => {
+    const setFactor = (value: boolean, _: unknown) => {
         if (!weeks) return
         weeks.scrollTo({
             behavior: "smooth",
@@ -63,40 +53,66 @@
     }
     $: setFactor(!!$schedule?.factor, weeks)
 
-    /** @param {boolean} value */
-    const slide = (value) => () => {
+    const slide = (value: boolean) => () => {
         weeks.scrollTo({
             behavior: "smooth",
             left: value ? innerWidth : 0,
             top: 0,
         })
-        current = value
     }
 
-    const onScroll = () => {
-        current = weeks.scrollLeft >= innerWidth - 100
+    let header: HTMLElement
+    const setLinePosition = () => {
+        const line = header.querySelector(".line") as HTMLElement
+        const titles = Array.from(
+            header.querySelectorAll(".header__week span"),
+        ) as HTMLElement[]
+        const { scrollLeft, offsetWidth, offsetLeft } = weeks
+
+        current = weeks.scrollLeft >= innerWidth / 2
+
+        const nearTitle = titles[+current]
+        const width = nearTitle.offsetWidth
+
+        const { left } = titles[0].getBoundingClientRect()
+        const minScrollPosition = left
+        const maxScrollPosition =
+            titles.at(-1)?.getBoundingClientRect()?.left || 0
+
+        console.log(maxScrollPosition)
+
+        const translate =
+            minScrollPosition +
+            (scrollLeft / offsetWidth) * (maxScrollPosition - minScrollPosition)
+
+        line.style.width = `${width}px`
+        line.style.transform = `translateX(${translate}px)`
     }
+    onMount(() => {
+        const local = localStorage.getItem("show-no-lessons")
+        if (local) showNoLessons = JSON.parse(local)
+        setTimeout(setLinePosition, 100)
+    })
 </script>
 
 <Scaffold padding={false}>
     <AppBar slot="app-bar">
         <LoadingText {loading} title="Расписание" />
-        <div slot="bottom" class="header__weeks">
+        <div slot="bottom" class="header__weeks" bind:this={header}>
             {#each factors as { title, value }}
                 <button
                     on:click={slide(value)}
                     class="header__week"
                     class:header__week--active={current === value}
                     class:header__week--current={$schedule?.factor === value}
+                    ><span>{title}</span></button
                 >
-                    <span class="week__title">{title}</span>
-                </button>
             {/each}
-            <div></div>
+            <div class="line"></div>
         </div></AppBar
     >
     <div class="schedule">
-        <div class="weeks" bind:this={weeks} on:scrollend={onScroll}>
+        <div class="weeks" bind:this={weeks} on:scroll={setLinePosition}>
             {#each factors as { value }}
                 <div class="week">
                     <div class="schedule__container container">
@@ -173,25 +189,21 @@
         border: none;
         padding-bottom: 8px;
     }
-    .header__week span {
-        position: relative;
-    }
     .header__week--current span::before {
         content: "(т) ";
         opacity: 0.5;
     }
-    .header__week span::after {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 2px;
-        top: calc(100% + 2px);
-        background-color: var(--pallete-primary-40);
-        opacity: 0;
-        left: 0;
+    .header__weeks {
+        position: relative;
     }
-    .header__week--active span::after {
+    .line {
+        position: absolute;
+        width: 100px;
+        height: 2px;
+        bottom: 5px;
+        background-color: var(--pallete-primary-40);
         opacity: 1;
+        left: calc(-1 * var(--padding-inline));
     }
     .lesson {
         padding-block: var(--padding);
