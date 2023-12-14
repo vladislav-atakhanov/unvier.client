@@ -22,6 +22,7 @@ export const createUseData =
         const lastUpdateKey = `${key}-last-update`
 
         const update = async () => {
+            if (get(loading)) return
             loading.set(true)
             const data = await fetchData()
             loading.set(false)
