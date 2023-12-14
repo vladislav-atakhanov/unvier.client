@@ -12,18 +12,17 @@
 
     let wishString = DEFAULT_WISH
     $: wish = Math.min(100, Math.max(parseInt(wishString), 0)) || 0
+    /** @param {any} event */
     const select = (event) => {
         event.target.select()
     }
 
     onMount(() => {
         const localWish = localStorage.getItem("wish")
-        if (wishString === DEFAULT_WISH && localWish)
-            wishString = localWish
+        if (wishString === DEFAULT_WISH && localWish) wishString = localWish
     })
 
     $: wishString !== DEFAULT_WISH && localStorage.setItem("wish", wishString)
-
 </script>
 
 <Scaffold>
@@ -33,7 +32,12 @@
     <label class="wish">
         Желаемая оценка
         <span class="wish__input">
-            <input type="text" inputmode="numeric" bind:value={wishString} on:click={select} />
+            <input
+                type="text"
+                inputmode="numeric"
+                bind:value={wishString}
+                on:click={select}
+            />
             <span class="wish__value"><span>{wish}</span></span>
         </span>
     </label>
@@ -82,19 +86,18 @@
         position: relative;
     }
     .wish__value span {
-        color: transparent
+        color: transparent;
     }
     .wish__value {
         position: absolute;
         text-decoration: underline;
         right: 0;
-        transform: translateY(.1em)
+        transform: translateY(0.1em);
     }
     input:focus {
-        outline: 0
+        outline: 0;
     }
     input:focus + .wish__value {
         color: red;
     }
-
 </style>

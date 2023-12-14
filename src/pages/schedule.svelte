@@ -10,23 +10,32 @@
     const [schedule, loading] = useSchedule()
     const FACTOR = false
 
-    const DAYS = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    const DAYS = [
+        "Понедельник",
+        "Вторник",
+        "Среда",
+        "Четверг",
+        "Пятница",
+        "Суббота",
+        "Воскресенье",
+    ]
     const getLessons = (schedule, _factor) => {
-        if (!schedule || schedule.lessons.length < 1)
-            return []
-        const lessons = schedule.lessons.filter(({factor}) => factor === _factor)
+        if (!schedule || schedule.lessons.length < 1) return []
+        const lessons = schedule.lessons.filter(
+            ({ factor }) => factor === _factor,
+        )
         return groupBy(lessons, "day").entries()
     }
 
     const factors = [
         {
             value: false,
-            title: "Числитель"
+            title: "Числитель",
         },
         {
             value: true,
-            title: "Знаменатель"
-        }
+            title: "Знаменатель",
+        },
     ]
     let current = false
     let weeks
@@ -35,7 +44,7 @@
         weeks.scrollTo({
             behavior: "smooth",
             left: value ? innerWidth : 0,
-            top: 0
+            top: 0,
         })
         current = value
     }
@@ -44,7 +53,7 @@
         weeks.scrollTo({
             behavior: "smooth",
             left: value ? innerWidth : 0,
-            top: 0
+            top: 0,
         })
         current = value
     }
@@ -58,7 +67,7 @@
     <AppBar slot="app-bar">
         <LoadingText {loading} title="Расписание" />
         <div slot="bottom" class="header__weeks">
-            {#each factors as {title, value}}
+            {#each factors as { title, value }}
                 <button
                     on:click={slide(value)}
                     class="header__week"
@@ -68,39 +77,46 @@
                     <span class="week__title">{title}</span>
                 </button>
             {/each}
-        <div>
-
-    </AppBar>
+            <div></div>
+        </div></AppBar
+    >
     <div class="schedule">
         <div class="weeks" bind:this={weeks} on:scrollend={onScroll}>
-        {#each factors as {value}}
-            <div class="week">
-                <div class="schedule__container container">
-                    {#each getLessons($schedule, value) as [day, _lessons]}
-                        <section class="day" style:order={day}>
-                            <h2 class="day__title">{DAYS[day]}</h2>
-                            {#each _lessons as {subject, time, audience, teacher}}
-                                <section class="lesson">
-                                    <div class="lesson__content">
-                                        <h3 class="lesson__title">{subject}</h3>
-                                        <p class="lesson__audience">{audience}</p>
-                                        <p class="lesson__teacher">{teacher}</p>
-                                    </div>
-                                    <p class="lesson__time">{time}</p>
-                                </section>
-                            {/each}
-                        </section>
-                    {/each}
+            {#each factors as { value }}
+                <div class="week">
+                    <div class="schedule__container container">
+                        {#each getLessons($schedule, value) as [day, _lessons]}
+                            <section class="day" style:order={day}>
+                                <h2 class="day__title">{DAYS[day]}</h2>
+                                {#each _lessons as { subject, time, audience, teacher }}
+                                    <section class="lesson">
+                                        <div class="lesson__content">
+                                            <h3 class="lesson__title">
+                                                {subject}
+                                            </h3>
+                                            <p class="lesson__audience">
+                                                {audience}
+                                            </p>
+                                            <p class="lesson__teacher">
+                                                {teacher}
+                                            </p>
+                                        </div>
+                                        <p class="lesson__time">{time}</p>
+                                    </section>
+                                {/each}
+                            </section>
+                        {/each}
+                    </div>
                 </div>
-            </div>
-        {/each}
+            {/each}
         </div>
     </div>
     <Navigation slot="navigation-bar" />
 </Scaffold>
 
 <style>
-    .day__title, .lesson__title {
+    .day__title,
+    .lesson__title {
         margin: 0;
         font-size: 1em;
         font-weight: normal;
@@ -109,7 +125,7 @@
         padding-bottom: var(--padding);
     }
     .day {
-        --padding: .5em;
+        --padding: 0.5em;
         padding: var(--padding);
         border: 1px solid var(--md-sys-color-outline);
         border-radius: 5px;
@@ -129,7 +145,7 @@
         padding-bottom: 8px;
     }
     .header__week span {
-        position: relative
+        position: relative;
     }
     .header__week--current span::before {
         content: "(т) ";
@@ -183,6 +199,6 @@
     .schedule__container {
         display: grid;
         gap: 1em;
-        padding: var(--container-padding)
+        padding: var(--container-padding);
     }
 </style>
