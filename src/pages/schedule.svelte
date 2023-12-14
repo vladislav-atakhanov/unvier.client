@@ -1,15 +1,11 @@
 <script>
-    import { onMount } from "svelte"
     import { Scaffold, AppBar } from "material/components"
     import Navigation from "../components/navigation.svelte"
     import LoadingText from "../components/loading-text.svelte"
     import { useSchedule } from "../api"
-    import { groupBy } from "../utils"
-    import { get } from "svelte/store"
+    import { onMount } from "svelte"
 
     const [schedule, loading] = useSchedule()
-    const FACTOR = false
-
     const DAYS = [
         "Понедельник",
         "Вторник",
@@ -17,15 +13,26 @@
         "Четверг",
         "Пятница",
         "Суббота",
-        "Воскресенье",
+        // "Воскресенье",
     ]
-    const getLessons = (schedule, _factor) => {
+    /**
+     *
+     * @param {import("../@types").Schedule | null} schedule
+     * @param {boolean} _factor
+     * @param {number} _day
+     */
+    const getLessonsByDay = (schedule, _factor, _day) => {
         if (!schedule || schedule.lessons.length < 1) return []
-        const lessons = schedule.lessons.filter(
-            ({ factor }) => factor === _factor,
+        return schedule.lessons.filter(
+            ({ factor, day }) => factor === _factor && day === _day,
         )
-        return groupBy(lessons, "day").entries()
     }
+
+    let showNoLessons = true
+    onMount(() => {
+        const local = localStorage.getItem("show-no-lessons")
+        if (local) showNoLessons = JSON.parse(local)
+    })
 
     const factors = [
         {
@@ -38,8 +45,14 @@
         },
     ]
     let current = false
+    /** @type {HTMLElement} */
     let weeks
-    const setFactor = (value) => {
+
+    /**
+     * @param {boolean} value
+     * @param {unknown} _
+     */
+    const setFactor = (value, _) => {
         if (!weeks) return
         weeks.scrollTo({
             behavior: "smooth",
@@ -48,7 +61,9 @@
         })
         current = value
     }
-    $: setFactor($schedule?.factor, weeks)
+    $: setFactor(!!$schedule?.factor, weeks)
+
+    /** @param {boolean} value */
     const slide = (value) => () => {
         weeks.scrollTo({
             behavior: "smooth",
@@ -85,26 +100,35 @@
             {#each factors as { value }}
                 <div class="week">
                     <div class="schedule__container container">
-                        {#each getLessons($schedule, value) as [day, _lessons]}
-                            <section class="day" style:order={day}>
-                                <h2 class="day__title">{DAYS[day]}</h2>
-                                {#each _lessons as { subject, time, audience, teacher }}
-                                    <section class="lesson">
-                                        <div class="lesson__content">
-                                            <h3 class="lesson__title">
-                                                {subject}
-                                            </h3>
-                                            <p class="lesson__audience">
-                                                {audience}
-                                            </p>
-                                            <p class="lesson__teacher">
-                                                {teacher}
-                                            </p>
-                                        </div>
-                                        <p class="lesson__time">{time}</p>
-                                    </section>
-                                {/each}
-                            </section>
+                        {#each DAYS as weekday, day}
+                            {@const lessons = getLessonsByDay(
+                                $schedule,
+                                value,
+                                day,
+                            )}
+                            {#if lessons.length > 0 || showNoLessons}
+                                <section class="day" style:order={day}>
+                                    <h2 class="day__title">{weekday}</h2>
+                                    {#each lessons as { subject, time, audience, teacher }}
+                                        <section class="lesson">
+                                            <div class="lesson__content">
+                                                <h3 class="lesson__title">
+                                                    {subject}
+                                                </h3>
+                                                <p class="lesson__audience">
+                                                    {audience}
+                                                </p>
+                                                <p class="lesson__teacher">
+                                                    {teacher}
+                                                </p>
+                                            </div>
+                                            <p class="lesson__time">{time}</p>
+                                        </section>
+                                    {:else}
+                                        <p class="nolessons">Занятий нет 🎉</p>
+                                    {/each}
+                                </section>
+                            {/if}
                         {/each}
                     </div>
                 </div>
@@ -132,6 +156,11 @@
     }
     .header__weeks {
         display: flex;
+    }
+    .nolessons {
+        border-top: 1px solid var(--md-sys-color-outline);
+        padding-top: var(--padding);
+        margin: 0;
     }
     .header__week {
         margin: 0;
