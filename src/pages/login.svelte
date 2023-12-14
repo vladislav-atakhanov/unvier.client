@@ -37,7 +37,7 @@
         {#if error}
             <p class="error">{error}</p>
         {/if}
-        <FilledButton {disabled}>Войти</FilledButton>
+        <FilledButton type="submit" {disabled}>Войти</FilledButton>
     </form>
 </div>
 
