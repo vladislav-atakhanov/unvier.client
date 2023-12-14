@@ -9,23 +9,28 @@
     const [attestation, loading] = useAttestation()
 
     const DEFAULT_WISH = "70"
+    const WISH_KEY = "wish"
 
     let wishString = DEFAULT_WISH
     $: wish = Math.min(100, Math.max(parseInt(wishString), 0)) || 0
+
     /** @param {any} event */
     const select = (event) => {
         event.target.select()
     }
-    const unfocus = () => {
+    const blur = () => {
+        // @ts-ignore
         document.activeElement?.blur()
     }
 
     onMount(() => {
-        const localWish = localStorage.getItem("wish")
+        const localWish = localStorage.getItem(WISH_KEY)
         if (wishString === DEFAULT_WISH && localWish) wishString = localWish
     })
 
-    $: wishString !== DEFAULT_WISH && localStorage.setItem("wish", wishString)
+    $: wishString === DEFAULT_WISH
+        ? localStorage.removeItem(WISH_KEY)
+        : localStorage.setItem(WISH_KEY, wishString)
 </script>
 
 <Scaffold>
@@ -33,7 +38,7 @@
         <LoadingText {loading} title="Оценки" />
         <label class="wish" slot="bottom">
             Желаемая оценка
-            <form class="wish__input" on:submit|preventDefault={unfocus}>
+            <form class="wish__input" on:submit|preventDefault={blur}>
                 <input
                     type="text"
                     inputmode="numeric"
@@ -50,7 +55,7 @@
             <Attestation attestation={$attestation} {wish} />
         {/if}
     </div>
-    <Navigation on:update={attestation.refresh} slot="navigation-bar" />
+    <Navigation on:update={attestation.update} slot="navigation-bar" />
 </Scaffold>
 
 <style>
