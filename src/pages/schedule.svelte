@@ -205,7 +205,7 @@
         width: 100px;
         height: 2px;
         bottom: 5px;
-        background-color: var(--pallete-primary-40);
+        background-color: var(--md-sys-color-primary);
         opacity: 1;
         left: calc(-1 * var(--padding-inline));
     }
