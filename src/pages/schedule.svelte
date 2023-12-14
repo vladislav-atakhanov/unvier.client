@@ -179,16 +179,13 @@
         opacity: 1;
         left: calc(-1 * var(--padding-inline));
     }
-    .weeks {
-        display: flex;
-        width: 100vw;
-        overflow: auto;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
-    }
     @media (width >= 760px) {
         .line {
             display: none;
+        }
+        .weeks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
         }
     }
     @media (width < 760px) {
@@ -197,6 +194,15 @@
             flex: 100vw 0 0;
             scroll-snap-align: start;
         }
+        .weeks {
+            width: 100vw;
+            display: flex;
+            overflow: auto;
+            scroll-snap-type: x mandatory;
+        }
+    }
+    .weeks {
+        scrollbar-width: none;
     }
     .weeks::-webkit-scrollbar {
         display: none;
