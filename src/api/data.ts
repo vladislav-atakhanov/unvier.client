@@ -1,7 +1,7 @@
 import { authFetch } from "./auth"
 import { api } from "./config"
 
-import { type Readable, writable, readable } from "svelte/store"
+import { type Readable, writable, get } from "svelte/store"
 import { onMount } from "svelte"
 
 export const createFetchData =
@@ -17,14 +17,13 @@ const UPDATE_DELAY = 5 * 60 * 1000
 export const createUseData =
     <T>(fetchData: () => Promise<T>, key: string, check = (d: T) => !!d) =>
     (): [Store<T>, Readable<boolean>] => {
-        const { subscribe, set } = writable<T | null>(null)
+        const store = writable<T | null>(null)
+        const { subscribe, set } = store
         const loading = writable(false)
 
         const update = async () => {
             loading.set(true)
-            console.log("fetch")
             const data = await fetchData()
-            console.log("fetch ok")
             loading.set(false)
             lastUpdates.set(key, Date.now())
             if (data && check(data)) {
@@ -34,9 +33,12 @@ export const createUseData =
         }
 
         const needUpdate = (callback: () => void) => {
+            const data = get(store)
+            if (!data || !check(data)) return callback()
+
             const now = Date.now()
             const lastUpdate = lastUpdates.get(key) || 0
-            if (now - lastUpdate >= UPDATE_DELAY) callback()
+            if (now - lastUpdate >= UPDATE_DELAY) return callback()
         }
 
         onMount(() => {
