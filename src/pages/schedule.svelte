@@ -88,10 +88,14 @@
         line.style.width = `${width}px`
         line.style.transform = `translateX(${translate}px)`
     }
+
+    const onResize = () => slide(current)
     onMount(() => {
         const local = localStorage.getItem("show-no-lessons")
         if (local) showNoLessons = JSON.parse(local)
         setTimeout(setLinePosition, 100)
+        addEventListener("resize", onResize)
+        return () => removeEventListener("resize", onResize)
     })
 </script>
 
