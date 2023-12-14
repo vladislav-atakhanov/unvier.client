@@ -6,13 +6,17 @@
     export let weekday: string
     export let activeWeek = false
 
-    const isDayActive = (day: number) => {
+    const isToday = (day: number) => {
         const now = new Date()
-        return activeWeek && day === now.getDay()
+        return day === now.getDay()
     }
 </script>
 
-<section class="day" style:order={day} class:day--active={isDayActive(day)}>
+<section
+    class="day"
+    style:order={day}
+    class:day--active={activeWeek && isToday(day)}
+>
     <h2 class="day__title">{weekday}</h2>
     {#each lessons as { subject, time, audience, teacher }}
         <section class="lesson">
