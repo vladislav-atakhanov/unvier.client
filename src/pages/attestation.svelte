@@ -16,6 +16,9 @@
     const select = (event) => {
         event.target.select()
     }
+    const unfocus = () => {
+        document.activeElement?.blur()
+    }
 
     onMount(() => {
         const localWish = localStorage.getItem("wish")
@@ -28,19 +31,19 @@
 <Scaffold>
     <AppBar slot="app-bar">
         <LoadingText {loading} title="Оценки" />
+        <label class="wish" slot="bottom">
+            Желаемая оценка
+            <form class="wish__input" on:submit|preventDefault={unfocus}>
+                <input
+                    type="number"
+                    bind:value={wishString}
+                    on:click={select}
+                />
+                <span class="wish__value"><span>{wish}</span></span>
+            </form>
+        </label>
     </AppBar>
-    <label class="wish">
-        Желаемая оценка
-        <span class="wish__input">
-            <input
-                type="text"
-                inputmode="numeric"
-                bind:value={wishString}
-                on:click={select}
-            />
-            <span class="wish__value"><span>{wish}</span></span>
-        </span>
-    </label>
+
     <div class="attestations__container">
         {#if $attestation}
             <Attestation attestation={$attestation} {wish} />
@@ -98,6 +101,6 @@
         outline: 0;
     }
     input:focus + .wish__value {
-        color: red;
+        color: var(--md-sys-color-primary);
     }
 </style>
