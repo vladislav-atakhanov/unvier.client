@@ -1,4 +1,5 @@
 <script>
+    import { TextField, FilledButton } from "material/components"
     import { login } from "../api"
     import { onMount } from "svelte"
     let username = ""
@@ -31,18 +32,12 @@
 
 <div class="container login__container">
     <form on:submit|preventDefault={onSubmit}>
-        <label>
-            Логин
-            <input type="text" bind:value={username} />
-        </label>
-        <label>
-            Пароль
-            <input type="password" bind:value={password} />
-        </label>
+        <TextField label="Логин" bind:value={username} />
+        <TextField label="Пароль" bind:value={password} type="password" />
         {#if error}
             <p class="error">{error}</p>
         {/if}
-        <button type="submit" {disabled}>Войти</button>
+        <FilledButton {disabled}>Войти</FilledButton>
     </form>
 </div>
 
