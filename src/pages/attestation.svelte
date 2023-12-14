@@ -35,7 +35,8 @@
             Желаемая оценка
             <form class="wish__input" on:submit|preventDefault={unfocus}>
                 <input
-                    type="number"
+                    type="text"
+                    inputmode="numeric"
                     bind:value={wishString}
                     on:click={select}
                 />
@@ -71,12 +72,12 @@
             --padding-block: 2em;
         }
     }
-    label {
+    .wish {
         display: flex;
         align-items: center;
         gap: 1em;
         white-space: nowrap;
-        margin-bottom: 1em;
+        padding-bottom: 4px;
     }
     input {
         border: none;
