@@ -132,7 +132,12 @@
                                 day,
                             )}
                             {#if lessons.length > 0 || showNoLessons}
-                                <ScheduleDay {weekday} {day} {lessons} />
+                                <ScheduleDay
+                                    {weekday}
+                                    {day}
+                                    {lessons}
+                                    activeWeek={value === $schedule?.factor}
+                                />
                             {/if}
                         {/each}
                     </div>

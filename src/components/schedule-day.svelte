@@ -4,10 +4,11 @@
     export let day: number
     export let lessons: Lesson[]
     export let weekday: string
+    export let activeWeek = false
 
     const isDayActive = (day: number) => {
         const now = new Date()
-        return day === now.getDay()
+        return activeWeek && day === now.getDay()
     }
 </script>
 
