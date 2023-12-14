@@ -9,6 +9,7 @@
     let sent = false
 
     const onSubmit = async () => {
+        if (sent) return
         try {
             sent = true
             error = ""
@@ -37,7 +38,9 @@
         {#if error}
             <p class="error">{error}</p>
         {/if}
-        <FilledButton type="submit" {disabled}>Войти</FilledButton>
+        <FilledButton type="submit" {disabled}
+            >{sent ? "Загрузка..." : "Войти"}</FilledButton
+        >
     </form>
 </div>
 
