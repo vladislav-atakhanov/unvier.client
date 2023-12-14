@@ -82,6 +82,8 @@
         const maxScrollPosition =
             titles.at(-1)?.getBoundingClientRect()?.left || 0
 
+        console.log(maxScrollPosition)
+
         const translate =
             minScrollPosition +
             (scrollLeft / offsetWidth) * (maxScrollPosition - minScrollPosition)
@@ -145,7 +147,7 @@
             {/each}
         </div>
     </div>
-    <Navigation on:update={schedule.update} slot="navigation-bar" />
+    <Navigation slot="navigation-bar" />
 </Scaffold>
 
 <style>
