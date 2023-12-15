@@ -61,12 +61,6 @@
         padding: 0.5em;
         font-size: 2em;
     }
-    label,
-    input,
-    button {
-        display: block;
-        width: 100%;
-    }
     form {
         display: grid;
         gap: 1em;

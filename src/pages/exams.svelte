@@ -55,13 +55,6 @@
 </Scaffold>
 
 <style>
-    .exam {
-        border-top: 1px solid var(--md-sys-color-outline);
-        padding-block: var(--padding-block, 1em);
-        padding-inline: var(--container-padding-inline);
-        padding-block: var(--container-padding-block);
-    }
-    .exam__date,
     .exam__audience {
         font-weight: bold;
     }
