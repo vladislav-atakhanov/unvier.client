@@ -2,6 +2,7 @@
     import { TextField, FilledButton } from "material/components"
     import { login } from "../api"
     import { onMount } from "svelte"
+    import WriteMe from "../components/write-me.svelte"
     let username = ""
     let password = ""
     let error = ""
@@ -42,6 +43,7 @@
             >{sent ? "Загрузка..." : "Войти"}</FilledButton
         >
     </form>
+    <div class="login__write-me"><WriteMe /></div>
 </div>
 
 <style>
@@ -49,7 +51,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 100vh;
+        min-height: 100dvh;
+        position: relative;
+    }
+    .login__write-me {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0.5em;
+        font-size: 2em;
     }
     label,
     input,
