@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Attestation } from "../@types"
+    import Card from "./card.svelte"
 
     export let attestation: Attestation[]
 
@@ -40,8 +41,7 @@
 
 {#each attestation as { subject, attestation: _attestation }, index (subject)}
     {@const total = getTotal(_attestation)}
-    <section class="attestation">
-        <h2 class="attestation__title">{subject}</h2>
+    <Card title={subject}>
         <ul class="attestation__summary">
             {#each _attestation as { title, value }, i (title)}
                 <li class="summary">
@@ -64,7 +64,7 @@
                 <p class="summary__wish">(+{Math.max(wish - total, 0)})</p>
             </li>
         </ul>
-    </section>
+    </Card>
 {/each}
 
 <style>
@@ -76,14 +76,7 @@
         gap: 1em;
         justify-content: space-between;
     }
-    .attestation {
-        border-top: 1px solid var(--md-sys-color-outline);
-        padding-block: var(--padding-block, 1em);
-    }
-    .attestation__title {
-        margin: 0;
-        font-size: 1em;
-    }
+
     p {
         margin: 0;
     }

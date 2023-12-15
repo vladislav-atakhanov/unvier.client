@@ -69,6 +69,7 @@
 <style>
     .attestations__container {
         display: grid;
+        gap: 1em;
     }
     @media (800px <= width < 1280px) {
         .attestations__container {

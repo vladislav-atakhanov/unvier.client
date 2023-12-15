@@ -3,6 +3,7 @@
     import Navigation from "../components/navigation.svelte"
     import { useExams } from "../api"
     import LoadingText from "../components/loading-text.svelte"
+    import Card from "../components/card.svelte"
 
     const [exams, loading] = useExams()
 
@@ -32,19 +33,23 @@
     }
 </script>
 
-<Scaffold padding={false}>
+<Scaffold>
     <AppBar slot="app-bar">
         <LoadingText {loading} title="Экзамены" />
     </AppBar>
     {#if $exams}
-        {#each $exams as { subject, teacher, audience, date }}
-            <section class="exam" class:exam--active={isActive(date)}>
+        <div class="exams">
+            {#each $exams as { subject, teacher, audience, date }}
+                <Card title={getDate(date)}>
+                    <p class="exam__subject">{subject}</p>
+                    <p class="exam__audience">{audience}</p>
+                    <p class="exam__teacher">{teacher}</p>
+                </Card>
+                <!-- <section class="exam" class:exam--active={isActive(date)}>
                 <time class="exam__date">{getDate(date)}</time>
-                <p class="exam__subject">{subject}</p>
-                <p class="exam__audience">{audience}</p>
-                <p class="exam__teacher">{teacher}</p>
-            </section>
-        {/each}
+            </section> -->
+            {/each}
+        </div>
     {/if}
     <Navigation slot="navigation-bar" />
 </Scaffold>
@@ -60,10 +65,11 @@
     .exam__audience {
         font-weight: bold;
     }
-    .exam p {
-        margin: 0;
+    .exams {
+        display: grid;
+        gap: 1em;
     }
-    .exam--active {
-        background-color: var(--md-sys-color-secondary-container);
+    .exams p {
+        margin: 0;
     }
 </style>

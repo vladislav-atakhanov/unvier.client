@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Lesson } from "../@types"
+    import Card from "./card.svelte"
 
     export let day: number
     export let lessons: Lesson[]
@@ -12,54 +13,37 @@
     }
 </script>
 
-<section
-    class="day"
-    style:order={day}
-    class:day--active={activeWeek && isToday(day)}
->
-    <h2 class="day__title">{weekday}</h2>
-    {#each lessons as { subject, time, audience, teacher }}
-        <section class="lesson">
-            <div class="lesson__content">
-                <h3 class="lesson__title">
-                    {subject}
-                </h3>
-                <p class="lesson__audience">
-                    {audience}
-                </p>
-                <p class="lesson__teacher">
-                    {teacher}
-                </p>
-            </div>
-            <p class="lesson__time">{time}</p>
-        </section>
-    {:else}
-        <p class="day__nolessons">Занятий нет 🎉</p>
-    {/each}
-</section>
+<div class="day" style:order={day}>
+    <Card active={activeWeek && isToday(day)} title={weekday}>
+        {#each lessons as { subject, time, audience, teacher }}
+            <section class="lesson">
+                <div class="lesson__content">
+                    <h3 class="lesson__title">
+                        {subject}
+                    </h3>
+                    <p class="lesson__audience">
+                        {audience}
+                    </p>
+                    <p class="lesson__teacher">
+                        {teacher}
+                    </p>
+                </div>
+                <p class="lesson__time">{time}</p>
+            </section>
+        {:else}
+            <p class="day__nolessons">Занятий нет 🎉</p>
+        {/each}
+    </Card>
+</div>
 
 <style>
-    .day__title,
     .lesson__title {
         margin: 0;
         font-size: 1em;
         font-weight: normal;
     }
-    .day__title {
-        padding-bottom: var(--padding);
-    }
-    .day {
-        --padding: 0.5em;
-        padding: var(--padding);
-        border: 1px solid var(--md-sys-color-outline);
-        border-radius: 5px;
-    }
-    .day--active {
-        border: 1px solid var(--md-sys-color-primary);
-        background-color: var(--md-sys-color-secondary-container);
-    }
+
     .day__nolessons {
-        border-top: 1px solid var(--md-sys-color-outline);
         padding-top: var(--padding);
         margin: 0;
     }
@@ -69,6 +53,10 @@
         display: flex;
         gap: 1em;
         justify-content: space-between;
+    }
+    .lesson:first-of-type {
+        border: none;
+        padding-top: 0;
     }
     .lesson__time {
         white-space: nowrap;
