@@ -196,6 +196,12 @@
         .weeks {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            margin: 0 auto;
+            max-width: 1000px;
+        }
+        .header__weeks {
+            margin: 0 auto;
+            max-width: 1000px;
         }
     }
     @media (width < 760px) {

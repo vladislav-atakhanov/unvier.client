@@ -45,9 +45,6 @@
                     <p class="exam__audience">{audience}</p>
                     <p class="exam__teacher">{teacher}</p>
                 </Card>
-                <!-- <section class="exam" class:exam--active={isActive(date)}>
-                <time class="exam__date">{getDate(date)}</time>
-            </section> -->
             {/each}
         </div>
     {/if}
@@ -61,6 +58,8 @@
     .exams {
         display: grid;
         gap: 1em;
+        margin: 0 auto;
+        max-width: 500px;
     }
     .exams p {
         margin: 0;

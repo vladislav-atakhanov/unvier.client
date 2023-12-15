@@ -16,9 +16,11 @@
         >Профиль
         <div slot="actions" class="profile__write-me"><WriteMe /></div>
     </AppBar>
-    <p>Логин: {username}</p>
+    <div class="profile__container">
+        <p>Логин: {username}</p>
 
-    <FilledButton on:click={logout}>Выйти</FilledButton>
+        <FilledButton on:click={logout}>Выйти</FilledButton>
+    </div>
 
     <Navigation slot="navigation-bar" />
 </Scaffold>
@@ -29,5 +31,9 @@
     }
     .profile__write-me {
         font-size: 2em;
+    }
+    .profile__container {
+        margin: 0 auto;
+        max-width: 500px;
     }
 </style>

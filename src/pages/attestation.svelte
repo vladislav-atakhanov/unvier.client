@@ -70,22 +70,10 @@
     .attestations__container {
         display: grid;
         gap: 1em;
+        margin: 0 auto;
+        max-width: 500px;
     }
-    @media (800px <= width < 1280px) {
-        .attestations__container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            column-gap: 2em;
-        }
-    }
-    @media (width >= 1280px) {
-        .attestations__container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            column-gap: 3em;
-            --padding-block: 2em;
-        }
-    }
+
     .wish {
         display: flex;
         align-items: center;
