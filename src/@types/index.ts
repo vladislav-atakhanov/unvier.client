@@ -1,6 +1,7 @@
 export interface Mark {
     title: string
     value: number
+    active: boolean
 }
 
 export interface Attestation {

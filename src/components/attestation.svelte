@@ -43,8 +43,8 @@
     {@const total = getTotal(_attestation)}
     <Card title={subject}>
         <ul class="attestation__summary">
-            {#each _attestation as { title, value }, i (title)}
-                <li class="summary">
+            {#each _attestation as { title, value, active }, i (title)}
+                <li class="summary" class:summary--active={active}>
                     <p class="summary__label">
                         <span class="summary__title">{title}:</span>
                         <span class="summary__value">{value}</span>
@@ -79,6 +79,9 @@
 
     p {
         margin: 0;
+    }
+    .summary--active {
+        color: var(--md-sys-color-primary);
     }
     .summary {
         display: grid;
