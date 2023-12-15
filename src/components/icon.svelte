@@ -1,5 +1,5 @@
 <script>
-    import icons from "../assets/icons.svg?url"
+    const icons = "/images/icons.svg"
     /** @type {string} */
     export let name
 </script>
