@@ -2,20 +2,22 @@ import { api } from "./config"
 import { HOME, LOGIN } from "../url"
 import { navigate } from "material"
 import { TOKEN_KEY, clearLocalStorage } from "./local-storage"
+import { singleFetch } from "./utils"
 
-export const authFetch = async <T>(path: string): Promise<T | null> => {
+export const authFetch = async <T>(url: string): Promise<T | null> => {
     while (1) {
         try {
             const accessToken = await getToken()
-            const response = await fetch(`${path}?token=${accessToken}`)
-            if (response.status === 403) {
+            const [data, status] = await singleFetch<T>(
+                `${url}?token=${accessToken}`
+            )
+            if (status === 403) {
                 const status = await refreshToken()
                 if (status === 403) {
                     navigate(LOGIN)
                     return null
                 }
             }
-            const data = await response.json()
             return data
         } catch (e) {
             // !!TODO show error
@@ -35,25 +37,28 @@ const setToken = async (token: string | null) => {
 }
 
 export const getToken = async () => localStorage.getItem(TOKEN_KEY)
-export const isAuth = () => !!getToken()
+export const checkAuth = async () => (await getToken()) !== null
 
 export const refreshToken = async () => {
-    const response = await fetch(api("/auth/refresh"), {
-        method: "GET",
-        credentials: "include",
-    })
-    if (response.status !== 200) return response.status
-    const accessToken = await response.json()
-    await setToken(accessToken)
+    const [accessToken, status] = await singleFetch<string>(
+        api("/auth/refresh"),
+        {
+            method: "GET",
+            credentials: "include",
+        }
+    )
+    if (accessToken) {
+        await setToken(accessToken)
+    }
+    return status
 }
-
 export const login = async (username: string, password: string) => {
-    const accessToken = await fetch(api("/auth/login"), {
+    const [accessToken] = await singleFetch<string>(api("/auth/login"), {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({ username, password }),
-    }).then((r) => r.json())
-    await setToken(accessToken)
+    })
+    if (accessToken) await setToken(accessToken)
 }
 
 export const logout = () => {

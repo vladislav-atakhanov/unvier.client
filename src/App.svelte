@@ -7,7 +7,7 @@
     import Profile from "./pages/profile.svelte"
     import Exams from "./pages/exams.svelte"
     import { onMount } from "svelte"
-    import { isAuth } from "./api"
+    import { checkAuth, refreshToken } from "./api"
     import {
         LOGIN,
         ATTESTATION,
@@ -18,10 +18,15 @@
         PATHS,
     } from "./url"
 
-    onMount(() => {
+    onMount(async () => {
         const { pathname } = location
+        localStorage.setItem("start-pathname", pathname)
+        navigate(LOGIN)
         const authPath = PATHS.includes(pathname) ? pathname : HOME
-        navigate(isAuth() ? authPath : LOGIN)
+        const isAuth = await checkAuth()
+        if (isAuth) return navigate(authPath)
+        navigate(LOGIN)
+        if ((await refreshToken()) === 200) return navigate(authPath)
     })
 
     /** @param {string} location */
