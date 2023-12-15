@@ -20,9 +20,9 @@
 
     onMount(async () => {
         const { pathname } = location
-        localStorage.setItem("start-pathname", pathname)
-        navigate(LOGIN)
         const authPath = PATHS.includes(pathname) ? pathname : HOME
+        localStorage.setItem("start-pathname", authPath)
+        navigate(LOGIN)
         const isAuth = await checkAuth()
         if (isAuth) return navigate(authPath)
         navigate(LOGIN)
