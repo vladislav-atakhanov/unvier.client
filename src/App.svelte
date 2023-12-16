@@ -37,9 +37,15 @@
         const match = pathname.match(/\//g) || []
         return match.length > 1
     }
+
+    /** @param {string} location */
+    const back = (location) => {
+        const target = location.split("/").slice(0, -1).join("/")
+        navigate(target)
+    }
 </script>
 
-<MaterialApp {canBack}>
+<MaterialApp {canBack} {back}>
     <Route path={LOGIN} component={Login} />
     <Route path={ATTESTATION} component={Attestation} />
     <Route path={SCHEDULE} component={Schedule} />
