@@ -1,10 +1,11 @@
 <script>
     import { useAttestation } from "../api"
     import Attestation from "../components/attestation.svelte"
-    import { Scaffold, AppBar } from "material/components"
+    import { Scaffold, AppBar, IconButton } from "material/components"
     import Navigation from "../components/navigation.svelte"
     import LoadingText from "../components/loading-text.svelte"
     import { onMount } from "svelte"
+    import { CALCULATOR } from "../url"
 
     const [attestation, loading] = useAttestation()
 
@@ -15,9 +16,7 @@
     $: wish = Math.min(100, Math.max(parseInt(wishString), 0)) || 0
 
     /** @param {any} event */
-    const select = (event) => {
-        event.target.select()
-    }
+    const select = (event) => event.target.select()
     const blur = () => {
         // @ts-ignore
         document.activeElement?.blur()
@@ -44,6 +43,7 @@
 <Scaffold>
     <AppBar slot="app-bar">
         <LoadingText {loading} title="Оценки" />
+        <IconButton slot="actions" href={CALCULATOR} icon="calculate" />
         <label class="wish" slot="bottom">
             Желаемая оценка
             <form class="wish__input" on:submit|preventDefault={blur}>

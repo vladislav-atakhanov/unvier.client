@@ -6,6 +6,7 @@
     import Schedule from "./pages/schedule.svelte"
     import Profile from "./pages/profile.svelte"
     import Exams from "./pages/exams.svelte"
+    import Calculator from "./pages/calculator.svelte"
     import { onMount } from "svelte"
     import { checkAuth, refreshToken } from "./api"
     import {
@@ -16,6 +17,7 @@
         EXAMS,
         PROFILE,
         PATHS,
+        CALCULATOR,
     } from "./url"
 
     onMount(async () => {
@@ -43,4 +45,5 @@
     <Route path={SCHEDULE} component={Schedule} />
     <Route path={PROFILE} component={Profile} />
     <Route path={EXAMS} component={Exams} />
+    <Route path={CALCULATOR} component={Calculator} />
 </MaterialApp>
