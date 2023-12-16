@@ -53,12 +53,16 @@ export const refreshToken = async () => {
     return status
 }
 export const login = async (username: string, password: string) => {
-    const [accessToken] = await singleFetch<string>(api("/auth/login"), {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify({ username, password }),
-    })
+    const [accessToken, status] = await singleFetch<string>(
+        api("/auth/login"),
+        {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({ username, password }),
+        }
+    )
     if (accessToken) await setToken(accessToken)
+    return status
 }
 
 export const logout = () => {

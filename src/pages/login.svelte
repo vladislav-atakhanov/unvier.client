@@ -11,16 +11,19 @@
 
     const onSubmit = async () => {
         if (sent) return
-        try {
-            sent = true
-            error = ""
-            await login(username, password)
-            localStorage.setItem("username", username)
-        } catch (e) {
+        error = ""
+        sent = true
+        const status = await login(username, password)
+        sent = false
+        if (status === 403) {
             error = "Неверный логин или пароль"
-        } finally {
-            sent = false
+            return
         }
+        if (status === 404) {
+            error = "Ошибка соединения"
+            return
+        }
+        localStorage.setItem("username", username)
     }
 
     onMount(() => {
