@@ -20,17 +20,15 @@ export const createUseData =
             if (get(store) === null) return true
 
             const now = Date.now()
-            const lastUpdate =
-                parseInt(localStorage.getItem(lastUpdateKey) || "") || 0
+            const lastUpdate = parseInt(
+                localStorage.getItem(lastUpdateKey) || "0"
+            )
             if (now - lastUpdate >= UPDATE_DELAY) return true
+            const mountTime = parseInt(
+                localStorage.getItem("mount-time") || "0"
+            )
 
-            const startPathname = localStorage.getItem("start-pathname")
-            const { pathname } = location
-            if (pathname === startPathname) {
-                localStorage.removeItem("start-pathname")
-                return true
-            }
-            return false
+            return lastUpdate < mountTime
         }
 
         const update = async () => {
