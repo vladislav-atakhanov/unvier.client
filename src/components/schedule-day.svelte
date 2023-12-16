@@ -6,15 +6,16 @@
     export let lessons: Lesson[]
     export let weekday: string
     export let activeWeek = false
-
-    const isToday = (day: number) => {
-        const now = new Date()
-        return day === now.getDay() - 1
+    const isActiveDay = (day: number, activeWeek: boolean) => {
+        const nowDay = new Date().getDay()
+        if (nowDay === 7) return activeWeek && day == 0
+        const _week = nowDay > 5 ? !activeWeek : activeWeek
+        return _week && day === nowDay - 1
     }
 </script>
 
 <div class="day" style:order={day}>
-    <Card active={activeWeek && isToday(day)} title={weekday}>
+    <Card active={isActiveDay(day, activeWeek)} title={weekday}>
         {#each lessons as { subject, time, audience, teacher }}
             <section class="lesson">
                 <div class="lesson__content">
