@@ -2,7 +2,7 @@
     import Icon from "./icon.svelte"
 </script>
 
-<a class="write-me" href="https://t.me/eloh1m">
+<a class="write-me" href="https://t.me/univerapp">
     <Icon name="telegram" />
 </a>
 
