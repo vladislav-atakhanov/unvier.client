@@ -67,6 +67,6 @@
     }
     .error {
         margin: 0;
-        color: red;
+        color: var(--md-sys-color-error);
     }
 </style>
