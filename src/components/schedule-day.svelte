@@ -7,8 +7,7 @@
     export let weekday: string
     export let activeWeek = false
     const isActiveDay = (day: number, activeWeek: boolean) => {
-        const nowDay = new Date().getDay()
-        if (nowDay === 7) return activeWeek && day == 0
+        const nowDay = Math.max(1, new Date().getDay())
         const _week = nowDay > 5 ? !activeWeek : activeWeek
         return _week && day === nowDay - 1
     }
