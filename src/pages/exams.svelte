@@ -4,6 +4,8 @@
     import { useExams } from "../api"
     import LoadingText from "../components/loading-text.svelte"
     import Card from "../components/card.svelte"
+    import { writable } from "svelte/store"
+    import { onMount } from "svelte"
 
     const [exams, loading] = useExams()
 
@@ -20,17 +22,65 @@
         return intl.format(date)
     }
 
-    const HOUR = 60 * 60 * 1000
+    const SECOND = 1000
+    const MINUTE = 60 * SECOND
+    const HOUR = 60 * MINUTE
+    const DAY = 24 * HOUR
 
-    /** @param {number} timestamp */
-    const isActive = (timestamp) => {
-        const now = Date.now()
-        const delta = timestamp * 1000 - now
-        if (delta < 0) {
-            return -delta <= 5 * HOUR
-        }
+    /**
+     * @param {number} timestamp
+     * @param {number} now
+     */
+    const getDelta = (timestamp, now) => timestamp * SECOND - now
+
+    /**
+     * @param {number} timestamp
+     * @param {number} now
+     */
+    const isActive = (timestamp, now) => {
+        const delta = getDelta(timestamp, now)
+        if (delta < 0) return -delta <= 5 * HOUR
         return delta <= 24 * HOUR
     }
+
+    /**
+     * @param {number} timestamp
+     * @param {number} now
+     */
+    const isNear = (timestamp, now) => {
+        const delta = getDelta(timestamp, now)
+        return delta > -HOUR && delta <= HOUR * 1.5
+    }
+
+    const rtf = new Intl.RelativeTimeFormat("ru", { style: "long" })
+
+    /**
+     * @param {number} timestamp
+     * @param {number} now
+     */
+    const relativeTime = (timestamp, now) => {
+        const delta = getDelta(timestamp, now)
+        if (delta <= -HOUR) return "Прошел"
+        if (delta <= 0) return "Сейчас"
+        if (delta < MINUTE)
+            return rtf.format(Math.floor(delta / SECOND), "seconds")
+        if (delta < HOUR)
+            return rtf.format(Math.floor(delta / MINUTE), "minutes")
+        if (delta < 2 * DAY)
+            return rtf.format(Math.round(delta / HOUR), "hours")
+        return rtf.format(Math.round(delta / DAY), "days")
+    }
+
+    let frame = 0
+    const now = writable(0)
+    const loop = () => {
+        now.set(Math.floor(Date.now() / 1000) * 1000)
+        frame = requestAnimationFrame(loop)
+    }
+    onMount(() => {
+        frame = requestAnimationFrame(loop)
+        return () => cancelAnimationFrame(frame)
+    })
 </script>
 
 <Scaffold>
@@ -40,10 +90,19 @@
     {#if $exams}
         <div class="exams">
             {#each $exams as { subject, teacher, audience, date }}
-                <Card title={getDate(date)}>
+                {@const delta = relativeTime(date, $now)}
+                <Card title={getDate(date)} active={isActive(date, $now)}>
                     <p class="exam__subject">{subject}</p>
                     <p class="exam__audience">{audience}</p>
                     <p class="exam__teacher">{teacher}</p>
+                    {#if delta}
+                        <p
+                            class="exam__delta"
+                            class:exam__delta--near={isNear(date, $now)}
+                        >
+                            {delta}
+                        </p>
+                    {/if}
                 </Card>
             {/each}
         </div>
@@ -60,6 +119,12 @@
         gap: 1em;
         margin: 0 auto;
         max-width: 500px;
+    }
+    .exam__delta {
+        text-align: right;
+    }
+    .exam__delta--near {
+        color: var(--md-sys-color-error);
     }
     .exams p {
         margin: 0;
