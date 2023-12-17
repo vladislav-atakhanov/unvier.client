@@ -5,11 +5,18 @@ import { type Readable, writable, get } from "svelte/store"
 import { onMount } from "svelte"
 
 type Store<T> = Readable<T | null> & { update: () => void }
+type LoadingStore = Readable<boolean>
+type Result<T> = [Store<T>, LoadingStore]
 
 const UPDATE_DELAY = 5 * 60 * 1000
+
+const stores = new Map<string, Result<unknown>>()
+
 export const createUseData =
     <T>(path: string, key: string, check = (d: T) => !!d) =>
-    (): [Store<T>, Readable<boolean>] => {
+    (): Result<T> => {
+        if (stores.has(path)) return stores.get(path) as Result<T>
+
         const fetchData = () => authFetch<T>(api(path))
         const store = writable<T | null>(null)
         const { subscribe, set } = store
@@ -48,5 +55,10 @@ export const createUseData =
             if (data) set(JSON.parse(data))
             if (needUpdate()) update()
         })
-        return [{ subscribe, update }, { subscribe: loading.subscribe }]
+        const result: Result<T> = [
+            { subscribe, update },
+            { subscribe: loading.subscribe },
+        ]
+        stores.set(path, result)
+        return result
     }
