@@ -182,10 +182,10 @@
 <style>
     .calculator__container {
         margin: 0 auto;
-        width: max-content;
         display: grid;
         gap: 1em;
         --width: 100%;
+        max-width: 500px;
     }
     .calculator__switch {
         display: flex;
@@ -194,9 +194,10 @@
     }
     .calculator__field {
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: auto max-content;
         gap: 1em;
         align-items: center;
+        width: 100%;
     }
     .calculator__switch p {
         font-size: 0.8em;
