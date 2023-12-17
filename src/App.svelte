@@ -20,13 +20,15 @@
         CALCULATOR,
     } from "./url"
 
+    let showLogin = false
     onMount(async () => {
         const { pathname } = location
         const authPath = PATHS.includes(pathname) ? pathname : HOME
         localStorage.setItem("mount-time", `${Date.now()}`)
-        navigate(LOGIN)
+        showLogin = true
         const isAuth = await checkAuth()
-        if (isAuth) return navigate(authPath)
+        showLogin = false
+        if (isAuth) return
         navigate(LOGIN)
         if ((await refreshToken()) === 200) return navigate(authPath)
     })
@@ -40,16 +42,22 @@
 
     /** @param {string} location */
     const back = (location) => {
-        const target = location.split("/").slice(0, -1).join("/")
+        let target = location.split("/").slice(0, -1).join("/")
+        if (target === "/") target = HOME
         navigate(target)
     }
 </script>
 
 <MaterialApp {canBack} {back}>
-    <Route path={LOGIN} component={Login} />
-    <Route path={ATTESTATION} component={Attestation} />
-    <Route path={SCHEDULE} component={Schedule} />
-    <Route path={PROFILE} component={Profile} />
-    <Route path={EXAMS} component={Exams} />
-    <Route path={CALCULATOR} component={Calculator} />
+    {#if showLogin}
+        <Login />
+    {:else}
+        <Route path={LOGIN} component={Login} />
+        <Route path={ATTESTATION} component={Attestation} />
+        <Route path={SCHEDULE} component={Schedule} />
+        <Route path="/" component={Schedule} />
+        <Route path={PROFILE} component={Profile} />
+        <Route path={EXAMS} component={Exams} />
+        <Route path={CALCULATOR} component={Calculator} />
+    {/if}
 </MaterialApp>
