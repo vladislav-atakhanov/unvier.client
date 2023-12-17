@@ -7,17 +7,17 @@ import { alert } from "material/notificator"
 
 export const authFetch = async <T>(url: string): Promise<T | null> => {
     while (1) {
-            const accessToken = await getToken()
-            const [data, status] = await singleFetch<T>(
-                `${url}?token=${accessToken}`
-            )
+        const accessToken = await getToken()
+        const [data, status] = await singleFetch<T>(
+            `${url}?token=${accessToken}`
+        )
+        if (status === 403) {
+            const status = await refreshToken()
             if (status === 403) {
-                const status = await refreshToken()
-                if (status === 403) {
-                    navigate(LOGIN)
-                    return null
-                }
+                navigate(LOGIN)
+                return null
             }
+        }
         if (status === 404) {
             alert("Не удалось подключиться к серверу")
             return null
@@ -27,11 +27,7 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
     return null
 }
 
-const setToken = async (token: string | null) => {
-    if (token === null) {
-        localStorage.removeItem(TOKEN_KEY)
-        return navigate(LOGIN)
-    }
+const setToken = async (token: string) => {
     localStorage.setItem(TOKEN_KEY, token)
     navigate(HOME)
 }
@@ -66,7 +62,6 @@ export const login = async (username: string, password: string) => {
 }
 
 export const logout = () => {
-    setToken(null)
     clearLocalStorage()
     fetch(api("/auth/logout"), {
         method: "GET",
