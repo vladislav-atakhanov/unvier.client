@@ -3,10 +3,10 @@ import { HOME, LOGIN } from "../url"
 import { navigate } from "material"
 import { TOKEN_KEY, clearLocalStorage } from "./local-storage"
 import { singleFetch } from "./utils"
+import { alert } from "material/notificator"
 
 export const authFetch = async <T>(url: string): Promise<T | null> => {
     while (1) {
-        try {
             const accessToken = await getToken()
             const [data, status] = await singleFetch<T>(
                 `${url}?token=${accessToken}`
@@ -18,11 +18,11 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
                     return null
                 }
             }
-            return data
-        } catch (e) {
-            // !!TODO show error
-            break
+        if (status === 404) {
+            alert("Не удалось подключиться к серверу")
+            return null
         }
+        return data
     }
     return null
 }
