@@ -58,19 +58,13 @@
     <Tabs let:Content let:Wrapper let:Header let:Tab maxWidth={1140}>
         <Scaffold padding={false}>
             <AppBar slot="app-bar"
-                ><LoadingText {loading} title="Успеваемость" />
-                <div class="attendence__header" slot="bottom">
-                    <Header>
-                        {#each tabNames as tab}
-                            <Tab>{tab}</Tab>
-                        {/each}
-                    </Header>
-                    <h1 class="attendence__subject attendence__subject--header">
-                        {subject}
-                    </h1>
-                </div>
+                ><LoadingText {loading} title={subject} />
+                <Header slot="bottom">
+                    {#each tabNames as tab}
+                        <Tab>{tab}</Tab>
+                    {/each}
+                </Header>
             </AppBar>
-            <h1 class="attendence__subject">{subject}</h1>
             <Wrapper>
                 {#each marks as [type, attendances]}
                     <Content>
@@ -123,12 +117,6 @@
         }
         .attendence__subject--header {
             display: block;
-        }
-        .attendence__header {
-            margin: 0 auto;
-            max-width: 1500px;
-            padding-inline: 10px;
-            padding-bottom: 8px;
         }
     }
     p {
