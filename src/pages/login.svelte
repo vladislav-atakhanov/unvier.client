@@ -15,7 +15,7 @@
         sent = true
         const status = await login(username, password)
         sent = false
-        if (status === 403) {
+        if (status === 401) {
             error = "Неверный логин или пароль"
             return
         }

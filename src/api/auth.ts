@@ -14,9 +14,9 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
         if (status === 200) {
             return data
         }
-        if (status === 403) {
+        if (status === 401) {
             const status = await refreshToken()
-            if (status === 403) {
+            if (status === 401) {
                 navigate(LOGIN)
                 return null
             }
