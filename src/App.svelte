@@ -19,6 +19,7 @@
         PATHS,
         CALCULATOR,
     } from "./url"
+    import Attendance from "./pages/attendance.svelte"
 
     let showLogin = false
     onMount(async () => {
@@ -54,6 +55,7 @@
     {:else}
         <Route path={LOGIN} component={Login} />
         <Route path={ATTESTATION} component={Attestation} />
+        <Route path="{ATTESTATION}/:subject" component={Attendance} />
         <Route path={SCHEDULE} component={Schedule} />
         <Route path="/" component={Schedule} />
         <Route path={PROFILE} component={Profile} />

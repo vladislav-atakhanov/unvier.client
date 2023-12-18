@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Attestation } from "../@types"
+    import { ATTESTATION } from "../url"
     import Card from "./card.svelte"
 
     export let attestation: Attestation[]
@@ -41,7 +42,7 @@
 
 {#each attestation as { subject, attestation: _attestation }, index (subject)}
     {@const total = getTotal(_attestation)}
-    <Card title={subject}>
+    <Card title={subject} href="{ATTESTATION}/{subject}">
         <ul class="attestation__summary">
             {#each _attestation as { title, value, active }, i (title)}
                 <li class="summary" class:summary--active={active}>

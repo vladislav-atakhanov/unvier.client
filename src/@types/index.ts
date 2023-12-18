@@ -7,6 +7,11 @@ export interface Mark {
 export interface Attestation {
     subject: string
     attestation: Mark[]
+    attendance: {
+        type: string // лекция | срсп
+        part: string // рк1 | рк2
+        marks: Mark[]
+    }[]
 }
 
 export interface Exam {

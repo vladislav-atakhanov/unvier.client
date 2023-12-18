@@ -2,12 +2,20 @@
     export let active = false
     /** @type {string} */
     export let title
+
+    /** @type {string | undefined} */
+    export let href = undefined
 </script>
 
-<section class="card" class:card--active={active}>
+<svelte:element
+    this={href ? "a" : "section"}
+    {href}
+    class="card"
+    class:card--active={active}
+>
     <h2 class="card__title">{title}</h2>
     <slot />
-</section>
+</svelte:element>
 
 <style>
     .card__title {
@@ -18,12 +26,18 @@
         border-bottom: 1px solid var(--md-sys-color-outline);
         margin-bottom: var(--padding);
     }
+
     .card {
         --padding: 0.5em;
         padding: var(--padding);
         border: 1px solid var(--md-sys-color-outline);
         border-radius: 5px;
+        text-decoration: none;
+        color: inherit;
+        display: block;
     }
+    a.card:hover,
+    a.card:active,
     .card--active {
         border: 1px solid var(--md-sys-color-primary);
         background-color: var(--md-sys-color-secondary-container);
