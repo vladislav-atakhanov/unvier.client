@@ -9,9 +9,10 @@ export const singleFetch = <T>(url: string, params?: RequestInit) => {
             const { status } = response
             const data = status === 200 ? await response.json() : null
             resolve([data, status])
-            cache.delete(url)
         } catch (e) {
             resolve([null, 404])
+        } finally {
+            cache.delete(url)
         }
     })
     cache.set(url, promise)
