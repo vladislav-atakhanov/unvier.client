@@ -30,7 +30,7 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
             alert("Сервер Универа не отвечает")
             return null
         }
-        alert("Неизвестная ошибка")
+        alert(`Неизвестная ошибка ${status}`)
         return null
     }
     return null
@@ -52,9 +52,7 @@ export const refreshToken = async () => {
             credentials: "include",
         }
     )
-    if (accessToken) {
-        await setToken(accessToken)
-    }
+    if (accessToken) await setToken(accessToken)
     return status
 }
 export const login = async (username: string, password: string) => {
