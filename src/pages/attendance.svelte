@@ -149,6 +149,8 @@
         gap: 1em;
         padding-inline: var(--container-padding-inline);
         padding-block: var(--container-padding-block);
+        margin: 0 auto;
+        max-width: 500px;
     }
     .attendence__title {
         padding-top: var(--padding);
