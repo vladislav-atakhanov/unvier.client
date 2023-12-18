@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { Scaffold, AppBar, IconButton } from "material/components"
+    import { Scaffold, AppBar, IconButton, Tabs } from "material/components"
     import Navigation from "../components/navigation.svelte"
     import LoadingText from "../components/loading-text.svelte"
     import { useSchedule } from "../api"
-    import { onMount } from "svelte"
     import type { Schedule } from "../@types"
     import { EXAMS } from "../url"
     import ScheduleDay from "../components/schedule-day.svelte"
@@ -29,8 +28,6 @@
         )
     }
 
-    let showNoLessons = true
-
     const factors = [
         {
             value: false,
@@ -41,193 +38,94 @@
             title: "Знаменатель",
         },
     ]
-    let current = false
-    let weeks: HTMLElement
 
-    const setFactor = (value: boolean, _: unknown) => {
-        if (!weeks) return
-        weeks.scrollTo({
-            behavior: "smooth",
-            left: value ? innerWidth : 0,
-            top: 0,
-        })
-        current = value
-    }
-    $: setFactor(!!$schedule?.factor, weeks)
+    let tabs: Tabs
 
-    const slide = (value: boolean) => () => {
-        weeks.scrollTo({
-            behavior: "smooth",
-            left: value ? innerWidth : 0,
-            top: 0,
-        })
-    }
-
-    let header: HTMLElement
-    const setLinePosition = () => {
-        if (!header) return
-        const line = header.querySelector(".line") as HTMLElement
-        const titles = Array.from(
-            header.querySelectorAll(".header__week span"),
-        ) as HTMLElement[]
-        const { scrollLeft, offsetWidth } = weeks
-
-        current = weeks.scrollLeft >= innerWidth / 2
-
-        const nearTitle = titles[+current]
-        const width = nearTitle.offsetWidth
-
-        const { left } = titles[0].getBoundingClientRect()
-        const minScrollPosition = left
-        const maxScrollPosition =
-            titles.at(-1)?.getBoundingClientRect()?.left || 0
-
-        const translate =
-            minScrollPosition +
-            (scrollLeft / offsetWidth) * (maxScrollPosition - minScrollPosition)
-
-        line.style.width = `${width}px`
-        line.style.transform = `translateX(${translate}px)`
-    }
-
-    const onResize = () => {
-        slide(current)
-        setLinePosition()
-    }
-    let isMount = false
-    onMount(() => {
-        const local = localStorage.getItem("show-no-lessons")
-        if (local) showNoLessons = JSON.parse(local)
-        setTimeout(() => {
-            setLinePosition()
-            isMount = true
-        }, 100)
-        addEventListener("resize", onResize)
-        return () => {
-            isMount = false
-            removeEventListener("resize", onResize)
-        }
-    })
+    $: tabs && tabs.select($schedule?.factor ? 1 : 0)
 </script>
 
-<Scaffold padding={false}>
-    <AppBar slot="app-bar">
-        <LoadingText {loading} title="Расписание" />
-        <IconButton slot="actions" href={EXAMS} icon="playlist_add_check" />
-        <div slot="bottom" class="header__weeks" bind:this={header}>
-            {#each factors as { title, value }}
-                <button
-                    on:click={slide(value)}
-                    class="header__week"
-                    class:header__week--active={current === value}
-                    class:header__week--current={$schedule?.factor === value}
-                    ><span>{title}</span></button
-                >
-            {/each}
-            <div class="line" class:line--show={isMount}></div>
-        </div></AppBar
+<div class="schedule">
+    <Tabs
+        let:Content
+        let:Wrapper
+        let:Header
+        let:Tab
+        bind:this={tabs}
+        maxWidth={760}
     >
-    <div class="schedule">
-        <div class="weeks" bind:this={weeks} on:scroll={setLinePosition}>
-            {#each factors as { value }}
-                <div class="week">
-                    <div class="schedule__container container">
-                        {#each DAYS as weekday, day}
-                            {@const lessons = getLessonsByDay(
-                                $schedule,
-                                value,
-                                day,
-                            )}
-                            {#if lessons.length > 0 || showNoLessons}
+        <Scaffold padding={false}>
+            <AppBar slot="app-bar">
+                <LoadingText {loading} title="Расписание" />
+                <IconButton
+                    slot="actions"
+                    href={EXAMS}
+                    icon="playlist_add_check"
+                />
+                <Header slot="bottom">
+                    {#each factors as { title, value }}
+                        <Tab
+                            ><span class:current={value === $schedule?.factor}
+                                >{title}</span
+                            ></Tab
+                        >
+                    {/each}
+                </Header>
+            </AppBar>
+            <Wrapper>
+                {#each factors as { value }}
+                    <Content>
+                        <div class="schedule__container container">
+                            {#each DAYS as weekday, day}
+                                {@const lessons = getLessonsByDay(
+                                    $schedule,
+                                    value,
+                                    day,
+                                )}
                                 <ScheduleDay
                                     {weekday}
                                     {day}
                                     {lessons}
                                     activeWeek={value === $schedule?.factor}
                                 />
-                            {/if}
-                        {/each}
-                    </div>
-                </div>
-            {/each}
-        </div>
-    </div>
-    <Navigation on:update={schedule.update} slot="navigation-bar" />
-</Scaffold>
+                            {/each}
+                        </div>
+                    </Content>
+                {/each}
+            </Wrapper>
+            <Navigation on:update={schedule.update} slot="navigation-bar" />
+        </Scaffold>
+    </Tabs>
+</div>
 
 <style>
-    .header__weeks {
-        display: flex;
-    }
-    .header__week {
-        margin: 0;
-        flex: 1 0 0;
-        padding: 0;
-        color: inherit;
-        background-color: transparent;
-        display: block;
-        width: 100%;
-        border: none;
-        padding-bottom: 8px;
-    }
-    .header__week--current span::before {
+    span.current::before {
         content: "(т) ";
         opacity: 0.5;
     }
-    .header__weeks {
-        position: relative;
-    }
-    .line {
-        position: absolute;
-        width: 100px;
-        height: 2px;
-        bottom: 5px;
-        background-color: var(--md-sys-color-primary);
-        opacity: 0;
-        left: calc(-1 * var(--padding-inline));
-    }
-    .line--show {
-        opacity: 1;
-    }
-    @media (width >= 760px) {
-        .line {
-            display: none;
-        }
-        .weeks {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            margin: 0 auto;
-            max-width: 1000px;
-        }
-        .header__weeks {
-            margin: 0 auto;
-            max-width: 1000px;
-        }
-    }
-    @media (width < 760px) {
-        .week {
-            width: 100vw;
-            flex: 100vw 0 0;
-            scroll-snap-align: start;
-        }
-        .weeks {
-            width: 100vw;
-            display: flex;
-            overflow: auto;
-            scroll-snap-type: x mandatory;
-        }
-    }
-    .weeks {
-        scrollbar-width: none;
-    }
-    .weeks::-webkit-scrollbar {
-        display: none;
-    }
-
     .schedule__container {
         display: grid;
         gap: 1em;
         padding-inline: var(--container-padding-inline);
         padding-block: var(--container-padding-block);
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    @media (width >= 760px) {
+        .schedule :global(.tabs__header) {
+            margin: 0 auto;
+            max-width: 1000px;
+        }
+        .schedule :global(.tabs__wrapper) {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin: 0 auto;
+            max-width: 1000px;
+        }
+        .schedule :global(.tabs__content) {
+            width: auto;
+        }
+        .schedule :global(.tabs__line) {
+            display: none;
+        }
     }
 </style>
