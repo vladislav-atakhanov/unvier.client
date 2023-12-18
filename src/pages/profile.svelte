@@ -4,6 +4,7 @@
     import Navigation from "../components/navigation.svelte"
     import { onMount } from "svelte"
     import WriteMe from "../components/write-me.svelte"
+    import SchemeSwitcher from "../components/scheme-switcher.svelte"
 
     let username = ""
     onMount(() => {
@@ -18,7 +19,7 @@
     </AppBar>
     <div class="profile__container">
         <p>Логин: {username}</p>
-
+        <div class="profile__switcher"><SchemeSwitcher /></div>
         <FilledButton on:click={logout}>Выйти</FilledButton>
     </div>
 
@@ -35,5 +36,8 @@
     .profile__container {
         margin: 0 auto;
         max-width: 500px;
+    }
+    .profile__switcher {
+        margin-bottom: 1em;
     }
 </style>
