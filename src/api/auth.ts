@@ -11,18 +11,27 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
         const [data, status] = await singleFetch<T>(
             `${url}?token=${accessToken}`
         )
+        if (status === 200) {
+            return data
+        }
         if (status === 403) {
             const status = await refreshToken()
             if (status === 403) {
                 navigate(LOGIN)
                 return null
             }
+            continue
         }
         if (status === 404) {
             alert("Не удалось подключиться к серверу")
             return null
         }
-        return data
+        if (status === 408) {
+            alert("Сервер Универа не отвечает")
+            return null
+        }
+        alert("Неизвестная ошибка")
+        return null
     }
     return null
 }
