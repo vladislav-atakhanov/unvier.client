@@ -3,11 +3,11 @@ export const SCHEDULE_KEY = "schedule"
 export const TOKEN_KEY = "access-token"
 export const EXAMS = "exams"
 
-const whiteList = ["username"]
+const whitelist = ["username", "color-scheme"]
 export const clearLocalStorage = () => {
     const keys = { ...localStorage }
     for (const key in keys) {
-        if (whiteList.includes(key)) continue
+        if (whitelist.includes(key)) continue
         localStorage.removeItem(key)
     }
 }
