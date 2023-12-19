@@ -24,7 +24,7 @@
     }
 
     const getSum = (marks: Mark[]) =>
-        marks.reduce((sum, { value }) => sum + (parseInt(`${value}`) || 0), 0)
+        marks.reduce((sum, [_, value]) => sum + (parseInt(`${value}`) || 0), 0)
 
     $: marks = getMarks($attestation)
     $: tabNames = marks.map(([key]) => key.split("-")[0].trim())
@@ -73,7 +73,7 @@
                             <h2 class="attendences__type">{type}</h2>
                             {#each attendances as { part, marks }}
                                 <Card title={removeAfterSymbol(part, "(")}>
-                                    {#each marks as { value, title }}
+                                    {#each marks as [title, value]}
                                         <p>
                                             {formatDay(title)}: <b> {value}</b>
                                         </p>

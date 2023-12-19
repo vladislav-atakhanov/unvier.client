@@ -11,7 +11,7 @@
         index == array.length - 1
     const getNeed = (marks: Attestation["attestation"], wish: number) => {
         const sum = marks.reduce(
-            (acc, { value }, index) =>
+            (acc, [_, value], index) =>
                 isLastIndex(marks, index) ? acc : acc + value,
             0,
         )
@@ -20,7 +20,7 @@
 
     const needShow = (marks: Attestation["attestation"], i) => {
         const sum = marks.reduce(
-            (acc, { value }, index) =>
+            (acc, [_, value], index) =>
                 isLastIndex(marks, index) ? acc : acc + value,
             0,
         )
@@ -29,10 +29,10 @@
 
     export const getTotal = (marks: Attestation["attestation"]) => {
         const examWeight = 0.4
-        const exam = marks.at(-1)?.value || 0
+        const exam = marks.at(-1)?.[1] || 0
         const otherSum = marks
             .slice(0, -1)
-            .reduce((sum, { value }) => sum + value, 0)
+            .reduce((sum, [_, value]) => sum + value, 0)
         return Math.round(
             exam * examWeight +
                 (otherSum * (1 - examWeight)) / (marks.length - 1),
@@ -44,7 +44,7 @@
     {@const total = getTotal(_attestation)}
     <Card title={subject} href="{ATTESTATION}/{subject}">
         <ul class="attestation__summary">
-            {#each _attestation as { title, value, active }, i (title)}
+            {#each _attestation as [title, value, active], i (title)}
                 <li class="summary" class:summary--active={active}>
                     <p class="summary__label">
                         <span class="summary__title">{title}:</span>
