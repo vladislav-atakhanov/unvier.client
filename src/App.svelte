@@ -16,15 +16,20 @@
         HOME,
         EXAMS,
         PROFILE,
-        PATHS,
+        AUTH_PATHS,
         CALCULATOR,
+        SETTINGS,
     } from "./url"
     import Attendance from "./pages/attendance.svelte"
+    import Settings from "./pages/settings.svelte"
 
     let showLogin = false
+
+    let currentPath = "/"
     onMount(async () => {
         const { pathname } = location
-        const authPath = PATHS.includes(pathname) ? pathname : HOME
+        currentPath = pathname
+        const authPath = AUTH_PATHS.includes(pathname) ? pathname : HOME
         localStorage.setItem("mount-time", `${Date.now()}`)
         showLogin = true
         const isAuth = await checkAuth()
@@ -51,7 +56,7 @@
 
 <MaterialApp {canBack} {back}>
     {#if showLogin}
-        <Login />
+        <Route path={currentPath} component={Login} />
     {:else}
         <Route path={LOGIN} component={Login} />
         <Route path={ATTESTATION} component={Attestation} />
@@ -62,4 +67,5 @@
         <Route path={EXAMS} component={Exams} />
         <Route path={CALCULATOR} component={Calculator} />
     {/if}
+    <Route path={SETTINGS} component={Settings} />
 </MaterialApp>
