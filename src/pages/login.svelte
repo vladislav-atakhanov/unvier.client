@@ -67,9 +67,6 @@
     :global(md-filled-button) {
         display: block;
     }
-    .login__write-me {
-        font-size: 2em;
-    }
     .login__container {
         margin: 0 auto;
         max-width: 500px;
@@ -84,13 +81,6 @@
         gap: 0.5em;
         font-size: 2em;
         align-items: center;
-    }
-    .login__write-me {
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 0.5em;
-        font-size: 2em;
     }
     form {
         display: grid;

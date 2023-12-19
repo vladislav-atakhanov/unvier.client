@@ -73,7 +73,6 @@
         margin: 0 auto;
         max-width: 500px;
     }
-
     .wish {
         display: flex;
         align-items: center;

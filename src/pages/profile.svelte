@@ -29,9 +29,6 @@
     :global(md-filled-button) {
         display: block;
     }
-    .profile__write-me {
-        font-size: 2em;
-    }
     .profile__container {
         margin: 0 auto;
         max-width: 500px;
@@ -39,9 +36,6 @@
         grid-template-rows: 1fr max-content;
         height: 100%;
         padding-bottom: 1em;
-    }
-    .profile__switcher {
-        margin-bottom: 1em;
     }
     p {
         margin: 0;

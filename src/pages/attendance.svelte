@@ -93,9 +93,6 @@
 </div>
 
 <style>
-    .attendence__subject--header {
-        display: none;
-    }
     @media (width >= 1140px) {
         .attendance :global(.tabs__header) {
             display: none;
@@ -113,25 +110,13 @@
         .attendance :global(.tabs__line) {
             display: none;
         }
-        .attendence__subject {
-            display: none;
-        }
-        .attendence__subject--header {
-            display: block;
-        }
     }
     p {
         margin: 0;
     }
-    .attendences__type,
-    .attendence__subject {
+    .attendences__type {
         margin: 0;
         font: inherit;
-    }
-    .attendence__subject {
-        font-weight: bold;
-        padding-block: var(--container-padding-block);
-        padding-inline: var(--container-padding-inline);
     }
     .attendences {
         display: grid;
