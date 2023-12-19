@@ -1,9 +1,11 @@
 <script>
     import Icon from "./icon.svelte"
+    export let href = "https://t.me/univerapp"
+    export let icon = "telegram"
 </script>
 
-<a class="write-me" href="https://t.me/univerapp">
-    <Icon name="telegram" />
+<a class="write-me" {href}>
+    <Icon name={icon} />
 </a>
 
 <style>
