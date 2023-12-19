@@ -72,16 +72,13 @@ export const login = async (
 }
 
 const whitelist = ["username", TOKEN_KEY, ...localStorageKeys]
-export const clearLocalStorage = () => {
+
+export const logout = () => {
+    storage.clear()
     for (const key in localStorage) {
         if (whitelist.includes(key)) continue
         localStorage.removeItem(key)
     }
-}
-
-export const logout = () => {
-    storage.clear()
-    clearLocalStorage()
     localStorage.removeItem(TOKEN_KEY)
     fetch(api("/auth/logout"), {
         method: "GET",

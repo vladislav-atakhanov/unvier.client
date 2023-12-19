@@ -30,7 +30,6 @@
         const localWish = localStorage.getItem(WISH_KEY)
         if (wishString === DEFAULT_WISH && localWish) wishString = localWish
         isMount = true
-        attestation.updateIfNeed()
     })
 
     /** @param {string} wish*/

@@ -6,8 +6,7 @@ import { onMount } from "svelte"
 import type { Storage } from "./storage"
 
 type Store<T> = Readable<T | null> & {
-    update: () => void
-    updateIfNeed: () => void
+    update: (checkLoading: boolean) => void
 }
 type LoadingStore = Readable<boolean>
 type Result<T> = [Store<T>, LoadingStore]
@@ -15,6 +14,24 @@ type Result<T> = [Store<T>, LoadingStore]
 const UPDATE_DELAY = 5 * 60 * 1000
 
 const stores = new Map<string, Result<unknown>>()
+
+export const updateAllStores = () => {
+    for (const [store] of stores.values()) store.update(false)
+}
+
+const needUpdate = async <T>(
+    store: Readable<T | null>,
+    lastUpdateKey: string
+) => {
+    if (get(store) === null) return true
+
+    const now = Date.now()
+    const lastUpdate = parseInt(localStorage.getItem(lastUpdateKey) || "0")
+    if (now - lastUpdate >= UPDATE_DELAY) return true
+    const mountTime = parseInt(localStorage.getItem("mount-time") || "0")
+
+    return lastUpdate < mountTime
+}
 
 export const createUseData =
     <T>(
@@ -34,25 +51,13 @@ export const createUseData =
         const loading = writable(false)
 
         const lastUpdateKey = `${key}-last-update`
-        const needUpdate = async () => {
-            if (get(store) === null) return true
 
-            const now = Date.now()
-            const lastUpdate = parseInt(
-                localStorage.getItem(lastUpdateKey) || "0"
-            )
-            if (now - lastUpdate >= UPDATE_DELAY) return true
-            const mountTime = parseInt(
-                localStorage.getItem("mount-time") || "0"
-            )
-
-            return lastUpdate < mountTime
-        }
-
-        const update = async () => {
-            if (get(loading)) return
+        const update = async (checkLoading = true) => {
+            if (checkLoading && get(loading)) return
             loading.set(true)
+            console.log("update", key)
             const data = await fetchData()
+
             loading.set(false)
             localStorage.setItem(lastUpdateKey, `${Date.now()}`)
             if (data && check(data)) {
@@ -61,16 +66,13 @@ export const createUseData =
             }
         }
 
-        const updateIfNeed = async () => {
-            if (await needUpdate()) update()
-        }
         onMount(async () => {
             const data = await storage.getItem<T>(key)
             if (data) set(data)
-            await updateIfNeed()
+            if (await needUpdate(store, lastUpdateKey)) update()
         })
         const result: Result<T> = [
-            { subscribe, update, updateIfNeed },
+            { subscribe, update },
             { subscribe: loading.subscribe },
         ]
         stores.set(path, result)

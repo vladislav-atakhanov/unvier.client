@@ -7,7 +7,6 @@
     import type { Schedule } from "../@types"
     import { EXAMS } from "../url"
     import ScheduleDay from "../components/schedule-day.svelte"
-    import { onMount } from "svelte"
 
     const [schedule, loading] = useSchedule()
     const _ = i18n()
@@ -41,8 +40,6 @@
             title: _("schedule.even"),
         },
     ]
-
-    onMount(schedule.updateIfNeed)
 
     let tabs: Tabs
 
