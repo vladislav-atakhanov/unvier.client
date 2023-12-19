@@ -1,9 +1,13 @@
 <script>
-    import { Scaffold, AppBar, FilledButton } from "material/components"
+    import {
+        Scaffold,
+        AppBar,
+        FilledButton,
+        IconButton,
+    } from "material/components"
     import { logout } from "../api"
     import Navigation from "../components/navigation.svelte"
     import { onMount } from "svelte"
-    import IconButton from "material/components/buttons/icon-button.svelte"
     import { SETTINGS } from "../url"
 
     let username = ""

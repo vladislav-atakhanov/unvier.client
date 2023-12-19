@@ -1,5 +1,5 @@
 <script>
-    import { Scaffold, AppBar, FilledButton } from "material/components"
+    import { Scaffold, AppBar } from "material/components"
     import Navigation from "../components/navigation.svelte"
     import WriteMe from "../components/write-me.svelte"
     import SchemeSwitcher from "../components/scheme-switcher.svelte"
