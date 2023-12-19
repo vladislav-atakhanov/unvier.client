@@ -8,12 +8,18 @@
     import { logout } from "../api"
     import Navigation from "../components/navigation.svelte"
     import { onMount } from "svelte"
-    import { SETTINGS } from "../url"
+    import { LOGIN, SETTINGS } from "../url"
+    import { navigate } from "material"
 
     let username = ""
     onMount(() => {
         username = localStorage.getItem("username") || ""
     })
+
+    const onClick = () => {
+        logout()
+        navigate(LOGIN)
+    }
 </script>
 
 <Scaffold>
@@ -23,7 +29,7 @@
     </AppBar>
     <div class="profile__container">
         <div class="profile__content"><p>Логин: {username}</p></div>
-        <FilledButton on:click={logout}>Выйти</FilledButton>
+        <FilledButton on:click={onClick}>Выйти</FilledButton>
     </div>
 
     <Navigation slot="navigation-bar" />
