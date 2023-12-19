@@ -88,7 +88,7 @@
 
 <Scaffold>
     <AppBar slot="app-bar">
-        <LoadingText {loading} title="Экзамены" />
+        <LoadingText {loading} title={_("exams")} />
     </AppBar>
     {#if $exams}
         <div class="exams">
