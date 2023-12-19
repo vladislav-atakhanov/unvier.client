@@ -3,6 +3,8 @@
 
     export let loading: Readable<boolean>
     export let title: string
+    import { i18n } from "material/i18n"
+    const _ = i18n()
 </script>
 
-{$loading ? "Обновление..." : title}
+{$loading ? _("updating") : title}

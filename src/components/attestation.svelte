@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { i18n } from "material/i18n"
     import type { Attestation } from "../@types"
     import { ATTESTATION } from "../url"
     import Card from "./card.svelte"
@@ -38,6 +39,8 @@
                 (otherSum * (1 - examWeight)) / (marks.length - 1),
         )
     }
+
+    const _ = i18n()
 </script>
 
 {#each attestation as { subject, attestation: _attestation }, index (subject)}
@@ -59,7 +62,7 @@
             {/each}
             <li class="summary">
                 <p class="summary__label">
-                    <span class="summary__title">Итог:</span>
+                    <span class="summary__title">{_("total")}:</span>
                     <span class="summary__value">{total}</span>
                 </p>
                 <p class="summary__wish">(+{Math.max(wish - total, 0)})</p>

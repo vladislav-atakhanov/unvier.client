@@ -7,6 +7,9 @@
     import { onMount } from "svelte"
     import { CALCULATOR } from "../url"
 
+    import { i18n } from "material/i18n"
+    const _ = i18n()
+
     const [attestation, loading] = useAttestation()
 
     const DEFAULT_WISH = "70"
@@ -43,10 +46,10 @@
 
 <Scaffold>
     <AppBar slot="app-bar">
-        <LoadingText {loading} title="Оценки" />
+        <LoadingText {loading} title={_("attestation")} />
         <IconButton slot="actions" href={CALCULATOR} icon="calculate" />
         <label class="wish" slot="bottom">
-            Желаемая оценка
+            {_("attestation.wish")}
             <form class="wish__input" on:submit|preventDefault={blur}>
                 <input
                     type="text"

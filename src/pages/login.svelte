@@ -10,6 +10,8 @@
     import { onMount } from "svelte"
     import WriteMe from "../components/write-me.svelte"
     import { SETTINGS } from "../url"
+    import { i18n } from "material/i18n"
+    const _ = i18n()
     let username = ""
     let password = ""
     let error = ""
@@ -27,10 +29,10 @@
             return
         }
         if (status === 401) {
-            error = "Неверный логин или пароль"
+            error = _("error.invalid-credentials")
             return
         }
-        error = "Ошибка соединения"
+        error = _("error.connection-error")
     }
 
     onMount(() => {
@@ -51,13 +53,17 @@
     </AppBar>
     <div class="login__container">
         <form on:submit|preventDefault={onSubmit}>
-            <TextField label="Логин" bind:value={username} />
-            <TextField label="Пароль" bind:value={password} type="password" />
+            <TextField label={_("username")} bind:value={username} />
+            <TextField
+                label={_("password")}
+                bind:value={password}
+                type="password"
+            />
             {#if error}
                 <p class="error">{error}</p>
             {/if}
             <FilledButton type="submit" {disabled}
-                >{sent ? "Загрузка..." : "Войти"}</FilledButton
+                >{sent ? _("loading") : _("login")}</FilledButton
             >
         </form>
     </div>

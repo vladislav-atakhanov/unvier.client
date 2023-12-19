@@ -6,6 +6,9 @@
     } from "material/color-scheme"
     import { SegmentedButtons } from "material/components"
     import { onMount } from "svelte"
+
+    import { i18n } from "material/i18n"
+    const _ = i18n()
     let current: Scheme
 
     onMount(() => {
@@ -15,9 +18,9 @@
     $: current && setScheme(current)
 
     const items = [
-        ["light", "Светлая"],
-        ["auto", "Системная"],
-        ["dark", "Темная"],
+        ["light", _("color-scheme.light")],
+        ["auto", _("color-scheme.auto")],
+        ["dark", _("color-scheme.dark")],
     ]
 </script>
 

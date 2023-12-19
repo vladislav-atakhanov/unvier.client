@@ -11,6 +11,9 @@
     import { LOGIN, SETTINGS } from "../url"
     import { navigate } from "material"
 
+    import { i18n } from "material/i18n"
+    const _ = i18n()
+
     let username = ""
     onMount(() => {
         username = localStorage.getItem("username") || ""
@@ -24,12 +27,12 @@
 
 <Scaffold>
     <AppBar slot="app-bar"
-        >Профиль
+        >{_("profile")}
         <IconButton slot="actions" icon="settings" href={SETTINGS} />
     </AppBar>
     <div class="profile__container">
-        <div class="profile__content"><p>Логин: {username}</p></div>
-        <FilledButton on:click={onClick}>Выйти</FilledButton>
+        <div class="profile__content"><p>{_("username")}: {username}</p></div>
+        <FilledButton on:click={onClick}>{_("logout")}</FilledButton>
     </div>
 
     <Navigation slot="navigation-bar" />

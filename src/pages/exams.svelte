@@ -6,20 +6,23 @@
     import Card from "../components/card.svelte"
     import { writable } from "svelte/store"
     import { onMount } from "svelte"
+    import { i18n, language } from "material/i18n"
+    const _ = i18n()
 
     const [exams, loading] = useExams()
+
+    $: dtf = new Intl.DateTimeFormat($language, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    })
 
     /** @param {number} timestamp */
     const getDate = (timestamp) => {
         const date = new Date(timestamp * 1000)
-        const intl = new Intl.DateTimeFormat("ru", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-        })
-        return intl.format(date)
+        return dtf.format(date)
     }
 
     const SECOND = 1000
@@ -51,8 +54,7 @@
         const delta = getDelta(timestamp, now)
         return delta > -HOUR && delta <= HOUR * 1.5
     }
-
-    const rtf = new Intl.RelativeTimeFormat("ru", { style: "long" })
+    $: rtf = new Intl.RelativeTimeFormat($language, { style: "long" })
 
     /**
      * @param {number} timestamp
@@ -60,8 +62,9 @@
      */
     const relativeTime = (timestamp, now) => {
         const delta = getDelta(timestamp, now)
-        if (delta <= -HOUR) return "Прошел"
-        if (delta <= 0) return "Сейчас"
+        if (delta <= -HOUR) return _("exams.ended")
+        if (delta <= 0) return _("exams.now")
+
         if (delta < MINUTE)
             return rtf.format(Math.floor(delta / SECOND), "seconds")
         if (delta < HOUR)

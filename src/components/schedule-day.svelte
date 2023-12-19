@@ -1,6 +1,8 @@
 <script lang="ts">
     import type { Lesson } from "../@types"
     import Card from "./card.svelte"
+    import { i18n } from "material/i18n"
+    const _ = i18n()
 
     export let day: number
     export let lessons: Lesson[]
@@ -31,7 +33,7 @@
                 <p class="lesson__time">{time}</p>
             </section>
         {:else}
-            <p class="day__nolessons">Занятий нет 🎉</p>
+            <p class="day__nolessons">{_("schedule.no-lessons")}</p>
         {/each}
     </Card>
 </div>
@@ -44,7 +46,6 @@
     }
 
     .day__nolessons {
-        padding-top: var(--padding);
         margin: 0;
     }
     .lesson {

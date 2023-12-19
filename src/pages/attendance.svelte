@@ -7,6 +7,9 @@
     import { groupBy } from "../utils"
     import Card from "../components/card.svelte"
     import { alert } from "material/notificator"
+
+    import { i18n, language } from "material/i18n"
+    const _ = i18n()
     export let subject: string
 
     type Attendance = Attestation["attendance"]
@@ -19,7 +22,6 @@
         const { attendance } = attestation.filter(
             ({ subject: s }) => subject === s,
         )[0]
-
         return Array.from(groupBy(attendance, "type").entries())
     }
 
@@ -29,29 +31,20 @@
     $: marks = getMarks($attestation)
     $: tabNames = marks.map(([key]) => key.split("-")[0].trim())
 
-    const MONTHS = [
-        "января",
-        "февраля",
-        "марта",
-        "апреля",
-        "мая",
-        "июня",
-        "июля",
-        "августа",
-        "сентября",
-        "октября",
-        "ноября",
-        "декабря",
-    ]
-
     const removeAfterSymbol = (text: string, symbol: string) => {
         const index = text.indexOf(symbol)
         if (index < 0) return text
         return text.substring(0, index).trim()
     }
+
+    $: dtf = new Intl.DateTimeFormat($language, {
+        month: "long",
+        day: "numeric",
+    })
     const formatDay = (date: string) => {
         const [day, month] = date.split(".").map((v) => parseInt(v))
-        return `${day} ${MONTHS[month - 1]}`
+        const d = new Date(`2020-${month}-${day}`)
+        return dtf.format(d)
     }
 </script>
 
@@ -79,7 +72,7 @@
                                         </p>
                                     {/each}
                                     <p class="attendence__title">
-                                        Сумма: <b>{getSum(marks)}</b>
+                                        {_("sum")}: <b>{getSum(marks)}</b>
                                     </p>
                                 </Card>
                             {/each}

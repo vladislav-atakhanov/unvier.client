@@ -5,6 +5,8 @@
     import SchemeSwitcher from "../components/scheme-switcher.svelte"
     import { checkAuth } from "../api"
     import { onMount } from "svelte"
+    import LanguageSwitcher from "../components/language-switcher.svelte"
+    import { i18n } from "material/i18n"
 
     let isAuth = false
     onMount(async () => {
@@ -14,17 +16,23 @@
     const back = () => {
         history?.back()
     }
+
+    const _ = i18n()
 </script>
 
 <Scaffold>
     <AppBar slot="app-bar" canBack={true} {back}
-        >Настройки
+        >{_("settings")}
         <div slot="actions" class="settings__write-me"><WriteMe /></div>
     </AppBar>
     <div class="settings__container">
         <div class="settings__switcher">
-            Тема
+            {_("color-scheme")}
             <SchemeSwitcher />
+        </div>
+        <div class="settings__switcher">
+            {_("language")}
+            <LanguageSwitcher />
         </div>
     </div>
 
@@ -45,9 +53,10 @@
     .settings__container {
         margin: 0 auto;
         max-width: 500px;
+        display: grid;
+        gap: 1em;
     }
     .settings__switcher {
-        margin-bottom: 1em;
         display: grid;
         gap: 0.5em;
     }

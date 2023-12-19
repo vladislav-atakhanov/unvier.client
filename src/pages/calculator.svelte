@@ -7,6 +7,8 @@
         FilledButton,
     } from "material/components"
     import Navigation from "../components/navigation.svelte"
+    import { i18n } from "material/i18n"
+    const _ = i18n()
     export let count = 3
     let wish = 70
     const blockeds = new Array(count).fill(false)
@@ -51,13 +53,12 @@
             return coef + getWeight(index)
         }, 0)
 
+        const x = Math.ceil(((_value - blockedSum) / coefficient) * 10)
         marks = marks.map((mark, index) => {
             if (blockeds[index]) return mark
-            mark = Math.ceil(((_value - blockedSum) / coefficient) * 10)
-            if (isExam(index)) return Math.max(50, mark)
-            return mark
+            if (isExam(index)) return Math.max(50, x)
+            return x
         })
-
         total = getTotal(marks)
     }
     $: isAllBlocked = checkAllBlocked(blockeds, count)
@@ -100,8 +101,9 @@
         const notExamCount = count - 1
         if (blockedCount === notExamCount) {
             if (sum / notExamCount < 50) {
-                message = "Недопуск к экзамену"
-                hint = `Сумма РК меньше ${notExamCount * 50}`
+                message = _("calculator.inadmissibility")
+
+                hint = _("calculator.sum-less-than", notExamCount * 50)
             }
             marks[count - 1] = 50
             total = getTotal(marks)
@@ -129,24 +131,26 @@
 </script>
 
 <Scaffold>
-    <AppBar slot="app-bar">Калькулятор</AppBar>
+    <AppBar slot="app-bar">{_("calculator")}</AppBar>
     <div class="calculator__container">
-        {#each blockeds as _, index}
+        {#each blockeds as __, index}
             <div class="calculator__field">
                 <TextField
-                    label={isExam(index) ? "ПА" : `РК${index + 1}`}
+                    label={isExam(index)
+                        ? _("calculator.exam")
+                        : _("calculator.part", index + 1)}
                     inputmode="numeric"
                     bind:value={marks[index]}
                     on:click={select}
                 />
                 <div class="calculator__switch">
                     <Switch bind:value={blockeds[index]} />
-                    <p>Заморозить</p>
+                    <p>{_("calculator.freeze")}</p>
                 </div>
             </div>
         {/each}
         <TextField
-            label="Итог"
+            label={_("total")}
             inputmode="numeric"
             bind:value={total}
             on:click={select}
@@ -163,16 +167,16 @@
         {/if}
 
         <FilledButton on:click={makeRecalculate(70)} disabled={isAllBlocked}
-            >Остаться на стипендии</FilledButton
+            >{_("calculator.stipend")}</FilledButton
         >
         <FilledButton on:click={credits} disabled={isAllBlocked}
-            >Не попасть на кредиты</FilledButton
+            >{_("calculator.not-credits")}</FilledButton
         >
         <FilledButton on:click={makeRecalculate(90)} disabled={isAllBlocked}
-            >Получить А</FilledButton
+            >{_("calculator.get-a")}</FilledButton
         >
         <FilledButton on:click={makeRecalculate()} disabled={isAllBlocked}
-            >Пересчитать</FilledButton
+            >{_("calculator.recalculate")}</FilledButton
         >
     </div>
 

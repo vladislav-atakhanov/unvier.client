@@ -22,6 +22,7 @@
     } from "./url"
     import Attendance from "./pages/attendance.svelte"
     import Settings from "./pages/settings.svelte"
+    import i18n from "./i18n"
 
     let showLogin = false
 
@@ -54,7 +55,7 @@
     }
 </script>
 
-<MaterialApp {canBack} {back}>
+<MaterialApp {canBack} {back} {i18n}>
     {#if showLogin}
         <Route path={currentPath} component={Login} />
     {:else}

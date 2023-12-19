@@ -1,5 +1,6 @@
 <script lang="ts">
     import { Scaffold, AppBar, IconButton, Tabs } from "material/components"
+    import { i18n, language } from "material/i18n"
     import Navigation from "../components/navigation.svelte"
     import LoadingText from "../components/loading-text.svelte"
     import { useSchedule } from "../api"
@@ -9,15 +10,16 @@
     import { onMount } from "svelte"
 
     const [schedule, loading] = useSchedule()
-    const DAYS = [
-        "Понедельник",
-        "Вторник",
-        "Среда",
-        "Четверг",
-        "Пятница",
-        "Суббота",
-        // "Воскресенье",
-    ]
+    const _ = i18n()
+
+    const capitalize = (text: string) =>
+        text[0].toUpperCase() + text.substring(1)
+
+    $: dtf = new Intl.DateTimeFormat($language, { weekday: "long" })
+    $: DAYS = Array(7)
+        .fill(1)
+        .map((_, index) => dtf.format(new Date(Date.UTC(2021, 5, index))))
+        .map(capitalize)
     const getLessonsByDay = (
         schedule: Schedule | null,
         _factor: boolean,
@@ -32,11 +34,11 @@
     const factors = [
         {
             value: false,
-            title: "Числитель",
+            title: _("schedule.odd"), // !!TODO
         },
         {
             value: true,
-            title: "Знаменатель",
+            title: _("schedule.even"),
         },
     ]
 
@@ -47,7 +49,7 @@
     $: tabs && tabs.select($schedule?.factor ? 1 : 0)
 </script>
 
-<div class="schedule">
+<div class="schedule" style:--current-content={`"${_("schedule.current")}"`}>
     <Tabs
         let:Content
         let:Wrapper
@@ -58,7 +60,7 @@
     >
         <Scaffold padding={false}>
             <AppBar slot="app-bar">
-                <LoadingText {loading} title="Расписание" />
+                <LoadingText {loading} title={_("schedule")} />
                 <IconButton
                     slot="actions"
                     href={EXAMS}
@@ -102,7 +104,7 @@
 
 <style>
     span.current::before {
-        content: "(т) ";
+        content: var(--current-content, "(т) ");
         opacity: 0.5;
     }
     .schedule__container {

@@ -5,16 +5,20 @@ import { TOKEN_KEY } from "./storage-keys"
 import { storage } from "./storage"
 import { singleFetch } from "./utils"
 import { alert } from "material/notificator"
+import { localStorageKeys } from "material"
+import { getLanguage, i18n } from "material/i18n"
+
+const _ = i18n(undefined, false)
 
 export const authFetch = async <T>(url: string): Promise<T | null> => {
     while (1) {
         const accessToken = await getToken()
-        const [data, status] = await singleFetch<T>(
-            `${url}?token=${accessToken}`
-        )
-        if (status === 200) {
-            return data
-        }
+        const queryString = new URLSearchParams({
+            token: accessToken || "",
+            lang: getLanguage(),
+        }).toString()
+        const [data, status] = await singleFetch<T>(`${url}?${queryString}`)
+        if (status === 200) return data
         if (status === 401) {
             const status = await refreshToken()
             if (status === 401) {
@@ -23,15 +27,9 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
             }
             continue
         }
-        if (status === 404) {
-            alert("Не удалось подключиться к серверу")
-            return null
-        }
-        if (status === 408) {
-            alert("Сервер Универа не отвечает")
-            return null
-        }
-        alert(`Неизвестная ошибка ${status}`)
+        if (status === 404) alert(_("error.server-error"))
+        else if (status === 408) alert(_("error.univer-error"))
+        else alert(_("error.unknown-error", status))
         return null
     }
     return null
@@ -56,7 +54,11 @@ export const refreshToken = async () => {
     if (accessToken) await setToken(accessToken)
     return status
 }
-export const login = async (username: string, password: string) => {
+export const login = async (
+    username: string,
+    password: string,
+    lang: string
+) => {
     const [accessToken, status] = await singleFetch<string>(
         api("/auth/login"),
         {
@@ -69,8 +71,18 @@ export const login = async (username: string, password: string) => {
     return status
 }
 
+const whitelist = ["username", TOKEN_KEY, ...localStorageKeys]
+export const clearLocalStorage = () => {
+    for (const key in localStorage) {
+        if (whitelist.includes(key)) continue
+        localStorage.removeItem(key)
+    }
+}
+
 export const logout = () => {
     storage.clear()
+    clearLocalStorage()
+    localStorage.removeItem(TOKEN_KEY)
     fetch(api("/auth/logout"), {
         method: "GET",
         credentials: "include",
