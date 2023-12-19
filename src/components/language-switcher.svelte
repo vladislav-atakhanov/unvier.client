@@ -4,10 +4,10 @@
     import { updateAllStores } from "../api/data"
 
     const values = getLanguages()
+
+    const onInput = () => {
+        setTimeout(updateAllStores, 1000)
+    }
 </script>
 
-<SegmentedButtons
-    items={values}
-    bind:value={$language}
-    on:input={updateAllStores}
-/>
+<SegmentedButtons items={values} bind:value={$language} on:input={onInput} />
