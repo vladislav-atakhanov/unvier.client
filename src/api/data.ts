@@ -3,6 +3,7 @@ import { api } from "./config"
 
 import { type Readable, writable, get } from "svelte/store"
 import { onMount } from "svelte"
+import type { Storage } from "./storage"
 
 type Store<T> = Readable<T | null> & { update: () => void }
 type LoadingStore = Readable<boolean>
@@ -13,7 +14,14 @@ const UPDATE_DELAY = 5 * 60 * 1000
 const stores = new Map<string, Result<unknown>>()
 
 export const createUseData =
-    <T>(path: string, key: string, check = (d: T) => !!d) =>
+    <T>(
+        path: string,
+        key: string,
+        {
+            check = (d) => !!d,
+            storage,
+        }: { check?: (d: T) => boolean; storage: Storage }
+    ) =>
     (): Result<T> => {
         if (stores.has(path)) return stores.get(path) as Result<T>
 
@@ -23,7 +31,7 @@ export const createUseData =
         const loading = writable(false)
 
         const lastUpdateKey = `${key}-last-update`
-        const needUpdate = () => {
+        const needUpdate = async () => {
             if (get(store) === null) return true
 
             const now = Date.now()
@@ -46,14 +54,14 @@ export const createUseData =
             localStorage.setItem(lastUpdateKey, `${Date.now()}`)
             if (data && check(data)) {
                 set(data)
-                localStorage.setItem(key, JSON.stringify(data))
+                await storage.setItem(key, data)
             }
         }
 
-        onMount(() => {
-            const data = localStorage.getItem(key)
-            if (data) set(JSON.parse(data))
-            if (needUpdate()) update()
+        onMount(async () => {
+            const data = await storage.getItem<T>(key)
+            if (data) set(data)
+            if (await needUpdate()) update()
         })
         const result: Result<T> = [
             { subscribe, update },

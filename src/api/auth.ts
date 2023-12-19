@@ -1,7 +1,8 @@
 import { api } from "./config"
 import { HOME, LOGIN } from "../url"
 import { navigate } from "material"
-import { TOKEN_KEY, clearLocalStorage } from "./local-storage"
+import { TOKEN_KEY } from "./storage-keys"
+import { storage } from "./storage"
 import { singleFetch } from "./utils"
 import { alert } from "material/notificator"
 
@@ -69,7 +70,7 @@ export const login = async (username: string, password: string) => {
 }
 
 export const logout = () => {
-    clearLocalStorage()
+    storage.clear()
     fetch(api("/auth/logout"), {
         method: "GET",
         credentials: "include",
