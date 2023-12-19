@@ -6,6 +6,7 @@
     import type { Schedule } from "../@types"
     import { EXAMS } from "../url"
     import ScheduleDay from "../components/schedule-day.svelte"
+    import { onMount } from "svelte"
 
     const [schedule, loading] = useSchedule()
     const DAYS = [
@@ -38,6 +39,8 @@
             title: "Знаменатель",
         },
     ]
+
+    onMount(schedule.updateIfNeed)
 
     let tabs: Tabs
 

@@ -5,7 +5,10 @@ import { type Readable, writable, get } from "svelte/store"
 import { onMount } from "svelte"
 import type { Storage } from "./storage"
 
-type Store<T> = Readable<T | null> & { update: () => void }
+type Store<T> = Readable<T | null> & {
+    update: () => void
+    updateIfNeed: () => void
+}
 type LoadingStore = Readable<boolean>
 type Result<T> = [Store<T>, LoadingStore]
 
@@ -58,13 +61,16 @@ export const createUseData =
             }
         }
 
+        const updateIfNeed = async () => {
+            if (await needUpdate()) update()
+        }
         onMount(async () => {
             const data = await storage.getItem<T>(key)
             if (data) set(data)
-            if (await needUpdate()) update()
+            await updateIfNeed()
         })
         const result: Result<T> = [
-            { subscribe, update },
+            { subscribe, update, updateIfNeed },
             { subscribe: loading.subscribe },
         ]
         stores.set(path, result)

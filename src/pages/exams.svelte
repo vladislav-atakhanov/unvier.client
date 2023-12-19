@@ -79,6 +79,7 @@
     }
     onMount(() => {
         frame = requestAnimationFrame(loop)
+        exams.updateIfNeed()
         return () => cancelAnimationFrame(frame)
     })
 </script>
