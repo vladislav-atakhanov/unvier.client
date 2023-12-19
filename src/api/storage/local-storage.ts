@@ -1,4 +1,5 @@
 import type { Storage } from "./storage"
+import { localStorageKeys } from "material"
 
 class LocalStorage implements Storage {
     constructor(private whitelist: string[]) {}
@@ -11,12 +12,11 @@ class LocalStorage implements Storage {
         localStorage.setItem(key, JSON.stringify(value))
     }
     async clear(): Promise<void> {
-        const keys = { ...localStorage }
-        for (const key in keys) {
+        for (const key in localStorage) {
             if (this.whitelist.includes(key)) continue
             localStorage.removeItem(key)
         }
     }
 }
 
-export const local = new LocalStorage(["username", "color-scheme"])
+export const local = new LocalStorage(["username", ...localStorageKeys])
