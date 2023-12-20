@@ -39,5 +39,8 @@
     "error.univer-error": "Универ сервері жауап бермейді",
     "error.unknown-error": "Белгісіз қате {}",
     "sum": "Сумма",
+    "version.server": "Сервер нұсқасы",
+    "version.client": "Клиент нұсқасы",
+    "version.update-required": "Жаңарту қажет",
     "CURRENT_LANGUAGE": "Қазақша"
 }

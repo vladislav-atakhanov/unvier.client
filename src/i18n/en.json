@@ -39,5 +39,8 @@
     "error.univer-error": "The Univer server is not responding",
     "error.unknown-error": "Unknown error {}",
     "sum": "Sum",
+    "version.server": "Server version",
+    "version.client": "Client version",
+    "version.update-required": "Update required",
     "CURRENT_LANGUAGE": "English"
 }

@@ -3,10 +3,14 @@
     import Navigation from "../components/navigation.svelte"
     import WriteMe from "../components/write-me.svelte"
     import SchemeSwitcher from "../components/scheme-switcher.svelte"
-    import { checkAuth } from "../api"
+    import { checkAuth, useServerVersion } from "../api"
     import { onMount } from "svelte"
     import LanguageSwitcher from "../components/language-switcher.svelte"
     import { i18n } from "material/i18n"
+    import LoadingText from "../components/loading-text.svelte"
+    import Version, { clientVerion } from "../components/version.svelte"
+
+    const [serverVersion, loading] = useServerVersion()
 
     let isAuth = false
     onMount(async () => {
@@ -34,6 +38,21 @@
             {_("language")}
             <LanguageSwitcher />
         </div>
+        <div class="settings__version">
+            <dl>
+                <dt>{_("version.server")}</dt>
+                <dd>
+                    <LoadingText {loading}>
+                        {$serverVersion}
+                    </LoadingText>
+                </dd>
+            </dl>
+            <dl>
+                <dt>{_("version.client")}</dt>
+                <dd>{clientVerion}</dd>
+            </dl>
+            <p><Version /></p>
+        </div>
     </div>
 
     <svelte:fragment slot="navigation-bar">
@@ -59,5 +78,21 @@
     .settings__switcher {
         display: grid;
         gap: 0.5em;
+    }
+    .settings__version p {
+        margin: 0;
+        color: var(--md-sys-color-error);
+    }
+    .settings__version dd {
+        margin: 0;
+        padding: 0;
+    }
+    .settings__version dl {
+        margin: 0;
+        display: flex;
+        gap: 1em;
+    }
+    .settings__version dt::after {
+        content: ":";
     }
 </style>

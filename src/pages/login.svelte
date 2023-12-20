@@ -12,6 +12,7 @@
     import { SETTINGS } from "../url"
     import { i18n } from "material/i18n"
     import { updateAllStores } from "../api/data"
+    import Version from "../components/version.svelte"
     const _ = i18n()
     let username = ""
     let password = ""
@@ -68,6 +69,9 @@
                 >{sent ? _("loading") : _("login")}</FilledButton
             >
         </form>
+        <div class="login__version">
+            <Version />
+        </div>
     </div>
 </Scaffold>
 
@@ -83,6 +87,11 @@
         justify-content: center;
         position: relative;
         height: 100%;
+    }
+    .login__version {
+        position: absolute;
+        bottom: 0;
+        opacity: 0.5;
     }
     .login__actions {
         display: flex;

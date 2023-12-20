@@ -39,5 +39,8 @@
     "error.univer-error": "Сервер Универа не отвечает",
     "error.unknown-error": "Неизвестная ошибка {}",
     "sum": "Сумма",
+    "version.server": "Версия сервера",
+    "version.client": "Версия клиента",
+    "version.update-required": "Требуется обновление",
     "CURRENT_LANGUAGE": "Русский"
 }

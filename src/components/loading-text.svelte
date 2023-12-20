@@ -2,9 +2,13 @@
     import type { Readable } from "svelte/store"
 
     export let loading: Readable<boolean>
-    export let title: string
+    export let title: string = ""
     import { i18n } from "material/i18n"
     const _ = i18n()
 </script>
 
-{$loading ? _("updating") : title}
+{#if $loading}
+    {_("updating")}
+{:else}
+    <slot>{title}</slot>
+{/if}
