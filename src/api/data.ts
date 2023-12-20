@@ -6,7 +6,7 @@ import { onMount } from "svelte"
 import type { Storage } from "./storage"
 
 type Store<T> = Readable<T | null> & {
-    update: (checkLoading: boolean) => void
+    update: (checkLoading?: boolean) => void
 }
 type LoadingStore = Readable<boolean>
 type Result<T> = [Store<T>, LoadingStore]
