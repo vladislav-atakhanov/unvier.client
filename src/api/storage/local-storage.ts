@@ -1,6 +1,13 @@
-import type { Storage } from "./storage"
 import { localStorageKeys } from "material"
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "../storage-keys"
+import type { Storage } from "./storage"
 
+export const whitelist = [
+    "username",
+    ACCESS_TOKEN_KEY,
+    REFRESH_TOKEN_KEY,
+    ...localStorageKeys,
+]
 class LocalStorage implements Storage {
     constructor(private whitelist: string[]) {}
     async getItem<T>(key: string) {
@@ -19,4 +26,4 @@ class LocalStorage implements Storage {
     }
 }
 
-export const local = new LocalStorage(["username", ...localStorageKeys])
+export const local = new LocalStorage(whitelist)
