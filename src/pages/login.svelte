@@ -11,6 +11,7 @@
     import WriteMe from "../components/write-me.svelte"
     import { SETTINGS } from "../url"
     import { i18n } from "material/i18n"
+    import { updateAllStores } from "../api/data"
     const _ = i18n()
     let username = ""
     let password = ""
@@ -26,6 +27,7 @@
         sent = false
         if (status === 200) {
             localStorage.setItem("username", username)
+            setTimeout(updateAllStores, 1000)
             return
         }
         if (status === 401) {
