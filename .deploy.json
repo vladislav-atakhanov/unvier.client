@@ -1,0 +1,5 @@
+{
+    "predeploy_command": "pnpm run build",
+    "directory": "dist",
+    "ssh": "user@univer.eloh1m.com:/home/user/univer/client/dist"
+}
