@@ -55,11 +55,7 @@ export const refreshToken = async () => {
     if (accessToken) await setToken(accessToken)
     return status
 }
-export const login = async (
-    username: string,
-    password: string,
-    lang: string
-) => {
+export const login = async (username: string, password: string) => {
     const [accessToken, status] = await singleFetch<string>(
         api("/auth/login"),
         {
