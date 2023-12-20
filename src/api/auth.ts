@@ -27,7 +27,8 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
             }
             continue
         }
-        if (status === 404) alert(_("error.server-error"))
+        if (status === 404 || status >= 500 || status < 600)
+            alert(_("error.server-error"))
         else if (status === 408) alert(_("error.univer-error"))
         else alert(_("error.unknown-error", status))
         return null
