@@ -5,6 +5,7 @@
         Scaffold,
         AppBar,
         IconButton,
+        Icon,
     } from "material/components"
     import { login } from "../api"
     import { onMount } from "svelte"
@@ -13,6 +14,7 @@
     import { i18n } from "material/i18n"
     import { updateAllStores } from "../api/data"
     import Version from "../components/version.svelte"
+    import InstallButton from "../components/install-button.svelte"
     const _ = i18n()
     let username = ""
     let password = ""
@@ -50,6 +52,10 @@
 <Scaffold>
     <AppBar slot="app-bar">
         <div class="login__actions" slot="actions">
+            <InstallButton class="login__install">
+                <Icon slot="mobile" name="install_mobile" />
+                <Icon slot="desktop" name="install_desktop" />
+            </InstallButton>
             <WriteMe />
             <IconButton icon="settings" href={SETTINGS} />
         </div>
@@ -98,6 +104,9 @@
         gap: 0.5em;
         font-size: 2em;
         align-items: center;
+    }
+    :global(.login__install) {
+        padding: 0.5em;
     }
     form {
         display: grid;

@@ -42,5 +42,6 @@
     "version.server": "Сервер нұсқасы",
     "version.client": "Клиент нұсқасы",
     "version.update-required": "Жаңарту қажет",
+    "install": "Орнату",
     "CURRENT_LANGUAGE": "Қазақша"
 }

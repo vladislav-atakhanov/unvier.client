@@ -42,5 +42,6 @@
     "version.server": "Версия сервера",
     "version.client": "Версия клиента",
     "version.update-required": "Требуется обновление",
+    "install": "Установить",
     "CURRENT_LANGUAGE": "Русский"
 }

@@ -42,5 +42,6 @@
     "version.server": "Server version",
     "version.client": "Client version",
     "version.update-required": "Update required",
+    "install": "Install",
     "CURRENT_LANGUAGE": "English"
 }
