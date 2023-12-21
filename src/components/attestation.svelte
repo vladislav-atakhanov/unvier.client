@@ -3,6 +3,7 @@
     import type { Attestation } from "../@types"
     import { ATTESTATION } from "../url"
     import Card from "./card.svelte"
+    import { getMissing } from "../api/marks"
 
     export let attestation: Attestation[]
 
@@ -45,6 +46,8 @@
 
 {#each attestation as { subject, attestation: _attestation }, index (subject)}
     {@const total = getTotal(_attestation)}
+    {@const missing = getMissing(_attestation, wish)}
+    {@const missingTotal = Math.max(wish - total, 0)}
     <Card title={subject} href="{ATTESTATION}/{subject}">
         <ul class="attestation__summary">
             {#each _attestation as [title, value, active], i (title)}
@@ -53,11 +56,9 @@
                         <span class="summary__title">{title}:</span>
                         <span class="summary__value">{value}</span>
                     </p>
-                    {#if needShow(_attestation, i)}
-                        <p class="summary__wish">
-                            (+{getNeed(_attestation, wish)})
-                        </p>
-                    {/if}
+                    <p class="summary__wish">
+                        (+{missing[i]})
+                    </p>
                 </li>
             {/each}
             <li class="summary">
@@ -65,7 +66,7 @@
                     <span class="summary__title">{_("total")}:</span>
                     <span class="summary__value">{total}</span>
                 </p>
-                <p class="summary__wish">(+{Math.max(wish - total, 0)})</p>
+                <p class="summary__wish">(+{missingTotal})</p>
             </li>
         </ul>
     </Card>
