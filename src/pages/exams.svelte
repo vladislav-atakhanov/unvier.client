@@ -84,6 +84,24 @@
         frame = requestAnimationFrame(loop)
         return () => cancelAnimationFrame(frame)
     })
+
+    /** @type {HTMLElement} */
+    let element
+
+    $: firstFeature = $exams?.reduce((prev, current) => {
+        const delta = getDelta(current.date, Date.now())
+        if (prev !== null) return prev
+        if (delta <= -HOUR) return prev
+        return current
+    }, null)
+
+    $: if (firstFeature && element) {
+        const exam = document.querySelector(`[data-id="${firstFeature.date}"]`)
+        exam?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        })
+    }
 </script>
 
 <Scaffold>
@@ -91,10 +109,14 @@
         <LoadingText {loading} title={_("exams")} />
     </AppBar>
     {#if $exams}
-        <div class="exams">
-            {#each $exams as { subject, teacher, audience, date, type }}
+        <div class="exams" bind:this={element}>
+            {#each $exams as { subject, teacher, audience, date, type } (date)}
                 {@const delta = relativeTime(date, $now)}
-                <Card title={getDate(date)} active={isActive(date, $now)}>
+                <Card
+                    title={getDate(date)}
+                    active={isActive(date, $now)}
+                    data-id={date}
+                >
                     <p class="exam__subject">{subject}</p>
                     <p class="exam__audience">{audience}</p>
                     <p class="exam__teacher">{teacher}</p>
@@ -134,5 +156,8 @@
     }
     .exams p {
         margin: 0;
+    }
+    .exams :global(.card) {
+        scroll-margin-top: 1em;
     }
 </style>
