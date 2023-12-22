@@ -21,9 +21,12 @@
         {#each lessons as { subject, time, audience, teacher, teacher_link }}
             <section class="lesson">
                 <div class="lesson__content">
-                    <h3 class="lesson__title">
-                        {subject}
-                    </h3>
+                    <div class="lesson__header">
+                        <h3 class="lesson__title">
+                            {subject}
+                        </h3>
+                        <p class="lesson__time">{time}</p>
+                    </div>
                     <p class="lesson__audience">
                         {audience}
                     </p>
@@ -40,7 +43,6 @@
                         </p>
                     {/if}
                 </div>
-                <p class="lesson__time">{time}</p>
             </section>
         {:else}
             <p class="day__nolessons">{_("schedule.no-lessons")}</p>
@@ -61,6 +63,8 @@
     .lesson {
         padding-block: var(--padding);
         border-top: 1px solid var(--md-sys-color-outline);
+    }
+    .lesson__header {
         display: flex;
         gap: 1em;
         justify-content: space-between;
