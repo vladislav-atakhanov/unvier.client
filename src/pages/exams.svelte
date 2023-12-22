@@ -7,6 +7,7 @@
     import { writable } from "svelte/store"
     import { onMount } from "svelte"
     import { i18n, language } from "material/i18n"
+    import TeacherLink from "../components/teacher-link.svelte"
     const _ = i18n()
 
     const [exams, loading] = useExams()
@@ -110,7 +111,7 @@
     </AppBar>
     {#if $exams}
         <div class="exams" bind:this={element}>
-            {#each $exams as { subject, teacher, audience, date, type } (date)}
+            {#each $exams as { subject, teacher, audience, date, type, teacher_link } (date)}
                 {@const delta = relativeTime(date, $now)}
                 <Card
                     title={getDate(date)}
@@ -119,7 +120,9 @@
                 >
                     <p class="exam__subject">{subject}</p>
                     <p class="exam__audience">{audience}</p>
-                    <p class="exam__teacher">{teacher}</p>
+                    <p class="exam__teacher">
+                        <TeacherLink {teacher} {teacher_link} />
+                    </p>
                     {#if type === "consultation"}
                         <p class="exam__delta">{_("exams.consultation")}</p>
                     {/if}

@@ -14,6 +14,7 @@ export interface Exam {
     date: number
     subject: string
     teacher: string
+    teacher_link?: string
     audience: string
     type: "consultation" | "exam"
 }
