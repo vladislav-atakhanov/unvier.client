@@ -20,7 +20,7 @@
 </script>
 
 <svelte:component
-    this={factor ? ScheduleTabs : Schedule}
+    this={factor !== null ? ScheduleTabs : Schedule}
     {schedule}
     {loading}
     days={DAYS}
