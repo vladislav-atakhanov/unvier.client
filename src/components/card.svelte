@@ -5,12 +5,17 @@
 
     /** @type {string | undefined} */
     export let href = undefined
+
+    /** @type {string} */
+    let class_ = ""
+    export { class_ as class }
 </script>
 
 <svelte:element
     this={href ? "a" : "section"}
     {href}
-    class="card"
+    class="card {class_}"
+    {...$$restProps}
     class:card--active={active}
 >
     <h2 class="card__title">{title}</h2>
