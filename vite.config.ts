@@ -5,5 +5,8 @@ import manifest from "./src/manifest"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [svelte(), VitePWA({ manifest })],
+    plugins: [
+        svelte(),
+        VitePWA({ manifest, includeAssets: ["images/icons.svg"] }),
+    ],
 })
