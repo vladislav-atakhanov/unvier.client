@@ -21,6 +21,7 @@ export interface Exam {
 export interface Lesson {
     subject: string
     teacher: string
+    teacher_link?: string
     audience: string
     period: string
     day: number

@@ -18,7 +18,7 @@
 
 <div class="day" style:order={day}>
     <Card active={isActiveDay(day, activeWeek)} title={weekday}>
-        {#each lessons as { subject, time, audience, teacher }}
+        {#each lessons as { subject, time, audience, teacher, teacher_link }}
             <section class="lesson">
                 <div class="lesson__content">
                     <h3 class="lesson__title">
@@ -27,9 +27,18 @@
                     <p class="lesson__audience">
                         {audience}
                     </p>
-                    <p class="lesson__teacher">
-                        {teacher}
-                    </p>
+                    {#if teacher_link}
+                        <a
+                            href={teacher_link}
+                            class="lesson__teacher lesson__teacher--link"
+                        >
+                            {teacher}
+                        </a>
+                    {:else}
+                        <p class="lesson__teacher">
+                            {teacher}
+                        </p>
+                    {/if}
                 </div>
                 <p class="lesson__time">{time}</p>
             </section>
@@ -62,6 +71,12 @@
     }
     .lesson__time {
         white-space: nowrap;
+    }
+    .lesson__teacher {
+        display: block;
+    }
+    .lesson__teacher--link {
+        color: var(--md-sys-color-primary);
     }
     .lesson__audience {
         font-weight: bold;
