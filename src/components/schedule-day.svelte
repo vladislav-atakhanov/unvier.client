@@ -2,6 +2,7 @@
     import type { Lesson } from "../@types"
     import Card from "./card.svelte"
     import { i18n } from "material/i18n"
+    import TeacherLink from "./teacher-link.svelte"
     const _ = i18n()
 
     export let day: number
@@ -30,18 +31,9 @@
                     <p class="lesson__audience">
                         {audience}
                     </p>
-                    {#if teacher_link}
-                        <a
-                            href={teacher_link}
-                            class="lesson__teacher lesson__teacher--link"
-                        >
-                            {teacher}
-                        </a>
-                    {:else}
-                        <p class="lesson__teacher">
-                            {teacher}
-                        </p>
-                    {/if}
+                    <p class="lesson__teacher">
+                        <TeacherLink {teacher} {teacher_link} />
+                    </p>
                 </div>
             </section>
         {:else}
@@ -78,9 +70,6 @@
     }
     .lesson__teacher {
         display: block;
-    }
-    .lesson__teacher--link {
-        color: var(--md-sys-color-primary);
     }
     .lesson__audience {
         font-weight: bold;
