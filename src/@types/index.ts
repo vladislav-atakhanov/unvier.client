@@ -15,6 +15,7 @@ export interface Exam {
     subject: string
     teacher: string
     audience: string
+    type: "consultation" | "exam"
 }
 
 export interface Lesson {

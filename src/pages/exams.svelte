@@ -92,13 +92,16 @@
     </AppBar>
     {#if $exams}
         <div class="exams">
-            {#each $exams as { subject, teacher, audience, date }}
+            {#each $exams as { subject, teacher, audience, date, type }}
                 {@const delta = relativeTime(date, $now)}
                 <Card title={getDate(date)} active={isActive(date, $now)}>
                     <p class="exam__subject">{subject}</p>
                     <p class="exam__audience">{audience}</p>
                     <p class="exam__teacher">{teacher}</p>
-                    {#if delta}
+                    {#if type === "consultation"}
+                        <p class="exam__delta">{_("exams.consultation")}</p>
+                    {/if}
+                    {#if type === "exam" && delta}
                         <p
                             class="exam__delta"
                             class:exam__delta--near={isNear(date, $now)}
