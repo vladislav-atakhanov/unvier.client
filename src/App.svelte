@@ -35,7 +35,7 @@
         showLogin = true
         const isAuth = await checkAuth()
         showLogin = false
-        if (isAuth) return
+        if (isAuth) return navigate(authPath)
         navigate(LOGIN)
         if ((await refreshToken()) === 200) return navigate(authPath)
     })
