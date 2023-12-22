@@ -4,6 +4,7 @@ import type { Storage } from "./storage"
 
 export const whitelist = [
     "username",
+    "univer",
     ACCESS_TOKEN_KEY,
     REFRESH_TOKEN_KEY,
     ...localStorageKeys,

@@ -5,7 +5,6 @@ import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "./storage-keys"
 import { storage } from "./storage"
 import { singleFetch } from "./utils"
 import { alert } from "material/notificator"
-import { localStorageKeys } from "material"
 import { getLanguage, i18n } from "material/i18n"
 import { whitelist } from "./storage/local-storage"
 
@@ -57,17 +56,25 @@ export const checkAuth = async () => (await getAccessToken()) !== null
 
 export const refreshToken = async () => {
     const token = await getRefreshToken()
+    if (!token) return 401
     const [tokens, status] = await singleFetch<string[]>(
         api(`/auth/refresh?token=${token}`)
     )
     if (tokens) await setTokens(tokens)
     return status
 }
-export const login = async (username: string, password: string) => {
+
+interface User {
+    username: string
+    password: string
+    univer: string
+}
+
+export const login = async (user: User) => {
     const [tokens, status] = await singleFetch<string[]>(api("/auth/login"), {
         method: "POST",
         credentials: "include",
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify(user),
     })
     if (tokens) await setTokens(tokens)
     return status

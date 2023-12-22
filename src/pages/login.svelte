@@ -6,6 +6,7 @@
         AppBar,
         IconButton,
         Icon,
+        SegmentedButtons,
     } from "material/components"
     import { login } from "../api"
     import { onMount } from "svelte"
@@ -19,6 +20,8 @@
     let username = ""
     let password = ""
     let error = ""
+    const univers = ["KSTU", "KazNU"]
+    let univer = "KSTU"
 
     let sent = false
 
@@ -26,10 +29,15 @@
         if (sent) return
         error = ""
         sent = true
-        const status = await login(username, password)
+        const status = await login({
+            username,
+            password,
+            univer: univer.toLowerCase(),
+        })
         sent = false
         if (status === 200) {
             localStorage.setItem("username", username)
+            localStorage.setItem("univer", univer)
             setTimeout(updateAllStores, 1000)
             return
         }
@@ -43,6 +51,9 @@
     onMount(() => {
         const localUsername = localStorage.getItem("username")
         if (username.length < 1 && localUsername) username = localUsername
+
+        const localUniver = localStorage.getItem("univer")
+        if (localUniver) univer = localUniver
     })
 
     $: active = username.length && password.length
@@ -62,6 +73,7 @@
     </AppBar>
     <div class="login__container">
         <form on:submit|preventDefault={onSubmit}>
+            <SegmentedButtons bind:value={univer} items={univers} />
             <TextField label={_("username")} bind:value={username} />
             <TextField
                 label={_("password")}
