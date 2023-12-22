@@ -7,10 +7,11 @@
     export let day: number
     export let lessons: Lesson[]
     export let weekday: string
-    export let activeWeek = false
-    const isActiveDay = (day: number, activeWeek: boolean) => {
+    export let activeWeek: boolean | null = null
+    const isActiveDay = (day: number, activeWeek: boolean | null) => {
         const nowDay = Math.max(1, new Date().getDay())
-        const _week = nowDay > 5 ? !activeWeek : activeWeek
+        const _week =
+            activeWeek === null ? true : nowDay > 5 ? !activeWeek : activeWeek
         return _week && day === nowDay - 1
     }
 </script>
