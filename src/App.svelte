@@ -55,7 +55,7 @@
     }
 </script>
 
-<MaterialApp {canBack} {back} {i18n}>
+<MaterialApp {canBack} {back} {i18n} defaultLanguage="ru">
     {#if showLogin}
         <Route path={currentPath} component={Login} />
     {:else}
