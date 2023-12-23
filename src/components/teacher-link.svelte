@@ -18,4 +18,7 @@
     .teacher-link {
         color: var(--md-sys-color-primary);
     }
+    .teacher-link:hover {
+        text-decoration: none;
+    }
 </style>
