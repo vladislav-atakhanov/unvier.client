@@ -66,7 +66,7 @@
             <Attestation attestation={$attestation} {wish} />
         {/if}
     </div>
-    <Navigation on:update={attestation.update} slot="navigation-bar" />
+    <Navigation slot="navigation-bar" />
 </Scaffold>
 
 <style>
@@ -89,6 +89,7 @@
         width: 30px;
         text-align: right;
         padding: 0;
+        color: inherit;
     }
     .wish__input {
         position: relative;
