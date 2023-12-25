@@ -44,5 +44,17 @@
     "version.client": "Клиент нұсқасы",
     "version.update-required": "Жаңарту қажет",
     "install": "Орнату",
+    "transcript.fullname": "Аты-жөні",
+    "transcript.faculty": "Факультеті",
+    "transcript.level-of-the-qualification": "Оқу сатысы",
+    "transcript.level-of-education": "Оқу деңгейі",
+    "transcript.education-program": "Білім беру бағдарламасы",
+    "transcript.education-program-group": "Білім беру бағдарламасының тобы",
+    "transcript.language": "Бөлім",
+    "transcript.year-of-study": "Оқу курсы",
+    "transcript.length-of-program": "Оқу мерзімі",
+    "transcript.graid-point": "GPA",
+    "transcript.avarage-point": "Орташа бал",
+    "transcript.form-of-study": "Оқу түрі",
     "CURRENT_LANGUAGE": "Қазақша"
 }

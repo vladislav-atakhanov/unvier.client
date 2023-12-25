@@ -44,5 +44,17 @@
     "version.client": "Client version",
     "version.update-required": "Update required",
     "install": "Install",
+    "transcript.fullname": "Full name",
+    "transcript.faculty": "Faculty",
+    "transcript.level-of-the-qualification": "Level of the Qualification",
+    "transcript.level-of-education": "Level of Education",
+    "transcript.education-program": "Educational Program",
+    "transcript.education-program-group": "Educational program group",
+    "transcript.language": "Language of Study",
+    "transcript.year-of-study": "Year of study",
+    "transcript.length-of-program": "Length of Programme",
+    "transcript.graid-point": "GPA",
+    "transcript.avarage-point": "Average Point",
+    "transcript.form-of-study": "Form of Study",
     "CURRENT_LANGUAGE": "English"
 }

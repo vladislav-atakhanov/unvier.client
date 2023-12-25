@@ -44,5 +44,17 @@
     "version.client": "Версия клиента",
     "version.update-required": "Требуется обновление",
     "install": "Установить",
+    "transcript.fullname": "Ф.И.О.",
+    "transcript.faculty": "Факультет",
+    "transcript.level-of-the-qualification": "Ступень обучения",
+    "transcript.level-of-education": "Уровень обучения",
+    "transcript.education-program": "Образовательная программа",
+    "transcript.education-program-group": "Группа образовательных программ",
+    "transcript.language": "Язык обучения",
+    "transcript.year-of-study": "Курс обучения",
+    "transcript.length-of-program": "Срок обучения",
+    "transcript.graid-point": "GPA",
+    "transcript.avarage-point": "Средний балл",
+    "transcript.form-of-study": "Форма обучения",
     "CURRENT_LANGUAGE": "Русский"
 }
