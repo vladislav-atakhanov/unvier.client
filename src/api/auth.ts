@@ -4,7 +4,7 @@ import { navigate } from "material"
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "./storage-keys"
 import { storage } from "./storage"
 import { singleFetch } from "./utils"
-import { alert } from "material/notificator"
+import { addSnack } from "material/notificator"
 import { getLanguage, i18n } from "material/i18n"
 import { whitelist } from "./storage/local-storage"
 
@@ -28,16 +28,16 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
             continue
         }
         if (status === 403) {
-            alert(_("error.invalid-credentials"))
+            addSnack(_("error.invalid-credentials"))
             navigate(LOGIN)
             logout()
             return null
         }
 
         if (status === 404 || (status >= 500 && status < 600))
-            alert(_("error.server-error"))
-        else if (status === 408) alert(_("error.univer-error"))
-        else alert(_("error.unknown-error", status))
+            addSnack(_("error.server-error"))
+        else if (status === 408) addSnack(_("error.univer-error"))
+        else addSnack(_("error.unknown-error", status))
         return null
     }
     return null

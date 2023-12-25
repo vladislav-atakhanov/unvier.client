@@ -6,7 +6,7 @@
     import type { Attestation, Mark } from "../@types"
     import { groupBy } from "../utils"
     import Card from "../components/card.svelte"
-    import { alert } from "material/notificator"
+    import { addSnack } from "material/notificator"
 
     import { i18n, language } from "material/i18n"
     const _ = i18n()
@@ -51,7 +51,7 @@
 <div class="attendance">
     <Tabs let:Content let:Wrapper let:Header let:Tab maxWidth={1140}>
         <Scaffold padding={false}>
-            <AppBar slot="app-bar" on:title-click={() => alert(subject)}
+            <AppBar slot="app-bar" on:title-click={() => addSnack(subject)}
                 ><LoadingText {loading} title={subject} />
                 <Header slot="bottom">
                     {#each tabNames as tab}
