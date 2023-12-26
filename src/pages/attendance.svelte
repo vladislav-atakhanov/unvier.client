@@ -48,7 +48,7 @@
     }
 </script>
 
-<div class="attendance">
+<div class="attendance" style:--columns={marks.length}>
     <Tabs let:Content let:Wrapper let:Header let:Tab maxWidth={1140}>
         <Scaffold padding={false}>
             <AppBar slot="app-bar" on:title-click={() => addSnack(subject)}
@@ -91,10 +91,11 @@
             display: none;
         }
         .attendance :global(.tabs__wrapper) {
+            --_columns: var(--columns, 3);
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: repeat(var(--_columns), 1fr);
             margin: 0 auto;
-            max-width: 1500px;
+            max-width: calc(var(--_columns) * 500px);
             height: unset !important;
         }
         .attendance :global(.tabs__content) {
