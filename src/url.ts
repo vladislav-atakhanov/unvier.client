@@ -5,6 +5,15 @@ export const PROFILE = "/profile"
 export const EXAMS = "/schedule/exams"
 export const CALCULATOR = "/attestation/calculator"
 export const SETTINGS = "/settings"
+export const PRIVACY_POLICY = "/privacy"
 
 export const HOME = SCHEDULE
-export const AUTH_PATHS = [ATTESTATION, SCHEDULE, PROFILE, EXAMS, CALCULATOR]
+export const AUTH_PATHS = [
+    ATTESTATION,
+    SCHEDULE,
+    PROFILE,
+    EXAMS,
+    CALCULATOR,
+    SETTINGS,
+    PRIVACY_POLICY,
+]

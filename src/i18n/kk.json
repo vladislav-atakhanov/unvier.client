@@ -56,5 +56,7 @@
     "transcript.graid-point": "GPA",
     "transcript.avarage-point": "Орташа бал",
     "transcript.form-of-study": "Оқу түрі",
+    "privacy-policy": "Құпиялылық саясаты",
+    "privacy-policy.agree": "Мен <a href='{}'>құпиялылық саясатымен</a> келісемін",
     "CURRENT_LANGUAGE": "Қазақша"
 }

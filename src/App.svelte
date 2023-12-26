@@ -19,10 +19,12 @@
         AUTH_PATHS,
         CALCULATOR,
         SETTINGS,
+        PRIVACY_POLICY,
     } from "./url"
     import Attendance from "./pages/attendance.svelte"
     import Settings from "./pages/settings.svelte"
     import i18n from "./i18n"
+    import PrivacyPolicy from "./pages/privacy-policy.svelte"
 
     let showLogin = false
 
@@ -67,6 +69,7 @@
         <Route path={PROFILE} component={Profile} />
         <Route path={EXAMS} component={Exams} />
         <Route path={CALCULATOR} component={Calculator} />
+        <Route path={PRIVACY_POLICY} component={PrivacyPolicy} />
     {/if}
     <Route path={SETTINGS} component={Settings} />
 </MaterialApp>

@@ -56,5 +56,7 @@
     "transcript.graid-point": "GPA",
     "transcript.avarage-point": "Average Point",
     "transcript.form-of-study": "Form of Study",
+    "privacy-policy": "Privacy policy",
+    "privacy-policy.agree": "I agree with the <a href='{}'>privacy policy</a>",
     "CURRENT_LANGUAGE": "English"
 }

@@ -8,6 +8,7 @@ import {
     EXAMS,
     SERVER_VERSION,
     TRANSCRIPT,
+    PRIVACY_POLICY,
 } from "./storage-keys"
 
 export const useAttestation = createUseData<Attestation[]>(
@@ -25,6 +26,11 @@ export const useTranscript = createUseData<Transcript>(
 export const useServerVersion = createUseData<string>(
     "/api/version",
     SERVER_VERSION,
+    { storage }
+)
+export const usePrivacyPolicy = createUseData<string>(
+    "/api/privacy-policy",
+    PRIVACY_POLICY,
     { storage }
 )
 

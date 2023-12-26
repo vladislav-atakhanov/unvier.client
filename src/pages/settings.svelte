@@ -9,6 +9,7 @@
     import { i18n } from "material/i18n"
     import LoadingText from "../components/loading-text.svelte"
     import Version, { clientVerion } from "../components/version.svelte"
+    import { PRIVACY_POLICY } from "../url"
 
     const [serverVersion, loading] = useServerVersion()
 
@@ -17,9 +18,7 @@
         isAuth = await checkAuth()
     })
 
-    const back = () => {
-        history?.back()
-    }
+    const back = () => history?.back()
 
     const _ = i18n()
 </script>
@@ -52,6 +51,10 @@
                 <dd>{clientVerion}</dd>
             </dl>
             <p><Version /></p>
+        </div>
+
+        <div class="policy">
+            <a href={PRIVACY_POLICY}>{_("privacy-policy")}</a>
         </div>
     </div>
 
@@ -94,5 +97,11 @@
     }
     .settings__version dt::after {
         content: ":";
+    }
+    a {
+        color: var(--md-sys-color-primary);
+    }
+    a:hover {
+        text-decoration: none;
     }
 </style>

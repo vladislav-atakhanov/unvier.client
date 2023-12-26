@@ -7,11 +7,12 @@
         IconButton,
         Icon,
         SegmentedButtons,
+        Checkbox,
     } from "material/components"
     import { login } from "../api"
     import { onMount } from "svelte"
     import WriteMe from "../components/write-me.svelte"
-    import { SETTINGS } from "../url"
+    import { PRIVACY_POLICY, SETTINGS } from "../url"
     import { i18n } from "material/i18n"
     import { updateAllStores } from "../api/data"
     import Version from "../components/version.svelte"
@@ -56,7 +57,9 @@
         if (localUniver) univer = localUniver
     })
 
-    $: active = username.length && password.length
+    let agree = false
+
+    $: active = agree && username.length && password.length
     $: disabled = sent ? true : !active
 </script>
 
@@ -80,6 +83,12 @@
                 bind:value={password}
                 type="password"
             />
+            <label class="policy">
+                <Checkbox label={false} bind:checked={agree} />
+                <span>
+                    {@html _("privacy-policy.agree", PRIVACY_POLICY)}
+                </span>
+            </label>
             {#if error}
                 <p class="error">{error}</p>
             {/if}
@@ -97,6 +106,9 @@
     :global(md-filled-button) {
         display: block;
     }
+    label {
+        display: block;
+    }
     .login__container {
         margin: 0 auto;
         max-width: 500px;
@@ -105,11 +117,20 @@
         justify-content: center;
         position: relative;
         height: 100%;
+        --width: 100%;
     }
     .login__version {
         position: absolute;
         bottom: 0;
         opacity: 0.5;
+    }
+    .policy {
+        display: flex;
+        gap: 1em;
+        align-items: center;
+    }
+    .policy span {
+        font-size: 0.8em;
     }
     .login__actions {
         display: flex;
