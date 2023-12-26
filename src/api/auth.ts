@@ -60,12 +60,7 @@ const encryptPassword = async (password: string) => {
 
 export const authFetch = async <T>(url: string): Promise<T | null> => {
     while (1) {
-        const password = secureStorage.getItem("password")
-        if (!password) {
-            navigate(LOGIN)
-            logout()
-            return null
-        }
+        const password = secureStorage.getItem("password") || ""
         const [accessToken, payload] = await Promise.all([
             getAccessToken(),
             encryptPassword(password),
@@ -93,6 +88,7 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
             return null
         }
 
+        if (status === 400) addSnack(_("version.update-required"))
         if (status === 404 || (status >= 500 && status < 600))
             addSnack(_("error.server-error"))
         else if (status === 408) addSnack(_("error.univer-error"))
@@ -105,7 +101,6 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
 const setTokens = async ([refreshToken, accessToken]: string[]) => {
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
     localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
-    navigate(HOME)
 }
 
 export const getAccessToken = async () => localStorage.getItem(ACCESS_TOKEN_KEY)
@@ -138,6 +133,7 @@ export const login = async (user: User) => {
     if (tokens) {
         await setTokens(tokens)
         secureStorage.setItem("password", user.password)
+        navigate(HOME)
     }
     return status
 }
