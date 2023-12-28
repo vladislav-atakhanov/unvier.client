@@ -27,7 +27,7 @@
     let sent = false
 
     const onSubmit = async () => {
-        if (sent) return
+        if (disabled) return
         error = ""
         sent = true
         const status = await login({
