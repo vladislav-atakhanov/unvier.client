@@ -51,6 +51,8 @@ export default {
     start_url: HOME,
     name: "Univer",
     short_name: "Univer",
+    description:
+        "Приложение для просмотра оценок, расписания занятий и экзаменов, и другой информации о студенте.",
     icons: [
         icon(64),
         icon(128),
