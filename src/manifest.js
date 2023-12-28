@@ -1,7 +1,7 @@
 import { HOME } from "./url"
 
 /**
- * @typedef Params
+ * @typedef IconParams
  * @type {object}
  * @property {string | ((size: number) => string)} [path]
  * @property {string} [type]
@@ -11,7 +11,7 @@ import { HOME } from "./url"
 /**
  *
  * @param {number} size
- * @param {Params} params
+ * @param {IconParams} params
  * @returns
  */
 const icon = (
@@ -26,6 +26,21 @@ const icon = (
     sizes: `${size}x${size}`,
     type,
     purpose,
+})
+
+/** @param {string} name */
+const mobileScreenshot = (name) => ({
+    src: `images/screens/mobile/${name}.jpg`,
+    type: "image/jpeg",
+    sizes: "540x1067",
+    form_factor: "narrow",
+})
+/** @param {string} name */
+const desktopScreenshot = (name) => ({
+    src: `images/screens/desktop/${name}.jpg`,
+    type: "image/jpeg",
+    sizes: "800x450",
+    form_factor: "wide",
 })
 
 export default {
@@ -45,5 +60,16 @@ export default {
             purpose: "maskable",
             path: "images/icons/maskable.png",
         }),
+    ],
+    screenshots: [
+        mobileScreenshot("schedule"),
+        mobileScreenshot("attendance"),
+        mobileScreenshot("marks"),
+        mobileScreenshot("calculator"),
+        mobileScreenshot("exams"),
+        mobileScreenshot("profile"),
+        desktopScreenshot("schedule"),
+        desktopScreenshot("attendance"),
+        desktopScreenshot("profile"),
     ],
 }
