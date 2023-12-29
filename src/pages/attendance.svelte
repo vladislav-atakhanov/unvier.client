@@ -10,7 +10,7 @@
 
     import { i18n, language } from "material/i18n"
     const _ = i18n()
-    export let subject: string
+    export let index: string
 
     type Attendance = Attestation["attendance"]
 
@@ -19,9 +19,7 @@
         attestation: Attestation[] | null,
     ): [string, Attendance][] => {
         if (!attestation) return []
-        const { attendance } = attestation.filter(
-            ({ subject: s }) => subject === s,
-        )[0]
+        const { attendance } = attestation[parseInt(index)]
         return Array.from(groupBy(attendance, "type").entries())
     }
 
@@ -30,6 +28,7 @@
 
     $: marks = getMarks($attestation)
     $: tabNames = marks.map(([key]) => key.split("-")[0].trim())
+    $: subject = $attestation ? $attestation[parseInt(index)].subject : ""
 
     const removeAfterSymbol = (text: string, symbol: string) => {
         const index = text.indexOf(symbol)
@@ -62,8 +61,8 @@
             <Wrapper>
                 {#each marks as [type, attendances]}
                     <Content>
-                        <div class="attendences">
-                            <h2 class="attendences__type">{type}</h2>
+                        <div class="attendances">
+                            <h2 class="attendances__type">{type}</h2>
                             {#each attendances as { part, marks }}
                                 <Card title={removeAfterSymbol(part, "(")}>
                                     {#each marks as [title, value]}
@@ -71,7 +70,7 @@
                                             {formatDay(title)}: <b> {value}</b>
                                         </p>
                                     {/each}
-                                    <p class="attendence__title">
+                                    <p class="attendance__title">
                                         {_("sum")}: <b>{getSum(marks)}</b>
                                     </p>
                                 </Card>
@@ -108,11 +107,11 @@
     p {
         margin: 0;
     }
-    .attendences__type {
+    .attendances__type {
         margin: 0;
         font: inherit;
     }
-    .attendences {
+    .attendances {
         display: grid;
         gap: 1em;
         padding-inline: var(--container-padding-inline);
@@ -120,7 +119,7 @@
         margin: 0 auto;
         max-width: 500px;
     }
-    .attendence__title {
+    .attendance__title {
         padding-top: var(--padding);
         margin-top: var(--padding);
         border-top: 1px solid var(--md-sys-color-outline);

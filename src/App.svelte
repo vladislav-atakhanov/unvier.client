@@ -63,7 +63,7 @@
     {:else}
         <Route path={LOGIN} component={Login} />
         <Route path={ATTESTATION} component={Attestation} />
-        <Route path="{ATTESTATION}/:subject" component={Attendance} />
+        <Route path="{ATTESTATION}/:index" component={Attendance} />
         <Route path={SCHEDULE} component={Schedule} />
         <Route path="/" component={Schedule} />
         <Route path={PROFILE} component={Profile} />
