@@ -42,8 +42,10 @@
     })
     const formatDay = (date: string) => {
         const [day, month] = date.split(".").map((v) => parseInt(v))
-        const d = new Date(`2020-${month}-${day}`)
-        return dtf.format(d)
+        const m = `${month}`.padStart(2, "0")
+        const d = `${day}`.padStart(2, "0")
+        const dateString = `2020-${m}-${d}`
+        return dtf.format(new Date(dateString))
     }
 </script>
 
