@@ -40,6 +40,7 @@
     "error.univer-error": "Универ сервері жауап бермейді",
     "error.unknown-error": "Белгісіз қате {}",
     "sum": "Сумма",
+    "no-data": "Мәліметтер жоқ",
     "version.server": "Сервер нұсқасы",
     "version.client": "Клиент нұсқасы",
     "version.update-required": "Жаңарту қажет",

@@ -62,8 +62,10 @@
     </AppBar>
 
     <div class="attestations__container">
-        {#if $attestation}
+        {#if $attestation && $attestation.length > 0}
             <Attestation attestation={$attestation} {wish} />
+        {:else}
+            <p class="attestations__no-data">{_("no-data")}</p>
         {/if}
     </div>
     <Navigation slot="navigation-bar" />
@@ -75,6 +77,7 @@
         gap: 1em;
         margin: 0 auto;
         max-width: 500px;
+        min-height: 100%;
     }
     .wish {
         display: flex;
@@ -82,6 +85,12 @@
         gap: 1em;
         white-space: nowrap;
         padding-bottom: 4px;
+    }
+    .attestations__no-data {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     input {
         border: none;

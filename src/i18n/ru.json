@@ -40,6 +40,7 @@
     "error.univer-error": "Сервер Универа не отвечает",
     "error.unknown-error": "Неизвестная ошибка {}",
     "sum": "Сумма",
+    "no-data": "Нет данных",
     "version.server": "Версия сервера",
     "version.client": "Версия клиента",
     "version.update-required": "Требуется обновление",

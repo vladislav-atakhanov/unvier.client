@@ -109,7 +109,7 @@
     <AppBar slot="app-bar">
         <LoadingText {loading} title={_("exams")} />
     </AppBar>
-    {#if $exams}
+    {#if $exams && $exams.length > 0}
         <div class="exams" bind:this={element}>
             {#each $exams as { subject, teacher, audience, date, type, teacher_link } (date)}
                 {@const delta = relativeTime(date, $now)}
@@ -137,6 +137,8 @@
                 </Card>
             {/each}
         </div>
+    {:else}
+        <p class="exams__no-data">{_("no-data")}</p>
     {/if}
     <Navigation slot="navigation-bar" />
 </Scaffold>
