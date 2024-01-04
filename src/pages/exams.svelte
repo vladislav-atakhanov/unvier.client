@@ -7,6 +7,7 @@
     import { writable } from "svelte/store"
     import { onMount } from "svelte"
     import { i18n, language } from "material/i18n"
+    import { useRequestAnimationFrame } from "material/hooks"
     import TeacherLink from "../components/teacher-link.svelte"
     const _ = i18n()
 
@@ -75,16 +76,10 @@
         return rtf.format(Math.round(delta / DAY), "days")
     }
 
-    let frame = 0
     const now = writable(0)
-    const loop = () => {
-        now.set(Math.floor(Date.now() / 1000) * 1000)
-        frame = requestAnimationFrame(loop)
-    }
-    onMount(() => {
-        frame = requestAnimationFrame(loop)
-        return () => cancelAnimationFrame(frame)
-    })
+    useRequestAnimationFrame(() =>
+        now.set(Math.floor(Date.now() / 1000) * 1000),
+    )
 
     /** @type {HTMLElement} */
     let element
