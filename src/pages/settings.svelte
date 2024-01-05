@@ -8,7 +8,7 @@
     import LanguageSwitcher from "../components/language-switcher.svelte"
     import { i18n } from "material/i18n"
     import LoadingText from "../components/loading-text.svelte"
-    import Version, { clientVerion } from "../components/version.svelte"
+    import Version, { clientVersion } from "../components/version.svelte"
     import { PRIVACY_POLICY } from "../url"
 
     const [serverVersion, loading] = useServerVersion()
@@ -48,7 +48,7 @@
             </dl>
             <dl>
                 <dt>{_("version.client")}</dt>
-                <dd>{clientVerion}</dd>
+                <dd>{clientVersion}</dd>
             </dl>
             <p><Version /></p>
         </div>

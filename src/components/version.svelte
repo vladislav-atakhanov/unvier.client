@@ -1,16 +1,15 @@
 <script context="module">
-    export const clientVerion = "84a4a631"
+    export const clientVersion = "84a4a631"
 </script>
 
 <script>
     import { useServerVersion } from "../api"
-    import LoadingText from "./loading-text.svelte"
     import { i18n } from "material/i18n"
     const _ = i18n()
 
-    const [serverVersion, loading] = useServerVersion()
+    const [serverVersion] = useServerVersion()
 
-    $: needUpdate = $serverVersion !== null && clientVerion !== $serverVersion
+    $: needUpdate = $serverVersion !== null && clientVersion !== $serverVersion
 </script>
 
 {#if needUpdate}
