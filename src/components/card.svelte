@@ -41,7 +41,12 @@
         color: inherit;
         display: block;
     }
-    a.card:hover,
+    @media (hover: hover) {
+        a.card:hover {
+            border: 1px solid var(--md-sys-color-primary);
+            background-color: var(--md-sys-color-secondary-container);
+        }
+    }
     a.card:active,
     .card--active {
         border: 1px solid var(--md-sys-color-primary);

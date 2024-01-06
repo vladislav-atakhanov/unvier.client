@@ -98,7 +98,9 @@
     a {
         color: var(--md-sys-color-primary);
     }
-    a:hover {
-        text-decoration: none;
+    @media (hover: hover) {
+        a:hover {
+            text-decoration: none;
+        }
     }
 </style>

@@ -18,7 +18,9 @@
     .teacher-link {
         color: var(--md-sys-color-primary);
     }
-    .teacher-link:hover {
-        text-decoration: none;
+    @media (hover: hover) {
+        .teacher-link:hover {
+            text-decoration: none;
+        }
     }
 </style>
