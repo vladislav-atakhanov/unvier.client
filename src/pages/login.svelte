@@ -64,7 +64,7 @@
 </script>
 
 <Scaffold>
-    <AppBar slot="app-bar">
+    <AppBar slot="app-bar" icon={false}>
         <div class="login__actions" slot="actions">
             <InstallButton class="login__install">
                 <Icon slot="mobile" name="install_mobile" />
@@ -83,6 +83,7 @@
                 bind:value={password}
                 type="password"
             />
+            <!-- svelte-ignore a11y-label-has-associated-control -->
             <label class="policy">
                 <Checkbox label={false} bind:checked={agree} />
                 <span>
