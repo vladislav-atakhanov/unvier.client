@@ -1,6 +1,7 @@
 <script>
     import Icon from "./icon.svelte"
-    export let href = "https://t.me/univerapp"
+    import { TELEGRAM } from "../url"
+    export let href = TELEGRAM
     export let icon = "telegram"
 </script>
 
@@ -13,7 +14,6 @@
         display: flex;
         align-items: center;
         color: inherit;
-        height: 1em;
-        width: 1em;
+        --size: 1em;
     }
 </style>

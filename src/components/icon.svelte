@@ -10,7 +10,8 @@
 
 <style>
     svg {
-        width: 1em;
-        height: 1em;
+        font-size: var(--size, 24px);
+        width: var(--size, 24px);
+        height: var(--size, 24px);
     }
 </style>
