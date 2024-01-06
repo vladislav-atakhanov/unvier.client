@@ -17,14 +17,11 @@
     onMount(async () => {
         isAuth = await checkAuth()
     })
-
-    const back = () => history?.back()
-
     const _ = i18n()
 </script>
 
 <Scaffold>
-    <AppBar slot="app-bar" canBack={true} {back}
+    <AppBar slot="app-bar" canBack={true}
         >{_("settings")}
         <div slot="actions" class="settings__write-me"><WriteMe /></div>
     </AppBar>

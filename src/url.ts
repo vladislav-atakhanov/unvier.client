@@ -6,6 +6,7 @@ export const EXAMS = "/schedule/exams"
 export const CALCULATOR = "/attestation/calculator"
 export const SETTINGS = "/settings"
 export const PRIVACY_POLICY = "/privacy"
+export const TELEGRAM = "https://t.me/univerapp"
 
 export const HOME = SCHEDULE
 export const AUTH_PATHS = [

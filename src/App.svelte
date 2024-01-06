@@ -25,6 +25,7 @@
     import Settings from "./pages/settings.svelte"
     import i18n from "./i18n"
     import PrivacyPolicy from "./pages/privacy-policy.svelte"
+    import Drawer from "./components/drawer.svelte"
 
     let showLogin = false
 
@@ -48,16 +49,9 @@
         const match = pathname.match(/\//g) || []
         return match.length > 1
     }
-
-    /** @param {string} location */
-    const back = (location) => {
-        let target = location.split("/").slice(0, -1).join("/")
-        if (target === "/") target = HOME
-        navigate(target)
-    }
 </script>
 
-<MaterialApp {canBack} {back} {i18n} defaultLanguage="ru">
+<MaterialApp {canBack} {i18n} defaultLanguage="ru" home={HOME}>
     {#if showLogin}
         <Route path={currentPath} component={Login} />
     {:else}
@@ -72,4 +66,5 @@
         <Route path={PRIVACY_POLICY} component={PrivacyPolicy} />
     {/if}
     <Route path={SETTINGS} component={Settings} />
+    <Drawer slot="drawer" />
 </MaterialApp>
