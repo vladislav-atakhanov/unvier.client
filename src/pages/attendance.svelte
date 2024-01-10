@@ -92,15 +92,20 @@
             display: none;
         }
         .attendance :global(.tabs__wrapper) {
-            --_columns: var(--columns, 3);
-            display: grid;
-            grid-template-columns: repeat(var(--_columns), 1fr);
             margin: 0 auto;
             max-width: calc(var(--_columns) * 500px);
             height: unset !important;
         }
-        .attendance :global(.tabs__content) {
+        .attendance :global(.tab__content) {
             width: auto;
+            flex: none;
+        }
+
+        .attendance :global(.tabs__content) {
+            --_columns: var(--columns, 3);
+            transform: none;
+            display: grid;
+            grid-template-columns: repeat(var(--_columns), 1fr);
         }
         .attendance :global(.tabs__line) {
             display: none;
