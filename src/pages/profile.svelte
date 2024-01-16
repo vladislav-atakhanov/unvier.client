@@ -1,14 +1,9 @@
 <script>
-    import {
-        Scaffold,
-        AppBar,
-        FilledButton,
-        IconButton,
-    } from "material/components"
+    import { Scaffold, AppBar, FilledButton } from "material/components"
     import { logout, useTranscript } from "../api"
     import Navigation from "../components/navigation.svelte"
     import { onMount } from "svelte"
-    import { LOGIN, SETTINGS } from "../url"
+    import { LOGIN } from "../url"
     import { navigate } from "material"
 
     import { i18n } from "material/i18n"
@@ -31,7 +26,6 @@
 <Scaffold>
     <AppBar slot="app-bar"
         ><LoadingText {loading}>{_("profile")}</LoadingText>
-        <IconButton slot="actions" icon="settings" href={SETTINGS} />
     </AppBar>
     <div class="profile__container">
         <div class="profile__content">

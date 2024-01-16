@@ -133,6 +133,9 @@
     .policy span {
         font-size: 0.8em;
     }
+    .policy :global(a) {
+        color: var(--md-sys-color-primary);
+    }
     .login__actions {
         display: flex;
         gap: 0.5em;
