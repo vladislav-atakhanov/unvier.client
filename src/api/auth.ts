@@ -58,20 +58,21 @@ const encryptPassword = async (password: string) => {
     }
 }
 
+export const authFetchUrl = async (url: string) => {
+    const password = secureStorage.getItem("password") || ""
+    const accessToken = getAccessToken()
+    const payload = await encryptPassword(password)
+    const queryString = new URLSearchParams({
+        token: accessToken || "",
+        lang: getLanguage(),
+        ...payload,
+    } as any).toString()
+    return `${url}?${queryString}`
+}
+
 export const authFetch = async <T>(url: string): Promise<T | null> => {
     while (1) {
-        const password = secureStorage.getItem("password") || ""
-        const [accessToken, payload] = await Promise.all([
-            getAccessToken(),
-            encryptPassword(password),
-        ])
-
-        const queryString = new URLSearchParams({
-            token: accessToken || "",
-            lang: getLanguage(),
-            ...payload,
-        } as any).toString()
-        const [data, status] = await singleFetch<T>(`${url}?${queryString}`)
+        const [data, status] = await singleFetch<T>(await authFetchUrl(url))
         if (status === 200) return data
         if (status === 401) {
             const status = await refreshToken()
@@ -98,23 +99,22 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
     return null
 }
 
-const setTokens = async ([refreshToken, accessToken]: string[]) => {
+const setTokens = ([refreshToken, accessToken]: string[]) => {
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
     localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
 }
 
-export const getAccessToken = async () => localStorage.getItem(ACCESS_TOKEN_KEY)
-export const getRefreshToken = async () =>
-    localStorage.getItem(REFRESH_TOKEN_KEY)
-export const checkAuth = async () => (await getAccessToken()) !== null
+export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY)
+export const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY)
+export const checkAuth = () => getAccessToken() !== null
 
 export const refreshToken = async () => {
-    const token = await getRefreshToken()
+    const token = getRefreshToken()
     if (!token) return 401
     const [tokens, status] = await singleFetch<string[]>(
         api(`/auth/refresh?token=${token}`)
     )
-    if (tokens) await setTokens(tokens)
+    if (tokens) setTokens(tokens)
     return status
 }
 
@@ -131,7 +131,7 @@ export const login = async (user: User) => {
         body: JSON.stringify(user),
     })
     if (tokens) {
-        await setTokens(tokens)
+        setTokens(tokens)
         secureStorage.setItem("password", user.password)
         navigate(HOME)
     }
@@ -144,7 +144,7 @@ export const logout = async () => {
         if (whitelist.includes(key)) continue
         localStorage.removeItem(key)
     }
-    const token = await getRefreshToken()
+    const token = getRefreshToken()
     fetch(api(`/auth/logout?token=${token}`))
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     localStorage.removeItem(REFRESH_TOKEN_KEY)

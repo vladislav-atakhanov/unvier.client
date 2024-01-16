@@ -44,11 +44,11 @@
     const _ = i18n()
 </script>
 
-{#each attestation as { subject, attestation: _attestation }, index (subject)}
+{#each attestation as { subject, attestation: _attestation } (subject)}
     {@const total = getTotal(_attestation)}
     {@const missing = getMissing(_attestation, wish)}
     {@const missingTotal = Math.max(wish - total, 0)}
-    <Card title={subject} href="{ATTESTATION}/{index}">
+    <Card title={subject} href="{ATTESTATION}/{subject}">
         <ul class="attestation__summary">
             {#each _attestation as [title, value, active], i (title)}
                 <li class="summary" class:summary--active={active}>

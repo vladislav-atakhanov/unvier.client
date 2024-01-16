@@ -10,7 +10,7 @@
 
     import { i18n, language } from "material/i18n"
     const _ = i18n()
-    export let index: string
+    export let subject: string
 
     type Attendance = Attestation["attendance"]
 
@@ -19,8 +19,11 @@
         attestation: Attestation[] | null,
     ): [string, Attendance][] => {
         if (!attestation) return []
-        const { attendance } = attestation[parseInt(index)]
-        return Array.from(groupBy(attendance, "type").entries())
+        const a = attestation.find(({ subject: s }) => subject === s)
+
+        if (!a) return []
+        console.log(a.attendance)
+        return groupBy(a.attendance, "type")
     }
 
     const getSum = (marks: Mark[]) =>
@@ -28,7 +31,6 @@
 
     $: marks = getMarks($attestation)
     $: tabNames = marks.map(([key]) => key.split("-")[0].trim())
-    $: subject = $attestation ? $attestation[parseInt(index)].subject : ""
 
     const removeAfterSymbol = (text: string, symbol: string) => {
         const index = text.indexOf(symbol)

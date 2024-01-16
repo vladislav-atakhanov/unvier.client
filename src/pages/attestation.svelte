@@ -77,7 +77,6 @@
         gap: 1em;
         margin: 0 auto;
         max-width: 500px;
-        min-height: 100%;
     }
     .wish {
         display: flex;
