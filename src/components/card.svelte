@@ -9,18 +9,15 @@
     /** @type {string} */
     let class_ = ""
     export { class_ as class }
-
-    export let tag = "section"
 </script>
 
 <svelte:element
-    this={href ? "a" : tag}
+    this={href ? "a" : "section"}
     {href}
     class="card {class_}"
-    class:card--button={href || tag === "button"}
+    class:card--button={href}
     {...$$restProps}
     class:card--active={active}
-    on:click
 >
     <h2 class="card__title">{title}</h2>
     <slot />
@@ -49,13 +46,14 @@
         background-color: transparent;
         text-align: left;
     }
-    @media (hover: hover) {
-        .card--button:hover {
-            border: 1px solid var(--md-sys-color-primary);
-            background-color: var(--md-sys-color-secondary-container);
-        }
+
+    .card--button {
+        transition: transform 0.2s;
     }
-    .card--button:active,
+    .card--button:active {
+        transform: scale(0.95);
+    }
+    .card--button:hover,
     .card--active {
         border: 1px solid var(--md-sys-color-primary);
         background-color: var(--md-sys-color-secondary-container);
