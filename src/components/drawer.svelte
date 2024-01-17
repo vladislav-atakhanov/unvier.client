@@ -9,6 +9,7 @@
         SCHEDULE,
         SETTINGS,
         TELEGRAM,
+        UMKD,
     } from "../url"
     import Icon from "./icon.svelte"
     import { useTranscript } from "../api"
@@ -29,6 +30,7 @@
     <Section>
         <Item label={_("exams")} icon="playlist_add_check" href={EXAMS} />
         <Item label={_("calculator")} icon="calculate" href={CALCULATOR} />
+        <Item label={_("umkd")} icon="description" href={UMKD} />
     </Section>
     <Section>
         <Item label={_("attestation")} icon="book" href={ATTESTATION} />

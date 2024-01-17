@@ -20,25 +20,24 @@
         CALCULATOR,
         SETTINGS,
         PRIVACY_POLICY,
+        UMKD,
     } from "./url"
     import Attendance from "./pages/attendance.svelte"
     import Settings from "./pages/settings.svelte"
     import i18n from "./i18n"
     import PrivacyPolicy from "./pages/privacy-policy.svelte"
     import Drawer from "./components/drawer.svelte"
-
-    let showLogin = false
+    import Umkd from "./pages/umkd.svelte"
+    import UmkdFiles from "./pages/umkd-files.svelte"
 
     let currentPath = "/"
     onMount(async () => {
         const { pathname } = location
+        console.log(pathname)
         currentPath = pathname
         const authPath = AUTH_PATHS.includes(pathname) ? pathname : HOME
         localStorage.setItem("mount-time", `${Date.now()}`)
-        showLogin = true
-        const isAuth = await checkAuth()
-        showLogin = false
-        if (isAuth) return navigate(authPath)
+        if (checkAuth()) return navigate(authPath)
         navigate(LOGIN)
         if ((await refreshToken()) === 200) return navigate(authPath)
     })
@@ -49,22 +48,22 @@
         const match = pathname.match(/\//g) || []
         return match.length > 1
     }
+
+    const home = () => (checkAuth() ? HOME : LOGIN)
 </script>
 
-<MaterialApp {canBack} {i18n} defaultLanguage="ru" home={HOME}>
-    {#if showLogin}
-        <Route path={currentPath} component={Login} />
-    {:else}
-        <Route path={LOGIN} component={Login} />
-        <Route path={ATTESTATION} component={Attestation} />
-        <Route path="{ATTESTATION}/:index" component={Attendance} />
-        <Route path={SCHEDULE} component={Schedule} />
-        <Route path="/" component={Schedule} />
-        <Route path={PROFILE} component={Profile} />
-        <Route path={EXAMS} component={Exams} />
-        <Route path={CALCULATOR} component={Calculator} />
-        <Route path={PRIVACY_POLICY} component={PrivacyPolicy} />
-    {/if}
+<MaterialApp {canBack} {i18n} defaultLanguage="ru" {home}>
+    <Route path={LOGIN} component={Login} />
+    <Route path={ATTESTATION} component={Attestation} />
+    <Route path="{ATTESTATION}/:subject" component={Attendance} />
+    <Route path={SCHEDULE} component={Schedule} />
+    <Route path="/" component={Schedule} />
+    <Route path={PROFILE} component={Profile} />
+    <Route path={EXAMS} component={Exams} />
+    <Route path={CALCULATOR} component={Calculator} />
+    <Route path={PRIVACY_POLICY} component={PrivacyPolicy} />
+    <Route path={UMKD} component={Umkd} />
+    <Route path="{UMKD}/:id" component={UmkdFiles} />
     <Route path={SETTINGS} component={Settings} />
     <Drawer slot="drawer" />
 </MaterialApp>

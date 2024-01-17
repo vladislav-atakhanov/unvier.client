@@ -49,3 +49,21 @@ export interface Transcript {
     avarage_point: number
     form_of_study: string
 }
+
+export interface UmkdFolder {
+    subject: string
+    id: string
+    type: string
+}
+export interface UmkdFile {
+    name: string
+    description: string
+    type: string
+    language: string | null
+    size: string
+    date: number
+    downloads_count: number
+    teacher: string
+    teacher_link?: string
+    url: string
+}

@@ -1,7 +1,13 @@
 export { login, refreshToken, logout, checkAuth } from "./auth"
 import { createUseData } from "./data"
 import { storage } from "./storage"
-import type { Attestation, Schedule, Exam, Transcript } from "../@types"
+import type {
+    Attestation,
+    Schedule,
+    Exam,
+    Transcript,
+    UmkdFolder,
+} from "../@types"
 import {
     ATTESTATION_KEY,
     SCHEDULE_KEY,
@@ -9,6 +15,7 @@ import {
     SERVER_VERSION,
     TRANSCRIPT,
     PRIVACY_POLICY,
+    UMKD_KEY,
 } from "./storage-keys"
 
 export const useAttestation = createUseData<Attestation[]>(
@@ -45,3 +52,7 @@ export const useSchedule = createUseData<Schedule>(
         storage,
     }
 )
+
+export const useUmkd = createUseData<UmkdFolder[]>("/api/umkd", UMKD_KEY, {
+    storage,
+})

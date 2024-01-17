@@ -8,6 +8,7 @@ import { addSnack } from "material/notificator"
 import { getLanguage, i18n } from "material/i18n"
 import { whitelist } from "./storage/local-storage"
 import SecureStorage from "secure-web-storage"
+import { writable } from "svelte/store"
 
 const _ = i18n(undefined, false)
 
@@ -58,12 +59,12 @@ const encryptPassword = async (password: string) => {
     }
 }
 
-export const authFetchUrl = async (url: string) => {
+export const authFetchUrl = async (url: string, accessToken?: string) => {
     const password = secureStorage.getItem("password") || ""
-    const accessToken = getAccessToken()
+    accessToken = accessToken ?? getAccessToken()
     const payload = await encryptPassword(password)
     const queryString = new URLSearchParams({
-        token: accessToken || "",
+        token: accessToken,
         lang: getLanguage(),
         ...payload,
     } as any).toString()
@@ -99,14 +100,20 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
     return null
 }
 
+export const token = writable("")
 const setTokens = ([refreshToken, accessToken]: string[]) => {
+    token.set(accessToken)
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
     localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
 }
 
-export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY)
+export const getAccessToken = () => {
+    const token_ = localStorage.getItem(ACCESS_TOKEN_KEY) ?? ""
+    token.set(token_)
+    return token_
+}
 export const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY)
-export const checkAuth = () => getAccessToken() !== null
+export const checkAuth = () => getAccessToken().length > 0
 
 export const refreshToken = async () => {
     const token = getRefreshToken()

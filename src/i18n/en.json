@@ -59,5 +59,6 @@
     "transcript.form-of-study": "Form of Study",
     "privacy-policy": "Privacy policy",
     "privacy-policy.agree": "I agree with the <a href='{}'>privacy policy</a>",
-    "CURRENT_LANGUAGE": "English"
+    "CURRENT_LANGUAGE": "English",
+    "umkd": "EMCD"
 }

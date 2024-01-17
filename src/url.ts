@@ -7,14 +7,23 @@ export const CALCULATOR = "/attestation/calculator"
 export const SETTINGS = "/settings"
 export const PRIVACY_POLICY = "/privacy"
 export const TELEGRAM = "https://t.me/univerapp"
+export const UMKD = "/umkd"
 
 export const HOME = SCHEDULE
-export const AUTH_PATHS = [
-    ATTESTATION,
-    SCHEDULE,
-    PROFILE,
-    EXAMS,
-    CALCULATOR,
-    SETTINGS,
-    PRIVACY_POLICY,
-]
+export const AUTH_PATHS = {
+    list: [
+        ATTESTATION,
+        SCHEDULE,
+        PROFILE,
+        EXAMS,
+        CALCULATOR,
+        SETTINGS,
+        PRIVACY_POLICY,
+        UMKD,
+    ],
+
+    includes(url: string) {
+        const isOrStarts = (u: string) => u === url || url.startsWith(u)
+        return this.list.find(isOrStarts) !== undefined
+    },
+}

@@ -59,5 +59,6 @@
     "transcript.form-of-study": "Форма обучения",
     "privacy-policy": "Политика конфиденциальности",
     "privacy-policy.agree": "Я согласен с <a href='{}'>политикой конфиденциальности</a>",
-    "CURRENT_LANGUAGE": "Русский"
+    "CURRENT_LANGUAGE": "Русский",
+    "umkd": "УМКД"
 }
