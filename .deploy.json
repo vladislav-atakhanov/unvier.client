@@ -1,5 +1,9 @@
 {
     "predeploy_command": "pnpm run build",
     "directory": "dist",
-    "ssh": "user@univer.eloh1m.com:/home/user/univer/client/dist"
+    "git": {
+        "repo": "https://github.com/vladislav-atakhanov/univer.eloh1m.com",
+        "branch": "master",
+        "commit_format": "Deploy at {{DATE}}"
+    }
 }
