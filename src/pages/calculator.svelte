@@ -143,10 +143,11 @@
                     bind:value={marks[index]}
                     on:click={select}
                 />
-                <div class="calculator__switch">
+                <!-- svelte-ignore a11y-label-has-associated-control -->
+                <label class="calculator__switch">
                     <Switch bind:value={blockeds[index]} />
                     <p>{_("calculator.freeze")}</p>
-                </div>
+                </label>
             </div>
         {/each}
         <TextField
