@@ -44,13 +44,7 @@ export const usePrivacyPolicy = createUseData<string>(
 export const useSchedule = createUseData<Schedule>(
     "/api/schedule",
     SCHEDULE_KEY,
-    {
-        check(schedule) {
-            if (!schedule) return false
-            return schedule.lessons.length > 0
-        },
-        storage,
-    }
+    { storage }
 )
 
 export const useUmkd = createUseData<UmkdFolder[]>("/api/umkd", UMKD_KEY, {

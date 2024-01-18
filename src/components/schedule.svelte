@@ -6,6 +6,7 @@
     import type { Schedule } from "../@types"
     import { EXAMS } from "../url"
     import ScheduleDay from "../components/schedule-day.svelte"
+    import { i18n } from "material/i18n"
 
     export let schedule: ReturnType<typeof useSchedule>[0]
     export let loading: ReturnType<typeof useSchedule>[1]
@@ -20,6 +21,10 @@
     let tabs: Tabs
 
     $: tabs && tabs.select($schedule?.factor ? 1 : 0)
+
+    const _ = i18n()
+
+    $: console.log($schedule)
 </script>
 
 <Scaffold padding={false}>
@@ -28,10 +33,14 @@
         <IconButton slot="actions" href={EXAMS} icon="playlist_add_check" />
     </AppBar>
     <div class="schedule__container container">
-        {#each days as weekday, day}
-            {@const lessons = getLessonsByDay($schedule, day)}
-            <ScheduleDay {weekday} {day} {lessons} />
-        {/each}
+        {#if $schedule !== null && $schedule.lessons.length > 0}
+            {#each days as weekday, day}
+                {@const lessons = getLessonsByDay($schedule, day)}
+                <ScheduleDay {weekday} {day} {lessons} />
+            {/each}
+        {:else}
+            <p class="schedule__no-data">{_("no-data")}</p>
+        {/if}
     </div>
     <Navigation slot="navigation-bar" />
 </Scaffold>

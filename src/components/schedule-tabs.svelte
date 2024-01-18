@@ -73,19 +73,23 @@
                 {#each factors as { value }}
                     <Content>
                         <div class="schedule__container container">
-                            {#each days as weekday, day}
-                                {@const lessons = getLessonsByDay(
-                                    $schedule,
-                                    value,
-                                    day,
-                                )}
-                                <ScheduleDay
-                                    {weekday}
-                                    {day}
-                                    {lessons}
-                                    activeWeek={value === $schedule?.factor}
-                                />
-                            {/each}
+                            {#if $schedule !== null && $schedule.lessons.length > 0}
+                                {#each days as weekday, day}
+                                    {@const lessons = getLessonsByDay(
+                                        $schedule,
+                                        value,
+                                        day,
+                                    )}
+                                    <ScheduleDay
+                                        {weekday}
+                                        {day}
+                                        {lessons}
+                                        activeWeek={value === $schedule?.factor}
+                                    />
+                                {/each}
+                            {:else}
+                                <p class="schedule__no-data">{_("no-data")}</p>
+                            {/if}
                         </div>
                     </Content>
                 {/each}
