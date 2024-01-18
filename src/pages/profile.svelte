@@ -1,4 +1,5 @@
 <script>
+    import { confirm } from "material/notificator"
     import { Scaffold, AppBar, FilledButton } from "material/components"
     import { logout, useTranscript } from "../api"
     import Navigation from "../components/navigation.svelte"
@@ -17,7 +18,15 @@
 
     const [transcript, loading] = useTranscript()
 
-    const onClick = () => {
+    const onClick = async () => {
+        const logout_ = _("logout")
+        const cancel = _("cancel")
+        const answer = await confirm({
+            title: _("logout.sure"),
+            message: _("logout.message"),
+            values: [logout_, cancel],
+        })
+        if (answer !== logout_) return
         logout()
         navigate(LOGIN)
     }

@@ -60,5 +60,8 @@
     "privacy-policy": "Privacy policy",
     "privacy-policy.agree": "I agree with the <a href='{}'>privacy policy</a>",
     "CURRENT_LANGUAGE": "English",
-    "umkd": "EMCD"
+    "umkd": "EMCD",
+    "cancel": "Cancel",
+    "logout.sure": "Do you really want to logout?",
+    "logout.message": "All data except settings will be deleted."
 }
