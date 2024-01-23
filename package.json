@@ -21,7 +21,6 @@
     },
     "dependencies": {
         "material": "file:../../material",
-        "secure-web-storage": "^1.0.2",
-        "svelte-routing": "^2.10.0"
+        "secure-web-storage": "^1.0.2"
     }
 }
