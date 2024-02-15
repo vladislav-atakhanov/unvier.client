@@ -9,6 +9,7 @@
     import Card from "../components/card.svelte"
     import TeacherLink from "../components/teacher-link.svelte"
     import { groupBy } from "../utils"
+    import { api } from "../api/config"
     const _ = i18n()
     const [umkd, loading] = useUmkd()
 
@@ -36,11 +37,6 @@
     })
 
     $: grouped = groupBy(files, "teacher")
-
-    /** @param {string} url */
-    const download = (url) => {
-        console.log(url)
-    }
 </script>
 
 <Scaffold>
@@ -52,7 +48,7 @@
             <div class="files__group">
                 <TeacherLink {...files[0]} />
                 {#each files as { date, description, downloads_count, language, name, size, type, url }}
-                    <Card title={name} on:click={download(url)}>
+                    <Card href={api(url)} title={name}>
                         {#if type}<p>{type}</p>{/if}
                         <div class="file__date">
                             {dtf.format(date * 1000)}
