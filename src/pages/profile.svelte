@@ -4,8 +4,6 @@
     import { logout, useTranscript } from "../api"
     import Navigation from "../components/navigation.svelte"
     import { onMount } from "svelte"
-    import { LOGIN } from "../url"
-    import { navigate } from "material"
 
     import { i18n } from "material/i18n"
     import LoadingText from "../components/loading-text.svelte"
@@ -28,7 +26,6 @@
         })
         if (answer !== logout_) return
         logout()
-        navigate(LOGIN)
     }
 </script>
 

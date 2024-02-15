@@ -1,19 +1,17 @@
 import { api } from "./config"
 import { HOME, LOGIN } from "../url"
 import { navigate } from "material"
-import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "./storage-keys"
 import { storage } from "./storage"
 import { singleFetch } from "./utils"
 import { addSnack } from "material/notificator"
 import { getLanguage, i18n } from "material/i18n"
 import { whitelist } from "./storage/local-storage"
 import SecureStorage from "secure-web-storage"
-import { writable } from "svelte/store"
 
 const _ = i18n(undefined, false)
 
 const secret = "6cceadbb-1602-4e90-8893-5c872e157575"
-const secureStorage = new SecureStorage(localStorage, {
+const secureStorage: Storage = new SecureStorage(localStorage, {
     hash(message: string) {
         var hash = 0,
             i,
@@ -46,34 +44,18 @@ const encrypt = (message: string, key: string) => {
     return result
 }
 
-const encryptPassword = async (password: string) => {
-    const [data, status] = await singleFetch<{ date: number; secret: string }>(
-        api("/api/secret")
-    )
-    if (!data) return {}
-    const { date, secret } = data
-
-    return {
-        date: `${date}`,
-        key: encrypt(password, secret),
-    }
-}
-
-export const authFetchUrl = async (url: string, accessToken?: string) => {
-    const password = secureStorage.getItem("password") || ""
-    accessToken = accessToken ?? getAccessToken()
-    const payload = await encryptPassword(password)
+export const authFetchUrl = async (url: string) => {
     const queryString = new URLSearchParams({
-        token: accessToken,
         lang: getLanguage(),
-        ...payload,
     } as any).toString()
     return `${url}?${queryString}`
 }
 
 export const authFetch = async <T>(url: string): Promise<T | null> => {
     while (1) {
-        const [data, status] = await singleFetch<T>(await authFetchUrl(url))
+        const [data, status] = await singleFetch<T>(await authFetchUrl(url), {
+            credentials: "include",
+        })
         if (status === 200) return data
         if (status === 401) {
             const status = await refreshToken()
@@ -85,7 +67,6 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
         }
         if (status === 403) {
             addSnack(_("error.invalid-credentials"))
-            navigate(LOGIN)
             logout()
             return null
         }
@@ -100,29 +81,14 @@ export const authFetch = async <T>(url: string): Promise<T | null> => {
     return null
 }
 
-export const token = writable("")
-const setTokens = ([refreshToken, accessToken]: string[]) => {
-    token.set(accessToken)
-    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
-    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
-}
-
-export const getAccessToken = () => {
-    const token_ = localStorage.getItem(ACCESS_TOKEN_KEY) ?? ""
-    token.set(token_)
-    return token_
-}
-export const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY)
-export const checkAuth = () => getAccessToken().length > 0
-
 export const refreshToken = async () => {
-    const token = getRefreshToken()
-    if (!token) return 401
-    const [tokens, status] = await singleFetch<string[]>(
-        api(`/auth/refresh?token=${token}`)
-    )
-    if (tokens) setTokens(tokens)
-    return status
+    const username = localStorage.getItem("username")
+    const univer = localStorage.getItem("univer")
+    const password = secureStorage.getItem("password")
+
+    if (username && univer && password)
+        return await login({ password, username, univer })
+    return 401
 }
 
 interface User {
@@ -131,18 +97,24 @@ interface User {
     univer: string
 }
 
-export const login = async (user: User) => {
-    const [tokens, status] = await singleFetch<string[]>(api("/auth/login"), {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify(user),
+let loginPromise: Promise<number> | null = null
+
+export const login = (user: User) => {
+    if (loginPromise) return loginPromise
+    loginPromise = new Promise(async (resolve) => {
+        const { status } = await fetch(api("/auth/login"), {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify(user),
+        })
+        if (status === 200) {
+            const { password } = user
+            secureStorage.setItem("password", password)
+            navigate(HOME)
+        }
+        resolve(status)
     })
-    if (tokens) {
-        setTokens(tokens)
-        secureStorage.setItem("password", user.password)
-        navigate(HOME)
-    }
-    return status
+    loginPromise.then(() => setTimeout(() => (loginPromise = null), 1000))
 }
 
 export const logout = async () => {
@@ -151,8 +123,8 @@ export const logout = async () => {
         if (whitelist.includes(key)) continue
         localStorage.removeItem(key)
     }
-    const token = getRefreshToken()
-    fetch(api(`/auth/logout?token=${token}`))
-    localStorage.removeItem(ACCESS_TOKEN_KEY)
-    localStorage.removeItem(REFRESH_TOKEN_KEY)
+    fetch(api(`/auth/logout`), { credentials: "include" })
+    navigate(LOGIN)
 }
+
+export const checkAuth = () => localStorage.getItem("username") !== null

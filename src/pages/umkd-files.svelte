@@ -9,8 +9,6 @@
     import Card from "../components/card.svelte"
     import TeacherLink from "../components/teacher-link.svelte"
     import { groupBy } from "../utils"
-    import { api } from "../api/config"
-    import { authFetchUrl, token } from "../api/auth"
     const _ = i18n()
     const [umkd, loading] = useUmkd()
 
@@ -39,12 +37,10 @@
 
     $: grouped = groupBy(files, "teacher")
 
-    /**
-     *
-     * @param {string} url
-     * @param {string} token
-     */
-    const getHref = async (url, token) => api(await authFetchUrl(url, token))
+    /** @param {string} url */
+    const download = (url) => {
+        console.log(url)
+    }
 </script>
 
 <Scaffold>
@@ -56,25 +52,23 @@
             <div class="files__group">
                 <TeacherLink {...files[0]} />
                 {#each files as { date, description, downloads_count, language, name, size, type, url }}
-                    {#await getHref(url, $token) then href}
-                        <Card {href} title={name} noroute>
-                            {#if type}<p>{type}</p>{/if}
-                            <div class="file__date">
-                                {dtf.format(date * 1000)}
-                            </div>
-                            {#if description.length > 0}
-                                <p class="file__description">{description}</p>
-                            {/if}
-                            {#if language}
-                                <p>{language}</p>
-                            {/if}
-                            <div class="file__icon">
-                                {size}
-                                <Icon name="download" />
-                                {#if downloads_count > 0}{downloads_count}{/if}
-                            </div>
-                        </Card>
-                    {/await}
+                    <Card title={name} on:click={download(url)}>
+                        {#if type}<p>{type}</p>{/if}
+                        <div class="file__date">
+                            {dtf.format(date * 1000)}
+                        </div>
+                        {#if description.length > 0}
+                            <p class="file__description">{description}</p>
+                        {/if}
+                        {#if language}
+                            <p>{language}</p>
+                        {/if}
+                        <div class="file__icon">
+                            {size}
+                            <Icon name="download" />
+                            {#if downloads_count > 0}{downloads_count}{/if}
+                        </div>
+                    </Card>
                 {/each}
             </div>
         {:else}

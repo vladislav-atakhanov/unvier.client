@@ -1,5 +1,5 @@
 <script context="module">
-    export const clientVersion = "VPjRDPsy"
+    export const clientVersion = "Ps9Oynpy"
 </script>
 
 <script>
