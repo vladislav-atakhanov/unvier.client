@@ -115,6 +115,7 @@ export const login = (user: User) => {
         resolve(status)
     })
     loginPromise.then(() => setTimeout(() => (loginPromise = null), 1000))
+    return loginPromise
 }
 
 export const logout = async () => {
