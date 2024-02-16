@@ -1,5 +1,5 @@
 import { api } from "./config"
-import { HOME, LOGIN } from "../url"
+import { LOGIN } from "../url"
 import { navigate } from "material"
 import { storage } from "./storage"
 import { singleFetch } from "./utils"
@@ -110,7 +110,6 @@ export const login = (user: User) => {
         if (status === 200) {
             const { password } = user
             secureStorage.setItem("password", password)
-            navigate(HOME)
         }
         resolve(status)
     })

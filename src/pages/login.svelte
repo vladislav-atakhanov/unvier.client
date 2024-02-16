@@ -9,14 +9,16 @@
         SegmentedButtons,
         Checkbox,
     } from "material/components"
+    import { navigate } from "material"
     import { login } from "../api"
     import { onMount } from "svelte"
     import WriteMe from "../components/write-me.svelte"
-    import { PRIVACY_POLICY, SETTINGS } from "../url"
+    import { PRIVACY_POLICY, SETTINGS, HOME } from "../url"
     import { i18n } from "material/i18n"
     import { updateAllStores } from "../api/data"
     import Version from "../components/version.svelte"
     import InstallButton from "../components/install-button.svelte"
+
     const _ = i18n()
     let username = ""
     let password = ""
@@ -35,6 +37,7 @@
             password,
             univer: univer.toLowerCase(),
         })
+        navigate(HOME)
         sent = false
         if (status === 200) {
             localStorage.setItem("username", username)
