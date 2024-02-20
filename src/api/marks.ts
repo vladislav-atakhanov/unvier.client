@@ -1,13 +1,13 @@
 import type { Mark } from "../@types"
 
-const isExam = (index: number, count: number) => index == count - 1
+export const isExam = (index: number, count: number) => index == count - 1
 
-const getWeight = <T>({ length }: T[], index: number) =>
+export const getWeight = <T>(index: number, count: number) =>
     isExam(length, index) ? 4 : 6 / (length - 1)
 
 export const _get = (values: number[], wish: number) => {
     const sum = values.reduce(
-        (acc, v, index) => acc + v * getWeight(values, index),
+        (acc, v, index) => acc + v * getWeight(index, values.length),
         0
     )
     if (sum === 0) return values.map((_) => wish)
@@ -29,3 +29,11 @@ export const getMissing = (marks: Mark[], wish: number) => {
         Math.max(v - marks[index][1], 0)
     )
 }
+
+export const getTotal = (marks: number[]) =>
+    Math.floor(
+        marks.reduce(
+            (t, mark, index) => t + mark * getWeight(index, marks.length),
+            0
+        ) / 10
+    )

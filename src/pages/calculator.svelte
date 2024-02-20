@@ -8,28 +8,25 @@
     } from "material/components"
     import Navigation from "../components/navigation.svelte"
     import { i18n } from "material/i18n"
+    import { getTotal, isExam, getWeight } from "../api/marks"
     const _ = i18n()
     export let count = 3
     let wish = 70
-    const blockeds = new Array(count).fill(false)
+    const blockFlags = new Array(count).fill(false)
     let marks = new Array(count).fill(wish)
 
     let total = wish
     const getBlockedSum = (marks: number[]) =>
         Math.floor(
             marks.reduce((sum, mark, index) => {
-                if (!blockeds[index]) return sum
-                const weight = getWeight(index)
+                if (!blockFlags[index]) return sum
+                const weight = getWeight(index, count)
                 return sum + (mark * weight) / 10
             }, 0),
         )
 
-    const checkAllBlocked = (blockeds: boolean[], count: number) =>
-        blockeds.filter(Boolean).length === count
-
-    const isExam = (index: number) => index == count - 1
-
-    const getWeight = (index: number) => (isExam(index) ? 4 : 6 / (count - 1))
+    const checkAllBlocked = (blockFlags: boolean[], count: number) =>
+        blockFlags.filter(Boolean).length === count
 
     const select = ({ detail }: any) => {
         detail.select()
@@ -40,7 +37,7 @@
         const _value = value || total
         const blockedSum = getBlockedSum(marks)
 
-        if (checkAllBlocked(blockeds, count)) return
+        if (checkAllBlocked(blockFlags, count)) return
 
         if (blockedSum == 0) {
             marks = marks.map((_) => _value)
@@ -48,34 +45,28 @@
             return
         }
 
-        const coefficient = blockeds.reduce((coef, blocked, index) => {
-            if (blocked) return coef
-            return coef + getWeight(index)
+        const coefficient = blockFlags.reduce((coefficient, blocked, index) => {
+            if (blocked) return coefficient
+            return coefficient + getWeight(index, count)
         }, 0)
 
         const x = Math.ceil(((_value - blockedSum) / coefficient) * 10)
         marks = marks.map((mark, index) => {
-            if (blockeds[index]) return mark
-            if (isExam(index)) return Math.max(50, x)
+            if (blockFlags[index]) return mark
+            if (isExam(index, count)) return Math.max(50, x)
             return x
         })
         total = getTotal(marks)
     }
-    $: isAllBlocked = checkAllBlocked(blockeds, count)
+    $: isAllBlocked = checkAllBlocked(blockFlags, count)
     $: if (isAllBlocked) {
         total = getBlockedSum(marks)
     }
 
-    const getTotal = (marks: number[]) =>
-        Math.floor(
-            marks.reduce((t, mark, index) => t + mark * getWeight(index), 0) /
-                10,
-        )
-
     const clamp = (min: number, value: number, max: number) =>
         Math.min(max, Math.max(value, min))
 
-    $: marks = marks.map((mark, index) => clamp(0, mark, 200) || 0)
+    $: marks = marks.map((mark) => clamp(0, mark, 200) || 0)
     $: total = clamp(0, total, 200) || 0
 
     let message = ""
@@ -83,14 +74,19 @@
     const credits = () => {
         message = ""
         hint = ""
-        const blockedCount = blockeds.reduce((blockedCount, blocked, index) => {
-            return isExam(index) ? blockedCount : blockedCount + blocked
-        }, 0)
+        const blockedCount = blockFlags.reduce(
+            (blockedCount, blocked, index) => {
+                return isExam(index, count)
+                    ? blockedCount
+                    : blockedCount + blocked
+            },
+            0,
+        )
 
         total = 50
 
         const sum = marks.reduce((sum, mark, index) =>
-            isExam(index) ? sum : sum + mark,
+            isExam(index, count) ? sum : sum + mark,
         )
 
         if (blockedCount == 0) {
@@ -112,8 +108,8 @@
         }
 
         const blockedSum = marks.reduce((sum, mark, index) => {
-            if (isExam(index)) return sum
-            if (!blockeds[index]) return sum
+            if (isExam(index, count)) return sum
+            if (!blockFlags[index]) return sum
             return sum + mark
         }, 0)
 
@@ -121,8 +117,8 @@
             (50 * notExamCount - blockedSum) / (notExamCount - blockedCount)
 
         marks = marks.map((mark, index) => {
-            if (isExam(index)) return 50
-            if (blockeds[index]) return mark
+            if (isExam(index, count)) return 50
+            if (blockFlags[index]) return mark
             return x
         })
     }
@@ -133,10 +129,10 @@
 <Scaffold>
     <AppBar slot="app-bar">{_("calculator")}</AppBar>
     <div class="calculator__container">
-        {#each blockeds as __, index}
+        {#each blockFlags as __, index}
             <div class="calculator__field">
                 <TextField
-                    label={isExam(index)
+                    label={isExam(index, count)
                         ? _("calculator.exam")
                         : _("calculator.part", index + 1)}
                     inputmode="numeric"
@@ -145,7 +141,7 @@
                 />
                 <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label class="calculator__switch">
-                    <Switch bind:value={blockeds[index]} />
+                    <Switch bind:value={blockFlags[index]} />
                     <p>{_("calculator.freeze")}</p>
                 </label>
             </div>

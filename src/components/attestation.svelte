@@ -3,23 +3,11 @@
     import type { Attestation } from "../@types"
     import { ATTESTATION } from "../url"
     import Card from "./card.svelte"
-    import { getMissing } from "../api/marks"
+    import { getMissing, getTotal } from "../api/marks"
 
     export let attestation: Attestation[]
 
     export let wish = 70
-
-    export const getTotal = (marks: Attestation["attestation"]) => {
-        const examWeight = 0.4
-        const exam = marks.at(-1)?.[1] || 0
-        const otherSum = marks
-            .slice(0, -1)
-            .reduce((sum, [_, value]) => sum + value, 0)
-        return Math.round(
-            exam * examWeight +
-                (otherSum * (1 - examWeight)) / (marks.length - 1),
-        )
-    }
 
     const _ = i18n()
 
@@ -30,7 +18,7 @@
 </script>
 
 {#each attestation as { subject, attestation: _attestation } (subject)}
-    {@const total = getTotal(_attestation)}
+    {@const total = getTotal(_attestation.map(([_, m]) => m))}
     {@const missing = getMissing(_attestation, wish)}
     {@const missingTotal = Math.max(wish - total, 0)}
     <Card title={subject} href="{ATTESTATION}/{subject}">
