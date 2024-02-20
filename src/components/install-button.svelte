@@ -1,10 +1,15 @@
 <script lang="ts">
     import { onMount } from "svelte"
     import { i18n } from "material/i18n"
+    interface BeforeInstallPromptEvent {
+        prompt: () => void
+        userChoice: Promise<{ outcome: "accepted" }>
+    }
+
     const _ = i18n()
     let canInstall = false
     let disabled = true
-    let installEvent: Event | null = null
+    let installEvent: BeforeInstallPromptEvent | null = null
 
     let class_ = ""
     export { class_ as class }
@@ -16,7 +21,7 @@
         installEvent = null
     }
 
-    const onBeforeInstallPrompt = (event: Event) => {
+    const onBeforeInstallPrompt = (event: any) => {
         event.preventDefault()
         installEvent = event
         canInstall = true
@@ -48,13 +53,9 @@
 <svelte:element
     this={tag}
     class="install-button"
-    class:install-button--can-install={canInstall}
+    class:install-button--can-install={canInstall && !disabled}
 >
-    <button
-        class="button {class_}"
-        class:button--disabled={disabled}
-        on:click={onClick}
-    >
+    <button class="button {class_}" on:click={onClick} {disabled}>
         <div class="mobile"><slot name="mobile" /></div>
         <div class="desktop"><slot name="desktop" /></div>
     </button>
@@ -82,7 +83,7 @@
         line-height: unset;
         color: inherit;
     }
-    .button--disabled {
+    .button:disabled {
         opacity: 0.5;
         pointer-events: none;
     }
