@@ -33,7 +33,6 @@
     let currentPath = "/"
     onMount(async () => {
         const { pathname } = location
-        console.log(pathname)
         currentPath = pathname
         const authPath = AUTH_PATHS.includes(pathname) ? pathname : HOME
         localStorage.setItem("mount-time", `${Date.now()}`)

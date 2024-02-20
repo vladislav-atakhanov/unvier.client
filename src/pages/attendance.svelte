@@ -22,7 +22,6 @@
         const a = attestation.find(({ subject: s }) => subject === s)
 
         if (!a) return []
-        console.log(a.attendance)
         return groupBy(a.attendance, "type")
     }
 

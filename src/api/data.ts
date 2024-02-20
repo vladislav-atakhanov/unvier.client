@@ -55,7 +55,6 @@ export const createUseData =
         const update = async (checkLoading = true) => {
             if (checkLoading && get(loading)) return
             loading.set(true)
-            console.log("update", key)
             const data = await fetchData()
 
             loading.set(false)

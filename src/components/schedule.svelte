@@ -23,8 +23,6 @@
     $: tabs && tabs.select($schedule?.factor ? 1 : 0)
 
     const _ = i18n()
-
-    $: console.log($schedule)
 </script>
 
 <Scaffold padding={false}>
