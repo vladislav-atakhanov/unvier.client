@@ -8,26 +8,6 @@
     export let attestation: Attestation[]
 
     export let wish = 70
-    // (рк1 + р2) * 0.3 + x * 0.4 = wish
-    const isLastIndex = <T,>(array: Array<T>, index: number) =>
-        index == array.length - 1
-    const getNeed = (marks: Attestation["attestation"], wish: number) => {
-        const sum = marks.reduce(
-            (acc, [_, value], index) =>
-                isLastIndex(marks, index) ? acc : acc + value,
-            0,
-        )
-        return Math.max(Math.ceil((wish * 10 - sum * 3) / 4), 0)
-    }
-
-    const needShow = (marks: Attestation["attestation"], i) => {
-        const sum = marks.reduce(
-            (acc, [_, value], index) =>
-                isLastIndex(marks, index) ? acc : acc + value,
-            0,
-        )
-        return sum >= 100 && isLastIndex(marks, i)
-    }
 
     export const getTotal = (marks: Attestation["attestation"]) => {
         const examWeight = 0.4
@@ -42,6 +22,11 @@
     }
 
     const _ = i18n()
+
+    const getTitle = (index: number, length: number) =>
+        index < length - 1
+            ? _("calculator.part", index + 1)
+            : _("calculator.exam")
 </script>
 
 {#each attestation as { subject, attestation: _attestation } (subject)}
@@ -53,7 +38,9 @@
             {#each _attestation as [title, value, active], i (title)}
                 <li class="summary" class:summary--active={active}>
                     <p class="summary__label">
-                        <span class="summary__title">{title}:</span>
+                        <span class="summary__title"
+                            >{getTitle(i, _attestation.length)}:</span
+                        >
                         <span class="summary__value">{value}</span>
                     </p>
                     <p class="summary__wish">
