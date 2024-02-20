@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { Scaffold, AppBar, IconButton, Tabs } from "material/components"
-    import Navigation from "../components/navigation.svelte"
-    import LoadingText from "../components/loading-text.svelte"
-    import type { useSchedule } from "../api"
-    import type { Schedule } from "../@types"
-    import { EXAMS } from "../url"
-    import ScheduleDay from "../components/schedule-day.svelte"
+    import { Scaffold, AppBar, Tabs } from "material/components"
+    import Navigation from "../navigation.svelte"
+    import LoadingText from "../loading-text.svelte"
+    import type { useSchedule } from "../../api"
+    import type { Schedule } from "../../@types"
+    import ScheduleDay from "./schedule-day.svelte"
     import { i18n } from "material/i18n"
+    import ScheduleActions from "./schedule-actions.svelte"
 
     export let schedule: ReturnType<typeof useSchedule>[0]
     export let loading: ReturnType<typeof useSchedule>[1]
@@ -28,7 +28,7 @@
 <Scaffold padding={false}>
     <AppBar slot="app-bar">
         <LoadingText {loading} {title} />
-        <IconButton slot="actions" href={EXAMS} icon="playlist_add_check" />
+        <ScheduleActions slot="actions" schedule={$schedule} />
     </AppBar>
     <div class="schedule__container container">
         {#if $schedule !== null && $schedule.lessons.length > 0}

@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { Lesson } from "../@types"
-    import Card from "./card.svelte"
+    import type { Lesson } from "../../@types"
+    import Card from "../card.svelte"
     import { i18n } from "material/i18n"
-    import TeacherLink from "./teacher-link.svelte"
+    import TeacherLink from "../teacher-link.svelte"
     const _ = i18n()
 
     export let day: number

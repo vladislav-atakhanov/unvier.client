@@ -32,7 +32,8 @@ export interface Lesson {
 
 export interface Schedule {
     lessons: Lesson[]
-    factor: boolean
+    factor: boolean | null
+    week: number
 }
 
 export interface Transcript {

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { useSchedule } from "../api"
-    import ScheduleTabs from "../components/schedule-tabs.svelte"
-    import Schedule from "../components/schedule.svelte"
+    import ScheduleTabs from "../components/schedule/schedule-tabs.svelte"
+    import Schedule from "../components/schedule/schedule.svelte"
     import { language, i18n } from "material/i18n"
 
     const _ = i18n()
