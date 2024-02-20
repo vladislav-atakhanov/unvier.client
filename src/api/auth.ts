@@ -44,16 +44,15 @@ const encrypt = (message: string, key: string) => {
     return result
 }
 
-export const authFetchUrl = async (url: string) => {
-    const queryString = new URLSearchParams({
-        lang: getLanguage(),
-    } as any).toString()
-    return `${url}?${queryString}`
+export const authFetchUrl = (apiUrl: string) => {
+    const url = new URL(apiUrl)
+    url.searchParams.append("lang", getLanguage())
+    return url
 }
 
 export const authFetch = async <T>(url: string): Promise<T | null> => {
     while (1) {
-        const [data, status] = await singleFetch<T>(await authFetchUrl(url), {
+        const [data, status] = await singleFetch<T>(authFetchUrl(url), {
             credentials: "include",
         })
         if (status === 200) return data
