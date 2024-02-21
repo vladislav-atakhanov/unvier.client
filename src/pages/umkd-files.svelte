@@ -5,7 +5,7 @@
     import LoadingText from "../components/loading-text.svelte"
     import { i18n, language } from "material/i18n"
     import { onMount } from "svelte"
-    import { fetchUmkdFiles } from "../api/umkd"
+    import { fetchUmkdFiles } from "../api/files"
     import Card from "../components/card.svelte"
     import TeacherLink from "../components/teacher-link.svelte"
     import { groupBy } from "../utils"

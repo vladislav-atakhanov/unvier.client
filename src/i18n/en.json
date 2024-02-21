@@ -63,5 +63,6 @@
     "umkd": "EMCD",
     "cancel": "Cancel",
     "logout.sure": "Do you really want to logout?",
-    "logout.message": "All data except settings will be deleted."
+    "logout.message": "All data except settings will be deleted.",
+    "faq": "Help"
 }

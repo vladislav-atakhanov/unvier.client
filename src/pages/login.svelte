@@ -13,7 +13,7 @@
     import { login } from "../api"
     import { onMount } from "svelte"
     import WriteMe from "../components/write-me.svelte"
-    import { PRIVACY_POLICY, SETTINGS, HOME } from "../url"
+    import { PRIVACY_POLICY, SETTINGS, HOME, FAQ } from "../url"
     import { i18n } from "material/i18n"
     import { updateAllStores } from "../api/data"
     import Version from "../components/version.svelte"
@@ -68,6 +68,7 @@
 
 <Scaffold>
     <AppBar slot="app-bar" icon={false}>
+        <IconButton href={FAQ} icon="help" slot="leading" />
         <div class="login__actions" slot="actions">
             <InstallButton class="login__install">
                 <Icon slot="mobile" name="install_mobile" />

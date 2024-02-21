@@ -5,6 +5,7 @@
         ATTESTATION,
         CALCULATOR,
         EXAMS,
+        FAQ,
         PROFILE,
         SCHEDULE,
         SETTINGS,
@@ -40,6 +41,7 @@
             <Icon name="telegram" slot="icon" />
         </Item>
         <Item label={_("settings")} icon="settings" href={SETTINGS} />
+        <Item label={_("faq")} icon="help" href={FAQ} />
     </Section>
 </Drawer>
 

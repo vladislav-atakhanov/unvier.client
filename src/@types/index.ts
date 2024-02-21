@@ -68,3 +68,8 @@ export interface UmkdFile {
     teacher_link?: string
     url: string
 }
+
+export interface FAQ {
+    id: string
+    label: string
+}

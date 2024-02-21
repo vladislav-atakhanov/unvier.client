@@ -8,6 +8,7 @@ export const SETTINGS = "/settings"
 export const PRIVACY_POLICY = "/privacy"
 export const TELEGRAM = "https://t.me/univerapp"
 export const UMKD = "/umkd"
+export const FAQ = "/faq"
 
 export const HOME = SCHEDULE
 export const AUTH_PATHS = {
@@ -20,6 +21,7 @@ export const AUTH_PATHS = {
         SETTINGS,
         PRIVACY_POLICY,
         UMKD,
+        FAQ,
     ],
 
     includes(url: string) {

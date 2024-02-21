@@ -7,6 +7,7 @@ import type {
     Exam,
     Transcript,
     UmkdFolder,
+    FAQ,
 } from "../@types"
 import {
     ATTESTATION_KEY,
@@ -16,6 +17,7 @@ import {
     TRANSCRIPT,
     PRIVACY_POLICY,
     UMKD_KEY,
+    FAQ_KEY,
 } from "./storage-keys"
 
 export const useAttestation = createUseData<Attestation[]>(
@@ -48,5 +50,8 @@ export const useSchedule = createUseData<Schedule>(
 )
 
 export const useUmkd = createUseData<UmkdFolder[]>("/api/umkd", UMKD_KEY, {
+    storage,
+})
+export const useFAQ = createUseData<FAQ[]>("/faq", FAQ_KEY, {
     storage,
 })

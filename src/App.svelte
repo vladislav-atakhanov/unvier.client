@@ -21,6 +21,7 @@
         SETTINGS,
         PRIVACY_POLICY,
         UMKD,
+        FAQ,
     } from "./url"
     import Attendance from "./pages/attendance.svelte"
     import Settings from "./pages/settings.svelte"
@@ -29,6 +30,8 @@
     import Drawer from "./components/drawer.svelte"
     import Umkd from "./pages/umkd.svelte"
     import UmkdFiles from "./pages/umkd-files.svelte"
+    import Faq from "./pages/faq.svelte"
+    import FaqFile from "./pages/faq-file.svelte"
 
     let currentPath = "/"
     onMount(async () => {
@@ -64,5 +67,7 @@
     <Route path={UMKD} component={Umkd} />
     <Route path="{UMKD}/:id" component={UmkdFiles} />
     <Route path={SETTINGS} component={Settings} />
+    <Route path={FAQ} component={Faq} />
+    <Route path="{FAQ}/:id" component={FaqFile} />
     <Drawer slot="drawer" />
 </MaterialApp>
