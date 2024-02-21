@@ -74,6 +74,14 @@
     .content :global(a) {
         color: var(--md-sys-color-primary);
     }
+    @media (hover: hover) {
+        .content :global(a):hover {
+            text-decoration: none;
+        }
+    }
+    .content :global(a):active {
+        text-decoration: none;
+    }
     .content :global(kbd) {
         display: inline-block;
         border-radius: 3px;
