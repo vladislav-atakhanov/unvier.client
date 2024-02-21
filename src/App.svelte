@@ -39,9 +39,9 @@
         currentPath = pathname
         const authPath = AUTH_PATHS.includes(pathname) ? pathname : HOME
         localStorage.setItem("mount-time", `${Date.now()}`)
-        if (checkAuth()) return navigate(authPath)
-        navigate(LOGIN)
-        if ((await refreshToken()) === 200) return navigate(authPath)
+
+        if (checkAuth() === false) return navigate(LOGIN)
+        if (authPath !== pathname) navigate(authPath)
     })
 
     /** @param {string} location */
