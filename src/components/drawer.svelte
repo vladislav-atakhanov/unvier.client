@@ -14,19 +14,15 @@
     } from "../url"
     import Icon from "./icon.svelte"
     import Profile from "./profile.svelte"
-    import { checkAuth } from "../api"
-    import { onMount } from "svelte"
+    import { useIsAuth } from "../api"
     const _ = i18n()
 
-    let isAuth = false
-    onMount(() => {
-        isAuth = checkAuth()
-    })
+    const isAuth = useIsAuth()
 </script>
 
 <Drawer let:Section let:Item>
     <DrawerHeader slot="header">
-        {#if isAuth}
+        {#if $isAuth}
             <Profile />
         {:else}
             <p>{_("updating")}</p>

@@ -1,7 +1,7 @@
 <script>
     import { Scaffold, AppBar, Icon } from "material/components"
     import Navigation from "../components/navigation.svelte"
-    import { useFAQ } from "../api"
+    import { useFAQ, useIsAuth } from "../api"
     import LoadingText from "../components/loading-text.svelte"
     import { i18n } from "material/i18n"
     import { onMount } from "svelte"
@@ -42,6 +42,8 @@
             top: element.offsetTop - appBarHeight - 16,
         })
     }
+
+    const isAuth = useIsAuth()
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -55,7 +57,11 @@
             {@html content}
         {/if}
     </div>
-    <Navigation slot="navigation-bar" />
+    <svelte:fragment slot="navigation-bar">
+        {#if $isAuth}
+            <Navigation />
+        {/if}
+    </svelte:fragment>
 </Scaffold>
 
 <style>

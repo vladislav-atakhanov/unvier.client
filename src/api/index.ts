@@ -1,4 +1,4 @@
-export { login, refreshToken, logout, checkAuth } from "./auth"
+export { login, refreshToken, logout, checkAuth, useIsAuth } from "./auth"
 import { createUseData } from "./data"
 import { storage } from "./storage"
 import type {

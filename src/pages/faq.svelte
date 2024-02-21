@@ -1,13 +1,14 @@
 <script>
     import { Scaffold, AppBar } from "material/components"
     import Navigation from "../components/navigation.svelte"
-    import { useFAQ } from "../api"
+    import { useFAQ, useIsAuth } from "../api"
     import LoadingText from "../components/loading-text.svelte"
     import Card from "../components/card.svelte"
     import { i18n } from "material/i18n"
     import { FAQ } from "../url"
     const _ = i18n()
     const [faq, loading] = useFAQ()
+    const isAuth = useIsAuth()
 </script>
 
 <Scaffold>
@@ -23,7 +24,11 @@
             {/each}
         </ul>
     {/if}
-    <Navigation slot="navigation-bar" />
+    <svelte:fragment slot="navigation-bar">
+        {#if $isAuth}
+            <Navigation />
+        {/if}
+    </svelte:fragment>
 </Scaffold>
 
 <style>

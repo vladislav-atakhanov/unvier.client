@@ -3,8 +3,7 @@
     import Navigation from "../components/navigation.svelte"
     import WriteMe from "../components/write-me.svelte"
     import SchemeSwitcher from "../components/scheme-switcher.svelte"
-    import { checkAuth, useServerVersion } from "../api"
-    import { onMount } from "svelte"
+    import { useIsAuth, useServerVersion } from "../api"
     import LanguageSwitcher from "../components/language-switcher.svelte"
     import { i18n } from "material/i18n"
     import LoadingText from "../components/loading-text.svelte"
@@ -13,10 +12,7 @@
 
     const [serverVersion, loading] = useServerVersion()
 
-    let isAuth = false
-    onMount(async () => {
-        isAuth = await checkAuth()
-    })
+    const isAuth = useIsAuth()
     const _ = i18n()
 </script>
 
@@ -56,7 +52,7 @@
     </div>
 
     <svelte:fragment slot="navigation-bar">
-        {#if isAuth}
+        {#if $isAuth}
             <Navigation />
         {/if}
     </svelte:fragment>

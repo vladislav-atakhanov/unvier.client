@@ -7,6 +7,8 @@ import { addSnack } from "material/notificator"
 import { getLanguage, i18n } from "material/i18n"
 import { whitelist } from "./storage/local-storage"
 import SecureStorage from "secure-web-storage"
+import { writable } from "svelte/store"
+import { onMount } from "svelte"
 
 const _ = i18n(undefined, false)
 
@@ -132,3 +134,11 @@ export const logout = async () => {
 }
 
 export const checkAuth = () => secureStorage.getItem("password") !== null
+
+export const useIsAuth = () => {
+    const { set, subscribe } = writable(false)
+    onMount(() => {
+        if (checkAuth()) set(true)
+    })
+    return { subscribe }
+}

@@ -1,15 +1,11 @@
 <script>
     import { Scaffold, AppBar } from "material/components"
     import Navigation from "../components/navigation.svelte"
-    import { checkAuth, usePrivacyPolicy } from "../api"
-    import { onMount } from "svelte"
+    import { usePrivacyPolicy, useIsAuth } from "../api"
     import { i18n } from "material/i18n"
     import LoadingText from "../components/loading-text.svelte"
 
-    let isAuth = false
-    onMount(async () => {
-        isAuth = await checkAuth()
-    })
+    const isAuth = useIsAuth()
 
     const [privacy, loading] = usePrivacyPolicy()
     const _ = i18n()
@@ -27,7 +23,7 @@
     </div>
 
     <svelte:fragment slot="navigation-bar">
-        {#if isAuth}
+        {#if $isAuth}
             <Navigation />
         {/if}
     </svelte:fragment>
