@@ -3,7 +3,11 @@
     export let schedule
 </script>
 
-<div class="week">{schedule?.week}</div>
+{#if schedule?.week}
+    <div class="week">
+        {schedule?.week}
+    </div>
+{/if}
 
 <style>
     .week {
