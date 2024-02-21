@@ -50,11 +50,16 @@ export const authFetchUrl = (apiUrl: string) => {
     return url
 }
 
-export const authFetch = async <T>(url: string): Promise<T | null> => {
+export const authFetch = async <T>(
+    url: string,
+    reader?: (r: Response) => unknown
+): Promise<T | null> => {
     while (1) {
-        const [data, status] = await singleFetch<T>(authFetchUrl(url), {
-            credentials: "include",
-        })
+        const [data, status] = await singleFetch<T>(
+            authFetchUrl(url),
+            { credentials: "include" },
+            reader
+        )
         if (status === 200) return data
         if (status === 401) {
             const status = await refreshToken()
