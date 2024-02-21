@@ -131,4 +131,4 @@ export const logout = async () => {
     navigate(LOGIN)
 }
 
-export const checkAuth = () => localStorage.getItem("username") !== null
+export const checkAuth = () => secureStorage.getItem("password") !== null

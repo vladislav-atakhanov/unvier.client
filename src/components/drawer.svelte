@@ -13,20 +13,24 @@
         UMKD,
     } from "../url"
     import Icon from "./icon.svelte"
-    import { useTranscript } from "../api"
+    import Profile from "./profile.svelte"
+    import { checkAuth } from "../api"
+    import { onMount } from "svelte"
     const _ = i18n()
 
-    const [transcript] = useTranscript()
+    let isAuth = false
+    onMount(() => {
+        isAuth = checkAuth()
+    })
 </script>
 
 <Drawer let:Section let:Item>
     <DrawerHeader slot="header">
-        <div class="profile">
-            <p class="fullname">{$transcript?.fullname ?? _("updating")}</p>
-            <p class="education-program">
-                {$transcript?.education_program ?? _("updating")}
-            </p>
-        </div>
+        {#if isAuth}
+            <Profile />
+        {:else}
+            <p>{_("updating")}</p>
+        {/if}
     </DrawerHeader>
     <Section>
         <Item label={_("schedule")} icon="calendar_month" href={SCHEDULE} />
@@ -44,18 +48,3 @@
         <Item label={_("faq")} icon="help" href={FAQ} />
     </Section>
 </Drawer>
-
-<style>
-    .profile {
-        align-self: flex-end;
-    }
-    p {
-        margin: 0;
-    }
-    .fullname {
-        font-weight: bold;
-    }
-    .education-program {
-        font-size: 0.8em;
-    }
-</style>
