@@ -16,6 +16,7 @@
     {href}
     class="card {class_}"
     class:card--button={href}
+    class:card--slot={$$slots.default}
     {...$$restProps}
     class:card--active={active}
 >
@@ -25,13 +26,15 @@
 
 <style>
     .card__title {
-        padding-bottom: var(--padding);
         margin: 0;
         font-size: 1em;
         font-weight: normal;
-        border-bottom: 1px solid var(--md-sys-color-outline);
-        margin-bottom: var(--padding);
         word-wrap: break-word;
+    }
+    .card--slot .card__title {
+        border-bottom: 1px solid var(--md-sys-color-outline);
+        padding-bottom: var(--padding);
+        margin-bottom: var(--padding);
     }
 
     .card {
