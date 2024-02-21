@@ -24,6 +24,8 @@
 
     /** @param {MouseEvent} event */
     const onClick = (event) => {
+        event.preventDefault()
+        event.stopPropagation()
         if (!event.target) return
         /** @type {HTMLElement} */
         const target = event.target

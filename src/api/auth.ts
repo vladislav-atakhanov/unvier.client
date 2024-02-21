@@ -7,7 +7,7 @@ import { addSnack } from "material/notificator"
 import { getLanguage, i18n } from "material/i18n"
 import { whitelist } from "./storage/local-storage"
 import SecureStorage from "secure-web-storage"
-import { writable } from "svelte/store"
+import { readonly, writable } from "svelte/store"
 import { onMount } from "svelte"
 
 const _ = i18n(undefined, false)
@@ -116,6 +116,7 @@ export const login = (user: User) => {
         if (status === 200) {
             const { password } = user
             secureStorage.setItem("password", password)
+            isAuth.set(true)
         }
         resolve(status)
     })
@@ -130,15 +131,17 @@ export const logout = async () => {
         localStorage.removeItem(key)
     }
     fetch(api(`/auth/logout`), { credentials: "include" })
+    isAuth.set(false)
     navigate(LOGIN)
 }
 
 export const checkAuth = () => secureStorage.getItem("password") !== null
 
+const isAuth = writable(false)
+
 export const useIsAuth = () => {
-    const { set, subscribe } = writable(false)
     onMount(() => {
-        if (checkAuth()) set(true)
+        if (checkAuth()) isAuth.set(true)
     })
-    return { subscribe }
+    return readonly(isAuth)
 }
