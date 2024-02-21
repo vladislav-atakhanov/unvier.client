@@ -30,10 +30,16 @@
 
         const selector = target.getAttribute("href")
         if (!selector) return
+        /** @type {HTMLElement} */
         const element = contentElement.querySelector(selector)
         if (!element) return
-        element.scrollIntoView({
+
+        const appBarHeight =
+            document.querySelector(".scaffold__app-bar")?.scrollHeight || 0
+
+        document.querySelector(".scaffold__content")?.scrollTo({
             behavior: "smooth",
+            top: element.offsetTop - appBarHeight - 16,
         })
     }
 </script>
@@ -68,8 +74,5 @@
     }
     .content :global(h1) {
         margin-top: 0;
-    }
-    .content :global(h2) {
-        scroll-margin-block-start: 0.5em;
     }
 </style>
