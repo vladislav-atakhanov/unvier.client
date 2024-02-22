@@ -33,13 +33,13 @@
     }
     .card--slot .card__title {
         border-bottom: 1px solid var(--md-sys-color-outline);
-        padding-bottom: var(--padding);
-        margin-bottom: var(--padding);
+        padding-bottom: var(--_padding);
+        margin-bottom: var(--_padding);
     }
 
     .card {
-        --padding: 0.5em;
-        padding: var(--padding);
+        --_padding: var(--padding, 0.5em);
+        padding: var(--_padding);
         border: 1px solid var(--md-sys-color-outline);
         border-radius: 5px;
         text-decoration: none;
