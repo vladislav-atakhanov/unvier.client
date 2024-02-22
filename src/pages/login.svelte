@@ -9,7 +9,7 @@
         SegmentedButtons,
         Checkbox,
     } from "material/components"
-    import { navigate } from "material"
+    import { navigate } from "material/router"
     import { login } from "../api"
     import { onMount } from "svelte"
     import WriteMe from "../components/write-me.svelte"

@@ -1,6 +1,6 @@
 <script>
     import { MaterialApp, Route } from "material/components"
-    import { navigate } from "material"
+    import { navigate } from "material/router"
     import Login from "./pages/login.svelte"
     import Attestation from "./pages/attestation.svelte"
     import Schedule from "./pages/schedule.svelte"

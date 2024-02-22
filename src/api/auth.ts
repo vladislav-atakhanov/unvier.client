@@ -1,6 +1,6 @@
 import { api } from "./config"
 import { LOGIN } from "../url"
-import { navigate } from "material"
+import { navigate } from "material/router"
 import { storage } from "./storage"
 import { singleFetch } from "./utils"
 import { addSnack } from "material/notificator"
