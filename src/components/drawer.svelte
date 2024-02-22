@@ -29,12 +29,22 @@
         {/if}
     </DrawerHeader>
     <Section>
-        <Item label={_("schedule")} icon="calendar_month" href={SCHEDULE} />
-        <Item label={_("attestation")} icon="book" href={ATTESTATION} />
+        <Item
+            label={_("schedule")}
+            icon="calendar_month"
+            href={SCHEDULE}
+            replace
+        />
+        <Item label={_("attestation")} icon="book" href={ATTESTATION} replace />
         <Item label={_("calculator")} icon="calculate" href={CALCULATOR} />
-        <Item label={_("umkd")} icon="description" href={UMKD} />
+        <Item label={_("umkd")} icon="description" href={UMKD} replace />
         <Item label={_("exams")} icon="playlist_add_check" href={EXAMS} />
-        <Item label={_("profile")} icon="account_circle" href={PROFILE} />
+        <Item
+            label={_("profile")}
+            icon="account_circle"
+            href={PROFILE}
+            replace
+        />
     </Section>
     <Section>
         <Item label="Telegram" href={TELEGRAM}>
