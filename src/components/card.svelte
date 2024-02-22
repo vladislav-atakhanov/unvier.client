@@ -32,9 +32,14 @@
         word-wrap: break-word;
     }
     .card--slot .card__title {
-        border-bottom: 1px solid var(--md-sys-color-outline);
-        padding-bottom: var(--_padding);
         margin-bottom: var(--_padding);
+    }
+    .card--slot .card__title::after {
+        content: "";
+        display: block;
+        height: 1px;
+        background-color: var(--md-sys-color-outline);
+        margin-top: var(--_padding);
     }
 
     .card {
