@@ -41,7 +41,7 @@
 </script>
 
 <BottomSheet
-    on:open={focus}
+    on:open={() => setTimeout(focus, 100)}
     on:click={focus}
     let:close
     bind:this={sheet}
