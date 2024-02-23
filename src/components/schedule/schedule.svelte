@@ -23,6 +23,7 @@
     $: tabs && tabs.select($schedule?.factor ? 1 : 0)
 
     const _ = i18n()
+    export let activeLesson: string | null = null
 </script>
 
 <Scaffold padding={false}>
@@ -34,7 +35,13 @@
         {#if $schedule !== null && $schedule.lessons.length > 0}
             {#each days as weekday, day}
                 {@const lessons = getLessonsByDay($schedule, day)}
-                <ScheduleDay {weekday} {day} {lessons} />
+                <ScheduleDay
+                    {weekday}
+                    {day}
+                    {lessons}
+                    on:select
+                    {activeLesson}
+                />
             {/each}
         {:else}
             <p class="schedule__no-data">{_("no-data")}</p>

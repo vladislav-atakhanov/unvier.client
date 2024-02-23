@@ -12,6 +12,9 @@
     const focus = () => {
         if (textarea) textarea.focus()
     }
+    const blur = () => {
+        if (textarea) textarea.blur()
+    }
 
     /** @type {BottomSheet} */
     let sheet
@@ -31,6 +34,7 @@
             sheet.open().then(() => {
                 r(value)
                 clear()
+                blur()
             })
         })
     }

@@ -40,6 +40,8 @@
     let tabs: Tabs
 
     $: tabs && tabs.select($schedule?.factor ? 1 : 0)
+
+    export let activeLesson: string | null = null
 </script>
 
 <div class="schedule" style:--current-content={`"${_("schedule.current")}"`}>
@@ -80,6 +82,8 @@
                                         {weekday}
                                         {day}
                                         {lessons}
+                                        {activeLesson}
+                                        on:select
                                         activeWeek={value === $schedule?.factor}
                                     />
                                 {/each}

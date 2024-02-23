@@ -28,6 +28,7 @@ export interface Lesson {
     day: number
     time: string
     factor: boolean
+    id: string
 }
 
 export interface Schedule {
