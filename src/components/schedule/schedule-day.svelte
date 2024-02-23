@@ -42,6 +42,7 @@
                 class="lesson"
                 class:lesson--active={id === activeLesson}
                 use:longPress={onLongPress(id)}
+                style="transition: {id !== activeLesson ? `all .2s` : 'none'}"
             >
                 <div class="lesson__content">
                     <div class="lesson__header">
@@ -76,6 +77,7 @@
     .day {
         --padding: 0;
         --lesson-padding: 0.5em;
+        --bubble-color: var(--md-sys-color-secondary-container);
     }
     .day :global(.card--slot .card__title) {
         padding: var(--lesson-padding);
