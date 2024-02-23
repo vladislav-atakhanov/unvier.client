@@ -22,29 +22,6 @@
 
     $: title = $faq?.find(({ id: i }) => id === i)?.label
 
-    /** @param {MouseEvent} event */
-    const onClick = (event) => {
-        event.preventDefault()
-        event.stopPropagation()
-        if (!event.target) return
-        /** @type {HTMLElement} */
-        const target = event.target
-
-        const selector = target.getAttribute("href")
-        if (!selector) return
-        /** @type {HTMLElement} */
-        const element = contentElement.querySelector(selector)
-        if (!element) return
-
-        const appBarHeight =
-            document.querySelector(".scaffold__app-bar")?.scrollHeight || 0
-
-        document.querySelector(".scaffold__content")?.scrollTo({
-            behavior: "smooth",
-            top: element.offsetTop - appBarHeight - 16,
-        })
-    }
-
     const isAuth = useIsAuth()
 </script>
 
@@ -54,7 +31,7 @@
         <LoadingText {loading} {title} />
     </AppBar>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class="content" bind:this={contentElement} on:click={onClick}>
+    <div class="content" bind:this={contentElement}>
         {#if content}
             {@html content}
         {/if}
@@ -90,5 +67,8 @@
     }
     .content :global(h1) {
         margin-top: 0;
+    }
+    .content :global(h2) {
+        scroll-margin-block-start: var(--app-bar-height);
     }
 </style>
