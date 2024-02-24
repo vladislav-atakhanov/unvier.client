@@ -46,6 +46,7 @@
     let:close
     bind:this={sheet}
     --sheet-height="calc(100vh - 100px)"
+    name="note"
 >
     <div class="content">
         <div class="header">
