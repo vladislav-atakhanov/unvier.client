@@ -21,7 +21,10 @@
     }
 
     const dispatch = createEventDispatcher()
-    const onLongPress = (id: Lesson["id"]) => () => dispatch("select", id)
+    const onLongPress = (id: Lesson["id"]) => ({
+        action: () => dispatch("select", id),
+        zIndex: false,
+    })
 
     export let activeLesson: string | null = null
 
@@ -32,10 +35,12 @@
         if (lines.length > 1) text += "..."
         return text
     }
+
+    $: active = isActiveDay(day, activeWeek)
 </script>
 
-<div class="day" style:order={day}>
-    <Card active={isActiveDay(day, activeWeek)} title={weekday}>
+<div class="day" style:order={day} class:day--active={active}>
+    <Card {active} title={weekday}>
         {#each lessons as { subject, time, audience, teacher, teacher_link, id } (id)}
             {@const note = getNotePreview($notes, id)}
             <section
@@ -69,15 +74,19 @@
 </div>
 
 <style>
+    .day {
+        --padding: 0;
+        --lesson-padding: 0.5em;
+        --bubble-color: color-mix(
+            in srgb,
+            var(--md-sys-color-primary) 15%,
+            transparent
+        );
+    }
     .lesson__title {
         margin: 0;
         font-size: 1em;
         font-weight: normal;
-    }
-    .day {
-        --padding: 0;
-        --lesson-padding: 0.5em;
-        --bubble-color: var(--md-sys-color-secondary-container);
     }
     .day :global(.card--slot .card__title) {
         padding: var(--lesson-padding);
@@ -97,6 +106,7 @@
     .lesson {
         padding: var(--lesson-padding);
         padding-bottom: 0;
+        display: grid;
     }
     .lesson__header {
         display: flex;
@@ -112,12 +122,16 @@
         height: 1px;
         background-color: var(--md-sys-color-outline);
         margin-top: var(--lesson-padding);
+        z-index: 1;
     }
     .lesson:last-of-type::after {
         display: none;
     }
+    .lesson__content {
+        z-index: 1;
+    }
     .lesson--active {
-        background-color: var(--md-sys-color-secondary-container);
+        background-color: var(--bubble-color);
     }
     .lesson__time {
         white-space: nowrap;
