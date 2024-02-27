@@ -1,9 +1,5 @@
 {
     "predeploy_command": "pnpm run build",
     "directory": "dist",
-    "git": {
-        "repo": "https://github.com/vladislav-atakhanov/univer.eloh1m.com",
-        "branch": "master",
-        "commit_format": "Deploy at {{DATE}}"
-    }
+    "ssh": "vlad@192.168.2.33:/var/www/app.kstu.kz"
 }
