@@ -1,6 +1,7 @@
 {
     "schedule": "Кесте",
     "schedule.current": "(қ) ",
+    "schedule.current-week": "Қазіргі апта саны",
     "schedule.no-lessons": "Сабақ жоқ 🎉",
     "schedule.odd": "Числитель",
     "schedule.even": "Знаменатель",

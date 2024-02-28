@@ -1,6 +1,7 @@
 {
     "schedule": "Расписание",
     "schedule.current": "(т) ",
+    "schedule.current-week": "Номер текущей недели",
     "schedule.no-lessons": "Занятий нет 🎉",
     "schedule.odd": "Числитель",
     "schedule.even": "Знаменатель",
