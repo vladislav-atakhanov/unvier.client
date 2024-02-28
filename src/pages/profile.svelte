@@ -1,6 +1,11 @@
 <script>
-    import { confirm } from "material/notificator"
-    import { Scaffold, AppBar, FilledButton } from "material/components"
+    import {
+        Scaffold,
+        AppBar,
+        FilledButton,
+        Popup,
+        TextButton,
+    } from "material/components"
     import { logout, useTranscript } from "../api"
     import Navigation from "../components/navigation.svelte"
     import { onMount } from "svelte"
@@ -16,15 +21,11 @@
 
     const [transcript, loading] = useTranscript()
 
-    const onClick = async () => {
-        const logout_ = _("logout")
-        const cancel = _("cancel")
-        const answer = await confirm({
-            title: _("logout.sure"),
-            message: _("logout.message"),
-            values: [logout_, cancel],
-        })
-        if (answer !== logout_) return
+    /** @type {Popup} */
+    let popup
+
+    const onLogout = () => {
+        popup.close()
         logout()
     }
 </script>
@@ -67,11 +68,20 @@
                 </div>
             {/if}
         </div>
-        <FilledButton on:click={onClick}>{_("logout")}</FilledButton>
+        <FilledButton on:click={popup.open}>{_("logout")}</FilledButton>
     </div>
 
     <Navigation slot="navigation-bar" />
 </Scaffold>
+
+<Popup bind:this={popup}>
+    <svelte:fragment slot="title">{_("logout.sure")}</svelte:fragment>
+    {_("logout.message")}
+    <svelte:fragment slot="actions">
+        <TextButton on:click={onLogout}>{_("logout")}</TextButton>
+        <TextButton on:click={popup.close}>{_("cancel")}</TextButton>
+    </svelte:fragment>
+</Popup>
 
 <style>
     :global(md-filled-button) {
