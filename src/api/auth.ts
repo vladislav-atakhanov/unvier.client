@@ -4,13 +4,11 @@ import { navigate } from "material/router"
 import { storage } from "./storage"
 import { singleFetch } from "./utils"
 import { addSnack } from "material/notificator"
-import { getLanguage, i18n } from "material/i18n"
+import { getLanguage, translate as _ } from "material/i18n"
 import { whitelist } from "./storage/local-storage"
 import SecureStorage from "secure-web-storage"
 import { readonly, writable } from "svelte/store"
 import { onMount } from "svelte"
-
-const _ = i18n(undefined, false)
 
 const secret = "6cceadbb-1602-4e90-8893-5c872e157575"
 const secureStorage: Storage = new SecureStorage(localStorage, {
