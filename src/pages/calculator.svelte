@@ -34,10 +34,9 @@
     const recalculate = (value?: number) => {
         message = ""
         hint = ""
+        if (checkAllBlocked(blockFlags, count)) return
         const _value = value || total
         const blockedSum = getBlockedSum(marks)
-
-        if (checkAllBlocked(blockFlags, count)) return
 
         if (blockedSum == 0) {
             marks = marks.map((_) => _value)

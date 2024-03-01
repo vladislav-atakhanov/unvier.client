@@ -1,9 +1,9 @@
 import type { Mark } from "../@types"
 
-export const isExam = (index: number, count: number) => index == count - 1
+export const isExam = (index: number, count: number) => index === count - 1
 
-export const getWeight = <T>(index: number, count: number) =>
-    isExam(length, index) ? 4 : 6 / (length - 1)
+export const getWeight = (index: number, count: number) =>
+    isExam(index, count) ? 4 : 6 / (count - 1)
 
 export const _get = (values: number[], wish: number) => {
     const sum = values.reduce(
