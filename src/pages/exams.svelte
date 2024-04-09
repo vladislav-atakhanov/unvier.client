@@ -158,6 +158,6 @@
         margin: 0;
     }
     .exams :global(.card) {
-        scroll-margin-top: 1em;
+        scroll-margin-top: calc(var(--app-bar-height) + 1em);
     }
 </style>
