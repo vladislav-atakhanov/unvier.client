@@ -17,8 +17,11 @@
             : _("calculator.exam")
 </script>
 
-{#each attestation as { subject, attestation: _attestation } (subject)}
-    {@const total = getTotal(_attestation.map(([_, m]) => m))}
+{#each attestation as { subject, attestation: _attestation, sum } (subject)}
+    {@const total = getTotal(
+        _attestation.map(([_, m]) => m),
+        sum[1],
+    )}
     {@const missing = getMissing(_attestation, wish)}
     {@const missingTotal = Math.max(wish - total, 0)}
     <Card title={subject} href="{ATTESTATION}/{subject}">

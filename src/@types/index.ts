@@ -8,6 +8,7 @@ export interface Attestation {
         part: string // рк1 | рк2
         marks: Mark[]
     }[]
+    sum: Mark
 }
 
 export interface Exam {

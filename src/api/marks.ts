@@ -5,7 +5,7 @@ export const isExam = (index: number, count: number) => index === count - 1
 export const getWeight = (index: number, count: number) =>
     isExam(index, count) ? 4 : 6 / (count - 1)
 
-export const _get = (values: number[], wish: number) => {
+const _get = (values: number[], wish: number) => {
     const sum = values.reduce(
         (acc, v, index) => acc + v * getWeight(index, values.length),
         0
@@ -30,10 +30,15 @@ export const getMissing = (marks: Mark[], wish: number) => {
     )
 }
 
-export const getTotal = (marks: number[]) =>
-    Math.floor(
+export const getTotal = (marks: number[], sum: number) => {
+    const fullSum = marks.reduce((acc, i) => acc + i)
+    const examValue = marks[marks.length - 1]
+    const sumWithoutExam = fullSum - examValue
+    if (sumWithoutExam === 0) return sum
+    return Math.floor(
         marks.reduce(
             (t, mark, index) => t + mark * getWeight(index, marks.length),
             0
         ) / 10
     )
+}
