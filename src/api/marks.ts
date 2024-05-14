@@ -33,6 +33,7 @@ export const getMissing = (marks: Mark[], wish: number) => {
 export const getTotal = (marks: number[], sum: number) => {
     const fullSum = marks.reduce((acc, i) => acc + i)
     const examValue = marks[marks.length - 1]
+    if (examValue !== 0 && examValue === sum) return sum
     const sumWithoutExam = fullSum - examValue
     if (sumWithoutExam === 0) return sum
     return Math.floor(
