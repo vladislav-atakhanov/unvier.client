@@ -7,11 +7,14 @@
     import type { Schedule } from "../../@types"
     import ScheduleDay from "./schedule-day.svelte"
     import ScheduleActions from "./schedule-actions.svelte"
+    import type { ComponentProps } from "svelte"
 
     export let schedule: ReturnType<typeof useSchedule>[0]
     export let loading: ReturnType<typeof useSchedule>[1]
     export let days: string[]
     export let title: string
+    export let onselect =
+        Function.prototype as ComponentProps<ScheduleDay>["onselect"]
 
     const _ = i18n()
 
@@ -83,7 +86,7 @@
                                         {day}
                                         {lessons}
                                         {activeLesson}
-                                        on:select
+                                        {onselect}
                                         activeWeek={value === $schedule?.factor}
                                     />
                                 {/each}

@@ -8,7 +8,7 @@
     import Exams from "./pages/exams.svelte"
     import Calculator from "./pages/calculator.svelte"
     import { onMount } from "svelte"
-    import { checkAuth, refreshToken } from "./api"
+    import { checkAuth } from "./api"
     import {
         LOGIN,
         ATTESTATION,

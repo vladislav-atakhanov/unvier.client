@@ -7,11 +7,15 @@
     import ScheduleDay from "./schedule-day.svelte"
     import { i18n } from "material/i18n"
     import ScheduleActions from "./schedule-actions.svelte"
+    import type { ComponentProps } from "svelte"
 
     export let schedule: ReturnType<typeof useSchedule>[0]
     export let loading: ReturnType<typeof useSchedule>[1]
     export let days: string[]
     export let title: string
+
+    export let onselect =
+        Function.prototype as ComponentProps<ScheduleDay>["onselect"]
 
     const getLessonsByDay = (schedule: Schedule | null, _day: number) => {
         if (!schedule || schedule.lessons.length < 1) return []
@@ -39,7 +43,7 @@
                     {weekday}
                     {day}
                     {lessons}
-                    on:select
+                    {onselect}
                     {activeLesson}
                 />
             {/each}

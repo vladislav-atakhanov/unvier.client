@@ -53,7 +53,7 @@
 <div class="attendance" style:--columns={marks.length}>
     <Tabs let:Content let:Wrapper let:Header let:Tab maxWidth={1140}>
         <Scaffold padding={false}>
-            <AppBar slot="app-bar" on:title-click={() => addSnack(subject)}
+            <AppBar slot="app-bar" onTitleClick={() => addSnack(subject)}
                 ><LoadingText {loading} title={subject} />
                 <Header slot="bottom">
                     {#each tabNames as tab}

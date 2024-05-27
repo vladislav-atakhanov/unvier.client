@@ -28,8 +28,8 @@
     const checkAllBlocked = (blockFlags: boolean[], count: number) =>
         blockFlags.filter(Boolean).length === count
 
-    const select = ({ detail }: any) => {
-        detail.select()
+    const select = (input: HTMLInputElement) => {
+        input.select()
     }
     const recalculate = (value?: number) => {
         message = ""
@@ -136,7 +136,7 @@
                         : _("calculator.part", index + 1)}
                     inputmode="numeric"
                     bind:value={marks[index]}
-                    on:click={select}
+                    onclick={select}
                 />
                 <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label class="calculator__switch">
@@ -149,7 +149,7 @@
             label={_("total")}
             inputmode="numeric"
             bind:value={total}
-            on:click={select}
+            onclick={select}
         />
         {#if message.length > 0 && hint.length > 0}
             <div>
@@ -162,16 +162,16 @@
             </div>
         {/if}
 
-        <FilledButton on:click={makeRecalculate(70)} disabled={isAllBlocked}
+        <FilledButton onclick={makeRecalculate(70)} disabled={isAllBlocked}
             >{_("calculator.stipend")}</FilledButton
         >
-        <FilledButton on:click={credits} disabled={isAllBlocked}
+        <FilledButton onclick={credits} disabled={isAllBlocked}
             >{_("calculator.not-credits")}</FilledButton
         >
-        <FilledButton on:click={makeRecalculate(90)} disabled={isAllBlocked}
+        <FilledButton onclick={makeRecalculate(90)} disabled={isAllBlocked}
             >{_("calculator.get-a")}</FilledButton
         >
-        <FilledButton on:click={makeRecalculate()} disabled={isAllBlocked}
+        <FilledButton onclick={makeRecalculate()} disabled={isAllBlocked}
             >{_("calculator.recalculate")}</FilledButton
         >
     </div>

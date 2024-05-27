@@ -2,10 +2,12 @@
     import { BottomSheet, IconButton, OneLine } from "material/components"
     const clear = () => (value = "")
 
-    /** @param {() => void} close*/
-    const onSubmit = (close) => () => {
-        close()
-    }
+    const onSubmit =
+        (/** @type {() => void} */ close) =>
+        (/** @type {SubmitEvent} */ event) => {
+            event.preventDefault()
+            close()
+        }
 
     /** @type {HTMLElement} */
     let textarea
@@ -41,8 +43,8 @@
 </script>
 
 <BottomSheet
-    on:open={() => setTimeout(focus, 100)}
-    on:click={focus}
+    onopen={() => setTimeout(focus, 100)}
+    onclick={focus}
     let:close
     bind:this={sheet}
     --sheet-height="calc(100vh - 100px)"
@@ -53,11 +55,11 @@
             <h2 class="header__title"><OneLine>{_title}</OneLine></h2>
             <IconButton
                 disabled={value.length < 1}
-                on:click={clear}
+                onclick={clear}
                 icon="delete"
             />
         </div>
-        <form on:submit|preventDefault={onSubmit(close)}>
+        <form on:submit={onSubmit(close)}>
             <textarea bind:value bind:this={textarea}></textarea>
         </form>
     </div>

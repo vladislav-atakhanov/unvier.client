@@ -7,7 +7,7 @@
     const _ = i18n()
 </script>
 
-<NavigationBar let:Item on:update>
+<NavigationBar let:Item>
     <Item label={_("attestation")} icon="book" path={ATTESTATION} />
     <Item label={_("schedule")} icon="calendar_month" path={SCHEDULE} />
     <Item label={_("profile")} icon="account_circle" path={PROFILE} />

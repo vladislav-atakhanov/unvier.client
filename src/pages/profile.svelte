@@ -68,7 +68,7 @@
                 </div>
             {/if}
         </div>
-        <FilledButton on:click={popup.open}>{_("logout")}</FilledButton>
+        <FilledButton onclick={() => popup.open()}>{_("logout")}</FilledButton>
     </div>
 
     <Navigation slot="navigation-bar" />
@@ -78,8 +78,8 @@
     <svelte:fragment slot="title">{_("logout.sure")}</svelte:fragment>
     {_("logout.message")}
     <svelte:fragment slot="actions">
-        <TextButton on:click={onLogout}>{_("logout")}</TextButton>
-        <TextButton on:click={popup.close}>{_("cancel")}</TextButton>
+        <TextButton onclick={onLogout}>{_("logout")}</TextButton>
+        <TextButton onclick={() => popup.close()}>{_("cancel")}</TextButton>
     </svelte:fragment>
 </Popup>
 

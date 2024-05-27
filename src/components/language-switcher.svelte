@@ -10,5 +10,5 @@
 <SegmentedButtons
     items={values}
     bind:value={$language}
-    on:input={debounce(updateAllStores, 1000)}
+    oninput={debounce(updateAllStores, 1000)}
 />

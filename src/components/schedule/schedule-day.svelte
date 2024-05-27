@@ -3,28 +3,21 @@
     import Card from "../card.svelte"
     import { i18n } from "material/i18n"
     import TeacherLink from "../teacher-link.svelte"
-    import { longPress } from "material/actions"
-    import { createEventDispatcher } from "svelte"
     import { notes, type Notes } from "../note"
-    import { OneLine } from "material/components"
+    import { OneLine, LongPress } from "material/components"
     const _ = i18n()
 
     export let day: number
     export let lessons: Lesson[]
     export let weekday: string
     export let activeWeek: boolean | null = null
+    export let onselect: (lessonId: Lesson["id"]) => void
     const isActiveDay = (day: number, activeWeek: boolean | null) => {
         const nowDay = Math.max(1, new Date().getDay())
         const _week =
             activeWeek === null ? true : nowDay > 5 ? !activeWeek : activeWeek
         return _week && day === nowDay - 1
     }
-
-    const dispatch = createEventDispatcher()
-    const onLongPress = (id: Lesson["id"]) => ({
-        action: () => dispatch("select", id),
-        zIndex: false,
-    })
 
     export let activeLesson: string | null = null
 
@@ -43,30 +36,50 @@
     <Card {active} title={weekday}>
         {#each lessons as { subject, time, audience, teacher, teacher_link, id } (id)}
             {@const note = getNotePreview($notes, id)}
-            <section
-                class="lesson"
-                class:lesson--active={id === activeLesson}
-                use:longPress={onLongPress(id)}
-                style="transition: {id !== activeLesson ? `all .2s` : 'none'}"
+            <LongPress
+                class="long-press"
+                onLongPress={() => onselect?.(id)}
+                let:progress
+                let:size
+                let:x
+                let:y
             >
-                <div class="lesson__content">
-                    <div class="lesson__header">
-                        <h3 class="lesson__title">
-                            {subject}
-                        </h3>
-                        <p class="lesson__time">{time}</p>
+                <section
+                    class="lesson"
+                    class:lesson--active={id === activeLesson}
+                    style="transition: {id !== activeLesson
+                        ? `background-color .2s`
+                        : 'none'}"
+                >
+                    <div class="lesson__content">
+                        <div class="lesson__header">
+                            <h3 class="lesson__title">
+                                {subject}
+                            </h3>
+                            <p class="lesson__time">{time}</p>
+                        </div>
+                        <p class="lesson__audience">
+                            {audience}
+                        </p>
+                        <p class="lesson__teacher">
+                            <TeacherLink {teacher} {teacher_link} />
+                        </p>
+                        {#if note.length > 0}
+                            <p class="lesson__note">
+                                <OneLine>{note}</OneLine>
+                            </p>
+                        {/if}
                     </div>
-                    <p class="lesson__audience">
-                        {audience}
-                    </p>
-                    <p class="lesson__teacher">
-                        <TeacherLink {teacher} {teacher_link} />
-                    </p>
-                    {#if note.length > 0}
-                        <p class="lesson__note"><OneLine>{note}</OneLine></p>
-                    {/if}
-                </div>
-            </section>
+                    <div
+                        class="bubble"
+                        style:--scale={progress}
+                        style:left="{x}px"
+                        style:top="{y}px"
+                        style:width="{size}px"
+                        style:height="{size}px"
+                    ></div>
+                </section>
+            </LongPress>
         {:else}
             <p class="day__nolessons">{_("schedule.no-lessons")}</p>
         {/each}
@@ -107,13 +120,15 @@
         padding: var(--lesson-padding);
         padding-bottom: 0;
         display: grid;
+        overflow: hidden;
+        position: relative;
     }
     .lesson__header {
         display: flex;
         gap: 1em;
         justify-content: space-between;
     }
-    .lesson:last-of-type {
+    .day :global(.long-press:last-of-type .lesson) {
         padding-bottom: var(--lesson-padding);
     }
     .lesson::after {
@@ -124,7 +139,7 @@
         margin-top: var(--lesson-padding);
         z-index: 1;
     }
-    .lesson:last-of-type::after {
+    .day :global(.long-press:last-of-type .lesson::after) {
         display: none;
     }
     .lesson__content {
@@ -144,5 +159,16 @@
     }
     .lesson p {
         margin: 0;
+    }
+
+    .bubble {
+        transition: background-color 0.2s;
+        position: absolute;
+        border-radius: 100%;
+        transform: translate(-50%, -50%) scale(var(--scale, 0));
+        background-color: var(
+            --bubble-color,
+            color-mix(in srgb, currentColor 10%, transparent)
+        );
     }
 </style>

@@ -31,7 +31,7 @@
 
     let activeLessonId: string | null = null
     let noteEditor: NoteEditor
-    const onSelect = async ({ detail: id }: { detail: string }) => {
+    const onSelect = async (id: string) => {
         if (!noteEditor) return
         activeLessonId = id
         const lesson = getLessonById($schedule, id)
@@ -49,7 +49,7 @@
     {loading}
     days={DAYS}
     title={_("schedule")}
-    on:select={onSelect}
+    onselect={onSelect}
     activeLesson={activeLessonId}
 />
 
