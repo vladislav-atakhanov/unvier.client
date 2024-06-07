@@ -9,7 +9,7 @@
         SegmentedButtons,
         Checkbox,
     } from "material/components"
-    import { navigate } from "material/router"
+    import { navigate } from "material/routing"
     import { login } from "../api"
     import { onMount } from "svelte"
     import WriteMe from "../components/write-me.svelte"
@@ -37,12 +37,12 @@
             password,
             univer: univer.toLowerCase(),
         })
-        navigate(HOME)
         sent = false
         if (status === 200) {
             localStorage.setItem("username", username)
             localStorage.setItem("univer", univer)
             setTimeout(updateAllStores, 1000)
+            navigate(HOME)
             return
         }
         if (status === 401) {
@@ -66,7 +66,7 @@
     $: disabled = sent ? true : !active
 </script>
 
-<Scaffold>
+<Scaffold noscroll>
     <AppBar slot="app-bar" icon={false}>
         <IconButton href={FAQ} icon="help" slot="leading" />
         <div class="login__actions" slot="actions">
