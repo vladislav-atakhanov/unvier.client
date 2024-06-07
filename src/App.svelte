@@ -1,6 +1,6 @@
 <script>
     import { MaterialApp, Route } from "material/components"
-    import { navigate } from "material/router"
+    import { navigate } from "material/routing"
     import Login from "./pages/login.svelte"
     import Attestation from "./pages/attestation.svelte"
     import Schedule from "./pages/schedule.svelte"
@@ -43,23 +43,13 @@
         if (checkAuth() === false) return navigate(LOGIN)
         if (authPath !== pathname) navigate(authPath)
     })
-
-    /** @param {string} location */
-    const canBack = (location) => {
-        const { pathname } = new URL(location)
-        const match = pathname.match(/\//g) || []
-        return match.length > 1
-    }
-
-    const home = () => (checkAuth() ? HOME : LOGIN)
 </script>
 
-<MaterialApp {canBack} {i18n} defaultLanguage="ru" {home}>
+<MaterialApp {i18n} defaultLanguage="ru">
     <Route path={LOGIN} component={Login} />
     <Route path={ATTESTATION} component={Attestation} />
     <Route path="{ATTESTATION}/:subject" component={Attendance} />
     <Route path={SCHEDULE} component={Schedule} />
-    <Route path="/" component={Schedule} />
     <Route path={PROFILE} component={Profile} />
     <Route path={EXAMS} component={Exams} />
     <Route path={CALCULATOR} component={Calculator} />

@@ -120,17 +120,13 @@
             margin: 0 auto;
             max-width: 1000px;
         }
-        .schedule :global(.tabs__wrapper) {
-            margin: 0 auto;
-            max-width: 1000px;
-        }
         .schedule :global(.tab__content) {
             flex: none;
             width: auto;
         }
         .schedule :global(.tabs__content) {
-            transform: none;
-            width: auto;
+            margin: 0 auto;
+            max-width: 1000px;
             display: grid;
             grid-template-columns: 1fr 1fr;
         }

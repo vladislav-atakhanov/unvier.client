@@ -1,5 +1,5 @@
 <script>
-    import { Scaffold, AppBar, Icon } from "material/components"
+    import { Scaffold, AppBar } from "material/components"
     import Navigation from "../components/navigation.svelte"
     import { useFAQ, useIsAuth } from "../api"
     import LoadingText from "../components/loading-text.svelte"
@@ -67,8 +67,5 @@
     }
     .content :global(h1) {
         margin-top: 0;
-    }
-    .content :global(h2) {
-        scroll-margin-block-start: var(--app-bar-height);
     }
 </style>
