@@ -1,6 +1,6 @@
 import { api } from "./config"
 import { LOGIN } from "../url"
-import { navigate } from "material/router"
+import { navigate } from "material/routing"
 import { storage } from "./storage"
 import { singleFetch } from "./utils"
 import { addSnack } from "material/notificator"
@@ -50,6 +50,8 @@ export const authFetchUrl = (apiUrl: string) => {
     return url
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
 export const authFetch = async <T>(
     url: string,
     reader?: (r: Response) => unknown
@@ -62,9 +64,10 @@ export const authFetch = async <T>(
         )
         if (status === 200) return data
         if (status === 401) {
+            await sleep(1000)
             const status = await refreshToken()
             if (status === 401) {
-                navigate(LOGIN)
+                logout()
                 return null
             }
             continue
