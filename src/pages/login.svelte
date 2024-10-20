@@ -1,160 +1,139 @@
-<script>
-    import {
-        TextField,
-        FilledButton,
-        Scaffold,
-        AppBar,
-        IconButton,
-        Icon,
-        SegmentedButtons,
-        Checkbox,
-    } from "material/components"
-    import { navigate } from "material/routing"
+<script lang="ts">
+    import { CircleHelp, Settings, Eye, EyeOff } from "lucide-svelte"
+    import { Button } from "$lib/components/ui/button"
+    import * as Select from "$lib/components/ui/select"
+    import { Input } from "$lib/components/ui/input"
+    import { Label } from "$lib/components/ui/label"
+    import { Checkbox } from "$lib/components/ui/checkbox"
+
+    import { PRIVACY_POLICY, SETTINGS, FAQ } from "./url"
     import { login } from "../api"
-    import { onMount } from "svelte"
-    import WriteMe from "../components/write-me.svelte"
-    import { PRIVACY_POLICY, SETTINGS, HOME, FAQ } from "../url"
-    import { i18n } from "material/i18n"
-    import { updateAllStores } from "../api/data"
-    import Version from "../components/version.svelte"
-    import InstallButton from "../components/install-button.svelte"
 
-    const _ = i18n()
-    let username = ""
-    let password = ""
-    let error = ""
-    const univers = ["KSTU", "KazNU"]
-    let univer = "KSTU"
+    const univers = {
+        kstu: "KSTU",
+        kaznu: "KazNU",
+    }
+    let univer = $state<keyof typeof univers>("" as any)
+    let username = $state("")
+    let password = $state("")
+    let status = $state<"ready" | "loading" | "error">("ready")
+    let agree = $state(false)
+    let error = $state("")
 
-    let sent = false
+    const _ = (v: string) => v
 
-    const onSubmit = async () => {
-        if (disabled) return
-        error = ""
-        sent = true
-        const status = await login({
-            username,
+    let active = $derived(username.length && agree && password.length && univer)
+    let disabled = $derived(status == "loading" ? true : !active)
+
+    const onsubmit = async (event: SubmitEvent) => {
+        event.preventDefault()
+        status = "loading"
+        const s = await login({
             password,
-            univer: univer.toLowerCase(),
+            univer,
+            username,
         })
-        sent = false
-        if (status === 200) {
-            localStorage.setItem("username", username)
-            localStorage.setItem("univer", univer)
-            setTimeout(updateAllStores, 1000)
-            navigate(HOME)
+        if (s === 200) {
             return
         }
-        if (status === 401) {
+        status = "ready"
+        if (s === 401) {
             error = _("error.invalid-credentials")
             return
         }
         error = _("error.connection-error")
     }
+    let showPassword = $state(false)
 
-    onMount(() => {
-        const localUsername = localStorage.getItem("username")
-        if (username.length < 1 && localUsername) username = localUsername
-
-        const localUniver = localStorage.getItem("univer")
-        if (localUniver) univer = localUniver
-    })
-
-    let agree = false
-
-    $: active = agree && username.length && password.length
-    $: disabled = sent ? true : !active
+    const navigate = (path: string) => {}
 </script>
 
-<Scaffold noscroll>
-    <AppBar slot="app-bar" icon={false}>
-        <IconButton href={FAQ} icon="help" slot="leading" />
-        <div class="login__actions" slot="actions">
-            <InstallButton class="login__install">
-                <Icon slot="mobile" name="install_mobile" />
-                <Icon slot="desktop" name="install_desktop" />
-            </InstallButton>
-            <WriteMe />
-            <IconButton icon="settings" href={SETTINGS} />
-        </div>
-    </AppBar>
-    <div class="login__container">
-        <form on:submit|preventDefault={onSubmit}>
-            <SegmentedButtons bind:value={univer} items={univers} />
-            <TextField label={_("username")} bind:value={username} />
-            <TextField
-                label={_("password")}
-                bind:value={password}
-                type="password"
-            />
-            <!-- svelte-ignore a11y-label-has-associated-control -->
-            <label class="policy">
-                <Checkbox label={false} bind:checked={agree} />
-                <span>
-                    {@html _("privacy-policy.agree", PRIVACY_POLICY)}
-                </span>
-            </label>
-            {#if error}
-                <p class="error">{error}</p>
-            {/if}
-            <FilledButton type="submit" {disabled}
-                >{sent ? _("loading") : _("login")}</FilledButton
+<div class="page">
+    <header class="flex justify-between p-2">
+        <Button variant="ghost" size="icon" onclick={() => navigate(FAQ)}
+            ><CircleHelp /></Button
+        >
+        <div class="flex gap-4">
+            <Button
+                variant="ghost"
+                size="icon"
+                onclick={() => navigate(SETTINGS)}><Settings /></Button
             >
-        </form>
-        <div class="login__version">
-            <Version />
         </div>
-    </div>
-</Scaffold>
+    </header>
+
+    <form
+        class="max-w-90 justify-self-center grid gap-4 self-center"
+        {onsubmit}
+    >
+        <Select.Root
+            onSelectedChange={({ value }) => (univer = value)}
+            name="univer"
+        >
+            <Select.Trigger>
+                <Select.Value placeholder="Univer" />
+            </Select.Trigger>
+            <Select.Content>
+                {#each Object.entries(univers) as [value, label]}
+                    <Select.Item {value}>{label}</Select.Item>
+                {/each}
+            </Select.Content>
+        </Select.Root>
+
+        <Label class="flex w-full max-w-sm flex-col gap-1.5"
+            >{_("username")}
+            <Input
+                type="text"
+                bind:value={username}
+                name="username"
+                placeholder="vladislav.atakhanov"
+            />
+        </Label>
+
+        <Label class="flex w-full max-w-sm flex-col gap-1.5"
+            >{_("password")}
+            <div class="relative">
+                <Input
+                    type={showPassword ? "text" : "password"}
+                    bind:value={password}
+                    name="password"
+                    placeholder={_("password")}
+                />
+                <Button
+                    variant="ghost"
+                    type="button"
+                    size="icon"
+                    class="absolute right-0 top-0"
+                    onclick={() => (showPassword = !showPassword)}
+                >
+                    {#if showPassword}
+                        <EyeOff />
+                    {:else}
+                        <Eye />
+                    {/if}
+                </Button>
+            </div>
+        </Label>
+
+        <Label class="flex align-center gap-2">
+            <Checkbox id="terms" bind:checked={agree} name="agree" />
+            {@html _("privacy-policy.agree", PRIVACY_POLICY)}
+        </Label>
+        {#if error}
+            <p class="text-muted-foreground text-sm">
+                {error}
+            </p>
+        {/if}
+        <Button {disabled} type="submit"
+            >{status === "loading" ? _("loading") : _("login")}</Button
+        >
+    </form>
+    <p class="m-0 p-4 text-center text-muted-foreground">version</p>
+</div>
 
 <style>
-    :global(md-filled-button) {
-        display: block;
-    }
-    label {
-        display: block;
-    }
-    .login__container {
-        margin: 0 auto;
-        max-width: 500px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        height: 100%;
-        --width: 100%;
-    }
-    .login__version {
-        position: absolute;
-        bottom: 0;
-        opacity: 0.5;
-    }
-    .policy {
-        display: flex;
-        gap: 1em;
-        align-items: center;
-    }
-    .policy span {
-        font-size: 0.8em;
-    }
-    .policy :global(a) {
-        color: var(--md-sys-color-primary);
-    }
-    .login__actions {
-        display: flex;
-        gap: 0.5em;
-        font-size: 2em;
-        align-items: center;
-    }
-    :global(.login__install) {
-        padding: 0.5em;
-    }
-    form {
+    .page {
         display: grid;
-        gap: 1em;
-    }
-    .error {
-        margin: 0;
-        color: var(--md-sys-color-error);
+        grid-template-rows: min-content 1fr min-content;
     }
 </style>

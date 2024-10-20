@@ -1,5 +1,3 @@
-import { HOME } from "./url"
-
 /**
  * @typedef IconParams
  * @type {object}
@@ -7,6 +5,8 @@ import { HOME } from "./url"
  * @property {string} [type]
  * @property {"maskable" | "badge" | "any"} [purpose]
  */
+
+import { HOME } from "./pages/url"
 
 /**
  *
