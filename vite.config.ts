@@ -13,6 +13,7 @@ export default defineConfig({
     resolve: {
         alias: {
             $lib: path.resolve("./src/lib"),
+            $api: path.resolve("./src/api"),
         },
     },
 })
