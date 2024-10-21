@@ -1,5 +1,7 @@
 import { api } from "./config.ts"
 
+export const clientVersion = "Ps9Oynpy"
+
 export { checkAuth, login } from "./auth.svelte.ts"
 
 export async function fetchPrivacy() {

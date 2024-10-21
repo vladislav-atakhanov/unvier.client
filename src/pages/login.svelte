@@ -7,7 +7,7 @@
     import { Checkbox } from "$lib/components/ui/checkbox"
 
     import { route } from "./url"
-    import { login } from "../api"
+    import { clientVersion, login } from "../api"
 
     import { _ } from "$lib/i18n"
     import Page from "../layouts/page.svelte"
@@ -132,7 +132,7 @@
             >{status === "loading" ? _("loading") : _("login")}</Button
         >
     </form>
-    <p class="m-0 p-4 text-center text-muted-foreground">version</p>
+    <p class="m-0 p-4 text-center text-muted-foreground">{clientVersion}</p>
 </Page>
 
 <style>
