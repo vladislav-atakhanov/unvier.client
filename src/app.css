@@ -19,8 +19,8 @@
         --border: 240 5.9% 90%;
         --input: 240 5.9% 90%;
 
-        --primary: 240 5.9% 10%;
-        --primary-foreground: 0 0% 98%;
+        --primary: 257 35% 48%;
+        --primary-foreground: 0 0% 100%;
 
         --secondary: 240 4.8% 95.9%;
         --secondary-foreground: 240 5.9% 10%;
@@ -52,8 +52,8 @@
         --border: 240 3.7% 15.9%;
         --input: 240 3.7% 15.9%;
 
-        --primary: 0 0% 98%;
-        --primary-foreground: 240 5.9% 10%;
+        --primary: 257 100% 87%;
+        --primary-foreground: 258 59% 28%;
 
         --secondary: 240 3.7% 15.9%;
         --secondary-foreground: 0 0% 98%;
@@ -68,18 +68,6 @@
     }
 }
 
-.page {
-    min-height: 100%;
-}
-
-.h-full {
-    height: 100%;
-}
-.h-screen {
-    height: 100vh;
-    height: 100dvh;
-}
-
-.text-foreground {
-    color: hsl(var(--foreground) / var(--tw-text-opacity, 1));
+body {
+    @apply bg-background font-sans text-foreground;
 }
