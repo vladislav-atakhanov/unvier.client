@@ -1,6 +1,6 @@
 <script>
-    import "./app.css"
-    import Login from "./pages/login.svelte"
+    import { Router } from "$lib/router"
+    import { routes } from "./pages/url"
 </script>
 
-<Login></Login>
+<Router {routes} />

@@ -61,6 +61,10 @@ const config: Config = {
             fontFamily: {
                 sans: [...fontFamily.sans],
             },
+            gridTemplateRows: {
+                "min-auto-min": "min-content 1fr min-content",
+                "min-auto": "min-content 1fr",
+            },
         },
     },
 }
