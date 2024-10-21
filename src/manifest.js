@@ -6,7 +6,7 @@
  * @property {"maskable" | "badge" | "any"} [purpose]
  */
 
-import { HOME } from "./pages/url"
+import { routes } from "./pages"
 
 /**
  *
@@ -48,7 +48,7 @@ export default {
     background_color: "#fff",
     display: "standalone",
     scope: "/",
-    start_url: HOME,
+    start_url: routes.home.path,
     name: "Univer",
     short_name: "Univer",
     description:
