@@ -1,13 +1,13 @@
 <script lang="ts">
     import { CircleHelp, Settings, Eye, EyeOff } from "lucide-svelte"
     import { Button } from "$lib/components/ui/button"
-    import * as Select from "$lib/components/ui/select"
+    import * as Radio from "$lib/components/ui/segmented-radio"
     import { Input } from "$lib/components/ui/input"
     import { Label } from "$lib/components/ui/label"
     import { Checkbox } from "$lib/components/ui/checkbox"
 
     import { route } from "./url"
-    import { clientVersion, login } from "../api"
+    import { login, version } from "../api"
 
     import { _ } from "$lib/i18n"
     import Page from "../layouts/page.svelte"
@@ -17,7 +17,7 @@
         kstu: "KSTU",
         kaznu: "KazNU",
     }
-    let univer = $state<keyof typeof univers>("" as any)
+    let univer = $state<keyof typeof univers>("kstu")
     let username = $state("")
     let password = $state("")
     let status = $state<"ready" | "loading" | "error">("ready")
@@ -68,19 +68,14 @@
         class="max-w-90 justify-self-center grid gap-4 self-center"
         {onsubmit}
     >
-        <Select.Root
-            onSelectedChange={({ value }) => (univer = value)}
+        <Radio.Root
+            bind:value={univer}
             name="univer"
         >
-            <Select.Trigger>
-                <Select.Value placeholder="Univer" />
-            </Select.Trigger>
-            <Select.Content>
-                {#each Object.entries(univers) as [value, label]}
-                    <Select.Item {value}>{label}</Select.Item>
-                {/each}
-            </Select.Content>
-        </Select.Root>
+            {#each Object.entries(univers) as [value, label]}
+                <Radio.Item {value}>{label}</Radio.Item>
+            {/each}
+        </Radio.Root>
 
         <Label class="flex w-full max-w-sm flex-col gap-1.5"
             >{_("username")}
@@ -124,7 +119,7 @@
             </div>
         </Label>
         {#if error}
-            <p class="text-muted-foreground text-sm">
+            <p class="text-destructive text-sm">
                 {error}
             </p>
         {/if}
@@ -132,7 +127,7 @@
             >{status === "loading" ? _("loading") : _("login")}</Button
         >
     </form>
-    <p class="m-0 p-4 text-center text-muted-foreground">{clientVersion}</p>
+    <p class="m-0 p-4 text-center text-muted-foreground">{version.client}</p>
 </Page>
 
 <style>
