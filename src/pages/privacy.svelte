@@ -17,7 +17,7 @@
 
         </AppBar>
     {/snippet}
-    <div class="privacy max-w-3xl m-auto pt-6">
+    <div class="privacy max-w-3xl mx-auto pt-6">
         {#if privacy}
             {@html privacy}
         {/if}
