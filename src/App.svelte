@@ -1,5 +1,6 @@
 <script lang="ts">
     import { checkAuth } from "$api"
+    import colorScheme from "$lib/color-scheme"
     import Wrapper, {type Router} from "$lib/router"
     import { routes } from "./pages"
     import Faq from "./pages/faq.svelte"
@@ -13,7 +14,11 @@
         }
         return true
     }
+
+
 </script>
+
+<svelte:body use:colorScheme.apply />
 
 <Wrapper home={routes.home}>
     {#snippet children(router)}

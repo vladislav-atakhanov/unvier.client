@@ -10,9 +10,9 @@
 
     import Page from "../layouts/page.svelte"
     import { routes } from "./url"
+    import colorScheme from "$lib/color-scheme"
 
     let language = $state("ru")
-    let scheme = $state("auto")
 
     $effect(() => setLocale(language as any))
 
@@ -32,10 +32,8 @@
 
         <Label class="grid gap-2">
             {_("color-scheme")}
-            <Radio.Root
-                bind:value={scheme}
-            >
-            <Radio.Item value="light">{_("color-scheme.light")}</Radio.Item>
+            <Radio.Root bind:value={colorScheme.value}>
+                <Radio.Item value="light">{_("color-scheme.light")}</Radio.Item>
                 <Radio.Item value="auto">{_("color-scheme.auto")}</Radio.Item>
                 <Radio.Item value="dark">{_("color-scheme.dark")}</Radio.Item>
             </Radio.Root>
