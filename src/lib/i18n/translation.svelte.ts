@@ -3,7 +3,7 @@ import kk from "./kk.json"
 import en from "./en.json"
 
 export const locales = { ru, kk, en }
-type Locale = (typeof locales)["ru"]
+type Locale = (typeof locales)[keyof typeof locales]
 
 class Translation {
     locale: keyof typeof locales = $state("ru")
