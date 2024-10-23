@@ -20,4 +20,4 @@
     })
 </script>
 
-<div class="flex items-center justify-center gap-1">{@render children?.()}</div>
+<div class="flex items-center justify-center gap-1 bg-muted text-muted-foreground rounded-md p-1">{@render children?.()}</div>
