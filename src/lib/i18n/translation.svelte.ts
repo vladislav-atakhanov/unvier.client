@@ -6,21 +6,25 @@ export const locales = { ru, kk, en }
 type Locale = (typeof locales)[keyof typeof locales]
 
 class Translation {
-    locale: keyof typeof locales = $state("ru")
-    obj: Locale = $derived(locales[this.locale])
+    language: keyof typeof locales = $state("ru")
+    obj: Locale = $derived(locales[this.language])
+    #mount = false
     constructor(public translations: Record<string, Locale>) {}
     translate(key: keyof Locale, ...params: string[]) {
-        let result = this.translations[this.locale][key]
+        let result = this.translations[this.language][key]
         for (const param of params) result = result.replace("{}", param)
-
         return result
     }
+    apply(_: unknown) {
+        this.language = (localStorage.getItem("lang") as any) ?? "ru"
+        $effect(() => {
+            localStorage.setItem("lang", this.language)
+            document.documentElement.setAttribute("lang", this.language)
+            this.#mount = true
+        })
+    }
 }
-const translations = new Translation(locales as any)
+export const i18n = new Translation(locales as any)
 
 export const _ = (key: keyof Locale, ...params: string[]) =>
-    translations.translate(key, ...params)
-
-export function setLocale(locale: keyof typeof locales) {
-    translations.locale = locale
-}
+    i18n.translate(key, ...params)
