@@ -60,7 +60,7 @@
 
     const onscroll = debounce(() => tick().then(() => {
         if (!router.element) return
-        const screenWidth = router.element.clientWidth / (history.length - 1);
+        const screenWidth = router.element.clientWidth / (router.history.length - 1);
         const index = Math.round(router.element.scrollLeft / screenWidth)
         if (index + 1 !== router.history.length)
             router.history = router.history.slice(0, index + 1)

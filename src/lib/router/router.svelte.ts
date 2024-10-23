@@ -43,7 +43,8 @@ export class HistoryRouter implements Router {
     }
     back() {
         if (!this.element) return
-        const screenWidth = this.element?.clientWidth / (history.length - 1)
+        const screenWidth =
+            this.element?.clientWidth / (this.history.length - 1)
         this.#scrollTo(this.element?.scrollLeft - screenWidth)
     }
 
