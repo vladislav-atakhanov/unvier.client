@@ -1,78 +1,47 @@
 <script module lang="ts">
     const ROUTER_KEY = Symbol()
-    export const useRouter = () => getContext<{
-        readonly history: string[]
-        readonly navigate: Navigate
-        readonly back: () => void
-    }>(ROUTER_KEY)
+
+    export const useRouter = () => getContext<HistoryRouter>(ROUTER_KEY)
 </script>
 
 <script lang="ts">
-    import { getContext, setContext } from "svelte"
-    import type { Route, Routes, Navigate } from "./@types"
-    import { debounce, hostMatches, next, shouldNavigate } from "./utils"
+    import { getContext, setContext, type Snippet, tick, } from "svelte"
+    import { debounce, findClosest, hostMatches, shouldNavigate } from "./utils"
+    import { HistoryRouter, ItemRouter } from "./router.svelte.ts"
+    import type { Router } from "./@types.ts"
     let {
-        routes,
-        home = routes.home,
+        children, home="/"
     }: {
-        routes: ReturnType<typeof Routes>
-        home?: Route
+        children?: Snippet<[Router]>,
+        home?: string
     } = $props()
-    let history = $state<string[]>([home.path])
-    let router = $state<HTMLElement>()
 
+    const router = new HistoryRouter(home)
+    setContext(ROUTER_KEY, router)
 
-    const navigate: Navigate = (route, { mode } = { mode: "push" }) => {
-        next(() => {
-            if (mode === "replace") {
-                history = [route.path]
-            } else {
-                if (history.includes(route.path) === false)
-                    history.push(route.path)
+    $inspect(router.history).with((type, value) => {
+        console.log("history", type, '[',value.map(({path, query, fragment}) => {
+            if (query) {
+                path += `?${query}`
             }
-            next(() => {
-                router?.scrollTo({
-                    left: router?.scrollWidth,
-                    behavior: "smooth",
-                })
-            })
-        })
-    }
+            if (fragment) {
+                path += `#${fragment}`
+            }
+            return path
+        }).join(", "), ']');
+    })
 
-    const getComponentByPath = (path: string) => {
-        const route = Object.values(routes).find((value) => value.path === path)
-        if (typeof route !== "object") return
 
-        let isRender = false
-        const render = () => {
-            isRender = true
-        }
-        if (!route.middleware) return route.component
-        route.middleware({ render, navigate })
-        if (isRender) return route.component
-    }
-
-    $inspect(history)
-
-    const findClosest = <T extends HTMLElement>(
-        tagName: string,
-        el: HTMLElement,
-    ): T => {
-        while (el && el.tagName !== tagName) el = el.parentNode
-        return el as T
-    }
-    const links = (event: PointerEvent) => {
+    const links: (event: any) => void = (event: PointerEvent) => {
         const anchor = findClosest<HTMLAnchorElement>("A", event.target as any)
         if (!anchor) return
         if (anchor.hash) {
             event.preventDefault()
             event.stopPropagation()
 
-            /** @type {HTMLElement} */
-            const element = document.querySelector(anchor.hash)
-            if (element) {
-                element.scrollIntoView({ behavior: "smooth" })
-                console.log("click")
+            const target = document.querySelector(anchor.hash) as HTMLElement
+            if (target) {
+                target.scrollIntoView({ behavior: "smooth" })
             }
             return
         }
@@ -84,44 +53,27 @@
         ) {
             event.preventDefault()
 
-            navigate(routes.get(anchor.pathname), { mode: "push" })
+            router.navigate(anchor.pathname, { mode: "push" })
             return
         }
     }
 
-    const onscroll = debounce(() => next(() => {
-        if (!router) return
-        const screenWidth = router.clientWidth / (history.length - 1);
-        const index = Math.round(router.scrollLeft / screenWidth)
-        history = history.slice(0, index + 1)
+    const onscroll = debounce(() => tick().then(() => {
+        if (!router.element) return
+        const screenWidth = router.element.clientWidth / (history.length - 1);
+        const index = Math.round(router.element.scrollLeft / screenWidth)
+        if (index + 1 !== router.history.length)
+            router.history = router.history.slice(0, index + 1)
     }), 100)
 
-    setContext(ROUTER_KEY, {
-        get history() {
-            return history
-        },
-        navigate,
-        back() {
-            if (!router) return
-            const screenWidth = router.clientWidth / (history.length - 1);
-            router?.scrollTo({
-                left: router.scrollLeft - screenWidth,
-                behavior: "smooth"
-            })
-        }
-    })
+
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div onclick={links} class="router" bind:this={router} {onscroll}>
-    {#each history as path}
-        {@const Component = getComponentByPath(path)}
-        {#if Component}
-            <Component />
-        {:else}
-            Not found
-        {/if}
+<div onclick={links} class="router" bind:this={router.element} {onscroll}>
+    {#each router.history as item}
+        {@render children?.(new ItemRouter(router, item))}
     {/each}
 </div>
 

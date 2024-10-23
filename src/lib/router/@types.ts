@@ -1,39 +1,29 @@
-import type { Component } from "svelte"
+import type { pattern } from "./pattern"
 
-export type Navigate = (
-    route: Route,
-    params?: { mode: "replace" | "push" }
-) => void
+export type ParametersExceptFirst<F> = F extends (
+    arg0: any,
+    ...rest: infer R
+) => any
+    ? R
+    : never
 
-export type Middleware = (actions: {
-    render: () => void
-    navigate: Navigate
-}) => unknown
-
-export type Route = {
-    component: Component
-    middleware?: Middleware
+export interface HistoryItem {
     path: string
+    query: string
+    fragment: string
 }
 
-const getPaths = (routes: Record<string, Route>) => {
-    const result: Record<string, Route> = {}
-    for (const route of Object.values(routes)) {
-        result[route.path] = route
-    }
-    return result
+export interface NavigateParams {
+    mode?: "push" | "replace"
 }
 
-const prototype = {
-    get(path: string): Route {
-        const paths = getPaths(this)
-        return paths[path]
-    },
-}
-
-export const Routes = <T extends string>(
-    routes: Record<T, Route>
-): Record<T, Route> & typeof prototype => {
-    Object.setPrototypeOf(routes, prototype)
-    return routes as any
+export interface Router {
+    path: string
+    query: string
+    fragment: string
+    navigate: (path: string, params?: NavigateParams) => void
+    back: () => void
+    pattern: (
+        ...args: ParametersExceptFirst<typeof pattern>
+    ) => ReturnType<typeof pattern>
 }

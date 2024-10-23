@@ -1,2 +1,2 @@
-export { default as Router, useRouter } from "./router.svelte"
-export * from "./@types"
+export { default, useRouter } from "./router.svelte"
+export type { Router } from "./@types"
