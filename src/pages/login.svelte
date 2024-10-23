@@ -10,7 +10,7 @@
     import { login, version } from "../api"
 
     import { _ } from "$lib/i18n"
-    import Page from "../layouts/page.svelte"
+    import Page from "$lib/layouts/page.svelte"
     import AppBar from "$lib/components/app-bar.svelte"
 
     const univers = {
@@ -65,7 +65,7 @@
     {/snippet}
 
     <form
-        class="max-w-90 justify-self-center grid gap-5 self-center"
+        class="max-w-90 justify-self-center grid gap-5 self-center px-4"
         {onsubmit}
     >
         <Radio.Root

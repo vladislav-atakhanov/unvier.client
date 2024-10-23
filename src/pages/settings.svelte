@@ -8,7 +8,7 @@
     import { onMount } from "svelte"
 
 
-    import Page from "../layouts/page.svelte"
+    import Page from "$lib/layouts/page.svelte"
     import { routes } from "./url"
     import colorScheme from "$lib/color-scheme"
 
