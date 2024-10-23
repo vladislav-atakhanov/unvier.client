@@ -4,12 +4,12 @@
     import { useRadio } from "./segmented-radio.svelte"
 
     const radio = useRadio()
-    let {children, ...restProps}: {children?: Snippet} & HTMLInputAttributes = $props()
+    let {children, class: class_, ...props}: {children?: Snippet} & HTMLInputAttributes = $props()
 </script>
 
 <label class="flex-1">
-    <input class="sr-only" type="radio" name={radio.name} bind:group={radio.value} {...restProps} />
-    <span class="ring-offset-background hover:bg-muted hover:text-muted-foreground flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-transparent h-10 px-3">{@render children?.()}</span>
+    <input class="sr-only" type="radio" name={radio.name} bind:group={radio.value} {...props} />
+    <span class="{class_} ring-offset-background hover:bg-muted hover:text-muted-foreground flex items-center justify-center rounded-md font-medium transition-colors bg-transparent h-10 px-3">{@render children?.()}</span>
 </label>
 
 <style>

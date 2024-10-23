@@ -59,7 +59,7 @@ const config: Config = {
                 sm: "calc(var(--radius) - 4px)",
             },
             fontFamily: {
-                sans: [...fontFamily.sans],
+                sans: ["Roboto Flex", ...fontFamily.sans],
             },
             gridTemplateRows: {
                 "min-auto-min": "min-content 1fr min-content",
