@@ -65,7 +65,7 @@
     {/snippet}
 
     <form
-        class="max-w-90 justify-self-center grid gap-4 self-center"
+        class="max-w-90 justify-self-center grid gap-5 self-center"
         {onsubmit}
     >
         <Radio.Root
@@ -112,14 +112,14 @@
             </div>
         </Label>
 
-        <Label class="flex align-center gap-2">
+        <Label class="flex items-center gap-2">
             <Checkbox id="terms" bind:checked={agree} name="agree" />
-            <div class="privacy">
+            <div class="privacy text-sm">
                 {@html _("privacy-policy.agree", routes.privacy)}
             </div>
         </Label>
         {#if error}
-            <p class="text-destructive text-sm">
+            <p class="text-destructive">
                 {error}
             </p>
         {/if}
