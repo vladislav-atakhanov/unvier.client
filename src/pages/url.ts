@@ -10,6 +10,7 @@ export const routes = {
     umkd: "/umkd",
     telegram: "https://t.me/univerapp",
     faq: "/faq",
+    faqItem: "/faq/:id",
 
     get home() {
         return this.schedule

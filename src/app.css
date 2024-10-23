@@ -80,3 +80,21 @@
 body {
     @apply bg-background font-sans text-foreground;
 }
+.content h1 {
+    @apply text-3xl font-bold my-5;
+}
+.content h2 {
+    @apply text-2xl font-bold mb-2 mt-4;
+}
+.content h3 {
+    @apply text-xl font-bold my-2;
+}
+.content ol {
+    @apply list-decimal ml-4;
+}
+.content p {
+    @apply my-4;
+}
+.content a {
+    @apply text-primary underline hover:no-underline;
+}
