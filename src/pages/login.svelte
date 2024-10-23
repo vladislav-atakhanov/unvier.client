@@ -6,7 +6,7 @@
     import { Label } from "$lib/components/ui/label"
     import { Checkbox } from "$lib/components/ui/checkbox"
 
-    import { route } from "./url"
+    import { routes } from "./url"
     import { login, version } from "../api"
 
     import { _ } from "$lib/i18n"
@@ -52,12 +52,12 @@
     {#snippet header()}
     <AppBar>
         {#snippet left()}
-        <Button variant="ghost" size="icon" href={route("faq")}
+        <Button variant="ghost" size="icon" href={routes.faq}
             ><CircleHelp /></Button
         >
         {/snippet}
         {#snippet right()}
-        <Button variant="ghost" size="icon" href={route("settings")}
+        <Button variant="ghost" size="icon" href={routes.settings}
             ><Settings /></Button
         >
         {/snippet}
@@ -115,7 +115,7 @@
         <Label class="flex align-center gap-2">
             <Checkbox id="terms" bind:checked={agree} name="agree" />
             <div class="privacy">
-                {@html _("privacy-policy.agree", route("privacy"))}
+                {@html _("privacy-policy.agree", routes.privacy)}
             </div>
         </Label>
         {#if error}

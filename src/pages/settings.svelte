@@ -9,6 +9,7 @@
 
 
     import Page from "../layouts/page.svelte"
+    import { routes } from "./url"
 
     let language = $state("ru")
     let scheme = $state("auto")
@@ -58,9 +59,11 @@
                 {/if}
             </p>
             <p>{_("version.client")}: <b>{version.client}</b></p>
-            {#if version.update || true}
+            {#if version.update}
                 <p class="text-destructive text-center">{_("version.update-required")}</p>
             {/if}
         </div>
+
+        <a class="text-primary" href={routes.privacy}>{@html _("privacy-policy", routes.privacy)}</a>
     </div>
 </Page>
