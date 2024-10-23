@@ -8,9 +8,10 @@
 </script>
 
 <label class="flex-1">
-    <input class="sr-only" type="radio" bind:group={radio.value} {...restProps} />
+    <input class="sr-only" type="radio" name={radio.name} bind:group={radio.value} {...restProps} />
     <span class="ring-offset-background hover:bg-muted hover:text-muted-foreground flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-transparent h-10 px-3">{@render children?.()}</span>
 </label>
+
 <style>
     label:focus-visible {
         @apply ring-ring outline-none ring-2 ring-offset-2
