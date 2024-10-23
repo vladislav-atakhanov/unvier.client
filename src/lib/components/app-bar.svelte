@@ -19,26 +19,39 @@
 </script>
 
 <header class="" bind:this={element}>
-    <div class="flex items-center gap-2 p-2 h-14">
-        {#if canBack}
-            <Button size="icon" variant="ghost" onclick={() => router.back()}>
-                <ArrowLeft />
-            </Button>
-        {/if}
-        {@render left?.()}
-        {#if title}
-            <h1 class="text-xl font-bold">
-                {#if typeof title === "string"}
-                    {title}
-                {:else}
-                    {@render title()}
-                {/if}
-            </h1>
-        {/if}
+    <div class="grid items-center gap-2 p-2 h-14">
 
-        {#if right}
-            <div class="ml-auto">{@render right()}</div>
-        {/if}
+        <div>
+            {#if canBack}
+                <Button size="icon" variant="ghost" onclick={() => router.back()}>
+                    <ArrowLeft />
+                </Button>
+            {/if}
+            {@render left?.()}
+        </div>
+        <div class="relative w-full">
+            {#if title}
+                <h1 class="text-xl font-bold whitespace-nowrap text-ellipsis absolute w-full top-0 block overflow-hidden">
+                    {#if typeof title === "string"}
+                        {title}
+                    {:else}
+                        {@render title()}
+                    {/if}
+                </h1>
+            {/if}
+        </div>
+
+        <div>{@render right?.()}</div>
     </div>
     <Separator />
 </header>
+<style>
+    .relative::before {
+        content: "0";
+        color: transparent;
+        pointer-events: none;
+    }
+    .grid {
+        grid-template-columns: min-content 1fr min-content;
+    }
+</style>

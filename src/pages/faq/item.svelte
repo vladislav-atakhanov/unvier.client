@@ -20,7 +20,7 @@
         <AppBar title={title} />
     {/snippet}
 
-    <div class="content mx-auto p-4 max-w-lg" bind:this={content}>
+    <div class="content mx-auto p-4 max-w-3xl" bind:this={content}>
         {#await promise}
             {_("loading")}
         {:then text}

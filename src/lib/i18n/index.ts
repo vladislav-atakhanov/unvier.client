@@ -1,1 +1,1 @@
-export { _, locales, setLocale } from "./translation.svelte.ts"
+export { _, locales, i18n } from "./translation.svelte.ts"

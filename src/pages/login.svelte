@@ -65,7 +65,7 @@
     {/snippet}
 
     <form
-        class="max-w-90 justify-self-center grid gap-5 self-center px-4"
+        class="w-full max-w-[370px] justify-self-center grid gap-5 self-center px-4"
         {onsubmit}
     >
         <Radio.Root
@@ -94,7 +94,7 @@
                     type={showPassword ? "text" : "password"}
                     bind:value={password}
                     name="password"
-                    placeholder={_("password")}
+                    placeholder={showPassword ? version.client : "●●●●●●●●●" }
                 />
                 <Button
                     variant="ghost"

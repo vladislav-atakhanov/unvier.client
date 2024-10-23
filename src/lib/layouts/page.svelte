@@ -10,7 +10,7 @@
     } = $props()
 </script>
 
-<div class="page min-h-screen {class_}">
+<div class="page min-h-screen {class_} w-screen overflow-x-hidden">
     {@render header?.()}
     {@render children?.()}
 </div>

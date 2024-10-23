@@ -98,3 +98,6 @@ body {
 .content a {
     @apply text-primary underline hover:no-underline;
 }
+.content kbd {
+    @apply inline-flex rounded border border-muted px-1 pb-0.5;
+}

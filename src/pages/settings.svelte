@@ -3,7 +3,7 @@
     import AppBar from "$lib/components/app-bar.svelte"
     import { Label } from "$lib/components/ui/label"
     import * as Radio from "$lib/components/ui/segmented-radio"
-    import { _, setLocale } from "$lib/i18n"
+    import { _, i18n } from "$lib/i18n"
     import { locales } from "$lib/i18n"
     import { onMount } from "svelte"
 
@@ -12,14 +12,8 @@
     import { routes } from "./url"
     import colorScheme from "$lib/color-scheme"
 
-    let language = $state("ru")
 
-    $effect(() => setLocale(language as any))
-
-    onMount(() => {
-        version.fetch()
-    })
-
+    onMount(() => version.fetch())
 
 </script>
 <Page>
@@ -27,9 +21,7 @@
         <AppBar title={_("settings")} />
     {/snippet}
 
-    <div class="max-w-xl mx-auto px-4 py-8 space-y-8">
-
-
+    <div class="max-w-xl mx-auto px-4 py-8 grid gap-y-8">
         <Label class="grid gap-2">
             {_("color-scheme")}
             <Radio.Root bind:value={colorScheme.value}>
@@ -40,7 +32,7 @@
         </Label>
         <Label class="grid gap-2">
             {_("language")}
-            <Radio.Root bind:value={language}>
+            <Radio.Root bind:value={i18n.language}>
                 {#each Object.entries(locales) as [value, locale]}
                 <Radio.Item {value}>{locale.CURRENT_LANGUAGE}</Radio.Item>
                 {/each}
@@ -62,6 +54,6 @@
             {/if}
         </div>
 
-        <a class="text-primary" href={routes.privacy}>{@html _("privacy-policy", routes.privacy)}</a>
+        <a class="text-primary underline hover:no-underline" href={routes.privacy}>{@html _("privacy-policy", routes.privacy)}</a>
     </div>
 </Page>
