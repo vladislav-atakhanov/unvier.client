@@ -4,24 +4,24 @@
     import { ArrowLeft } from "lucide-svelte"
     import { Separator } from "$lib/components/ui/separator"
     import { type Snippet } from "svelte"
-    import { usePage } from "../../layouts/page.svelte"
 
     const router = useRouter()
     const { title, left, right }: {title?: Snippet | string, left?: Snippet, right?: Snippet} = $props()
 
     let canBack = $state(false)
-    const page = usePage()
+    let element: HTMLElement
     $effect(() => {
-        const index = Array.from(page.element.parentElement?.children ?? []).findIndex(element => page.element === element)
-
+        const page = element.closest(".page")
+        const pages = page?.parentElement?.querySelectorAll(".page") ?? []
+        const index = Array.from(pages).findIndex((p) => p === page)
         canBack = index !== 0
     })
 </script>
 
-<header class="">
+<header class="" bind:this={element}>
     <div class="flex items-center gap-2 p-2 h-14">
         {#if canBack}
-            <Button size="icon" variant="ghost" onclick={router.back}>
+            <Button size="icon" variant="ghost" onclick={() => router.back()}>
                 <ArrowLeft />
             </Button>
         {/if}
