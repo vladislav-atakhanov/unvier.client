@@ -12,6 +12,7 @@
     import { _ } from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
     import AppBar from "$lib/components/app-bar.svelte"
+    import { useRouter } from "$lib/router"
 
     const univers = {
         kstu: "KSTU",
@@ -26,6 +27,7 @@
 
     let active = $derived(username.length && agree && password.length && univer)
     let disabled = $derived(status == "loading" ? true : !active)
+    const router = useRouter()
 
     const onsubmit = async (event: SubmitEvent) => {
         event.preventDefault()
@@ -36,6 +38,7 @@
             username,
         })
         if (s === 200) {
+            router.navigate(routes.home)
             return
         }
         status = "ready"
