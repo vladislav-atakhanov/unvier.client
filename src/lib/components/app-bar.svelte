@@ -1,9 +1,10 @@
 <script lang="ts">
     import { useRouter } from "$lib/router"
     import { Button } from "$lib/components/ui/button"
-    import { ArrowLeft } from "lucide-svelte"
+    import { ArrowLeft, Menu, X } from "lucide-svelte"
     import { Separator } from "$lib/components/ui/separator"
-    import { type Snippet } from "svelte"
+    import type { Snippet } from "svelte"
+    import { useApp } from "../../app.svelte"
 
     const router = useRouter()
     const { title, left, right }: {title?: Snippet | string, left?: Snippet, right?: Snippet} = $props()
@@ -16,6 +17,8 @@
         const index = Array.from(pages).findIndex((p) => p === page)
         canBack = index !== 0
     })
+
+    const app = useApp()
 </script>
 
 <header class="" bind:this={element}>
@@ -26,6 +29,14 @@
                 <Button size="icon" variant="ghost" onclick={() => router.back()}>
                     <ArrowLeft />
                 </Button>
+            {:else if app.drawer}
+            <Button size="icon" variant="ghost" onclick={() => app.toggleDrawer()}>
+                {#if app.drawerState === "close"}
+                    <Menu />
+                {:else}
+                    <X />
+                {/if}
+            </Button>
             {/if}
             {@render left?.()}
         </div>

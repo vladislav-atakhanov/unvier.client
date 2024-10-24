@@ -21,6 +21,7 @@ export interface Router {
     path: string
     query: string
     fragment: string
+    element?: HTMLElement
     navigate: (path: string, params?: NavigateParams) => void
     back: () => void
     pattern: (
