@@ -11,6 +11,7 @@
     import Page from "$lib/layouts/page.svelte"
     import { routes } from "./url"
     import colorScheme from "$lib/color-scheme"
+    import Loader from "$lib/components/loader.svelte"
 
 
     onMount(() => version.fetch())
@@ -43,7 +44,7 @@
             <p>
                 {_("version.server")}:
                 {#if version.loading}
-                {_("loading")}
+                <Loader />
                 {:else}
                 <b>{version.server}</b>
                 {/if}

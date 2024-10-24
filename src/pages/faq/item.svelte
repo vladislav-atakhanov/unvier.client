@@ -1,6 +1,7 @@
 <script lang="ts">
     import { fetchFAQItem } from "$api/faq"
     import AppBar from "$lib/components/app-bar.svelte"
+    import Loader from "$lib/components/loader.svelte"
     import { _ } from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
     import { tick } from "svelte"
@@ -22,7 +23,7 @@
 
     <div class="content mx-auto p-4 max-w-3xl" bind:this={content}>
         {#await promise}
-            {_("loading")}
+            <Loader />
         {:then text}
             {@html text}
         {/await}
