@@ -30,6 +30,7 @@ export class HistoryRouter implements Router {
                 if (this.history.findIndex(({ path: p }) => p === path) === -1)
                     this.history.push(this.#item(path))
             }
+            this.path = path
             tick().then(() => {
                 this.#scrollTo(this.element?.scrollWidth)
             })
@@ -50,6 +51,18 @@ export class HistoryRouter implements Router {
 
     pattern(...args: ParametersExceptFirst<typeof pattern>) {
         return pattern(this.path, ...args)
+    }
+    onScrollEnd() {
+        if (!this.element) return
+        const screenWidth = this.element.clientWidth / (this.history.length - 1)
+        const index = Math.round(this.element.scrollLeft / screenWidth)
+        if (index + 1 !== this.history.length) {
+            this.history = this.history.slice(0, index + 1)
+            const { path, fragment, query } = this.history.at(-1) as HistoryItem
+            this.path = path
+            this.fragment = fragment
+            this.query = query
+        }
     }
 }
 export class ItemRouter implements Router {
