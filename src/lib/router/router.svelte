@@ -52,7 +52,7 @@
         }
         if (
             (anchor.target === "" || anchor.target === "_self") &&
-            hostMatches(anchor) &&
+            hostMatches(anchor.href) &&
             shouldNavigate(event) &&
             !anchor.hasAttribute("noroute")
         ) {

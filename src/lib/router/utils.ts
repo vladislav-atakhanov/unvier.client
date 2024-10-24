@@ -1,9 +1,11 @@
-export const hostMatches = (anchor: HTMLAnchorElement) => {
+export const hostMatches = (url: string) => {
+    const isAbsolute = url.startsWith("http://") || url.startsWith("https://")
+    if (!isAbsolute) return true
+
     const host = location.host
     return (
-        anchor.host === host ||
-        anchor.href.indexOf(`https://${host}`) === 0 ||
-        anchor.href.indexOf(`http://${host}`) === 0
+        url.indexOf(`https://${host}`) === 0 ||
+        url.indexOf(`http://${host}`) === 0
     )
 }
 
