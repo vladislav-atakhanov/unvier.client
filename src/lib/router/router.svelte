@@ -21,6 +21,7 @@
     const router = new HistoryRouter(home)
     const app = useApp()
     app.router = router
+    router.app = app
     setContext(ROUTER_KEY, router)
 
     $inspect(router.history).with((type, value) => {

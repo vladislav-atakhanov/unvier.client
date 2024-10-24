@@ -1,12 +1,14 @@
 import { tick } from "svelte"
 import type { HistoryItem, ParametersExceptFirst, Router } from "./@types"
 import { pattern } from "./pattern"
+import type { App } from "../../app.svelte"
 
 export class HistoryRouter implements Router {
     path = $state("")
     query = $state("")
     fragment = $state("")
     history = $state<HistoryItem[]>([])
+    app?: App
 
     element?: HTMLElement
     constructor(home: string) {
@@ -55,7 +57,16 @@ export class HistoryRouter implements Router {
     onScrollEnd() {
         if (!this.element) return
         const screenWidth = this.element.clientWidth / (this.history.length - 1)
-        const index = Math.round(this.element.scrollLeft / screenWidth)
+        const { scrollLeft } = this.element
+        if (this.app?.drawer && scrollLeft === 0) {
+            this.app.drawerState = "open"
+            return
+        }
+        if (this.app?.drawer && scrollLeft === this.app.drawer.clientWidth) {
+            this.app.drawerState = "close"
+            return
+        }
+        const index = Math.round(scrollLeft / screenWidth)
         if (index + 1 !== this.history.length) {
             this.history = this.history.slice(0, index + 1)
             const { path, fragment, query } = this.history.at(-1) as HistoryItem

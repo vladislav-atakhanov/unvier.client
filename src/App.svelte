@@ -2,7 +2,7 @@
     import { getContext } from "svelte"
 
     const KEY = Symbol()
-    class App {
+    export class App {
         drawer = $state<HTMLElement>()
         router = $state<Router>()
         drawerState = $state<"open" | "close">("close")
