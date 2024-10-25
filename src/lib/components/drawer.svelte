@@ -2,7 +2,7 @@
     import { routes } from "../../pages"
     import { Button } from "./ui/button"
     import { Separator } from "./ui/separator"
-    import { _ } from "$lib/i18n"
+    import { _, i18n } from "$lib/i18n"
     import { BookA, CalendarDays, Calculator, FileText, ListCheck, CircleUserRound, Settings, CircleHelp } from "lucide-svelte"
     import { hostMatches, useRouter } from "$lib/router"
     import { useApp } from "../../app.svelte"
@@ -11,7 +11,6 @@
     import Telegram from "$lib/icons/telegram.svelte"
 
     const router = useRouter()
-
     const app = useApp()
 </script>
 
@@ -32,9 +31,9 @@
 
 <aside class="h-screen relative max-w-xs" bind:this={app.drawer}>
     <div
-        class="justify-start w-full bg-muted text-white p-4 h-48 grid items-end gap-2"
+        class="justify-start w-full bg-muted p-4 h-48 grid items-end gap-2"
     >
-        {#await fetchTranscript()}
+        {#await app.query(() => fetchTranscript(i18n.language))}
             <Loader />
         {:then {fullname, education_program}}
             <div>
