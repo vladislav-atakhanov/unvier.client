@@ -95,7 +95,7 @@
                 type="text"
                 bind:value={username}
                 name="username"
-                placeholder="vladislav.atakhanov"
+                placeholder="atakhanov.vladislav"
             />
         </Label>
 
