@@ -1,4 +1,4 @@
-const cache = new Map<string | URL, Promise<unknown>>()
+const singleCache = new Map<string | URL, Promise<unknown>>()
 
 type _Promise<T> = Promise<[T | null, number]>
 export const singleFetch = <T>(
@@ -6,7 +6,7 @@ export const singleFetch = <T>(
     params?: RequestInit,
     reader: (r: Response) => unknown = (r) => r.json()
 ) => {
-    if (cache.has(url)) return cache.get(url) as _Promise<T>
+    if (singleCache.has(url)) return singleCache.get(url) as _Promise<T>
     const promise = new Promise(async (resolve) => {
         try {
             const response = await fetch(url, params)
@@ -16,10 +16,17 @@ export const singleFetch = <T>(
         } catch (e) {
             resolve([null, 404])
         } finally {
-            cache.delete(url)
+            singleCache.delete(url)
         }
     })
-    cache.set(url, promise)
+    singleCache.set(url, promise)
     return promise as _Promise<T>
 }
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+const cache = new Map<string, Promise<unknown>>()
+export const CachedPromise = <T>(key: string, promise: Promise<T>) => {
+    if (cache.has(key)) return cache.get(key) as Promise<T>
+    cache.set(key, promise)
+    return promise
+}

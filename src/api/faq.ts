@@ -1,27 +1,19 @@
+import type { Language } from "$lib/i18n"
 import { api } from "./config"
+import { CachedPromise } from "./utils"
 
-let promise: Promise<{ id: string; label: string }[]>
-export function fetchFAQ() {
-    if (promise) return promise
-    promise = new Promise((resolve, reject) =>
-        fetch(api("/faq"))
-            .then((request) => request.json())
-            .then(resolve)
-            .catch(reject)
+export function fetchFAQ(lang: Language) {
+    const url = api(`/faq?lang=${lang}`)
+    return CachedPromise<{ id: string; label: string }[]>(
+        url,
+        fetch(url).then((r) => r.json())
     )
-    return promise
 }
 
-const faqItems = new Map<string, Promise<string>>()
-export const fetchFAQItem = (id: string): Promise<string> => {
-    if (faqItems.has(id)) return faqItems.get(id) as any
-    const promise = new Promise<string>((resolve, reject) =>
-        fetch(api(`/faq/${id}`))
-            .then((request) => request.text())
-            .then(resolve)
-            .catch(reject)
+export function fetchFAQItem(id: string, lang: Language) {
+    const url = api(`/faq/${id}?lang=${lang}`)
+    return CachedPromise<string>(
+        url,
+        fetch(url).then((r) => r.text())
     )
-    faqItems.set(id, promise)
-
-    return promise
 }

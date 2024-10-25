@@ -1,13 +1,11 @@
+import type { Language } from "$lib/i18n"
 import { api } from "./config"
+import { CachedPromise } from "./utils"
 
-let promise: Promise<string>
-export function fetchPrivacy() {
-    if (promise) return promise
-    promise = new Promise((resolve, reject) =>
-        fetch(api("/api/privacy-policy"))
-            .then((request) => request.json())
-            .then(resolve)
-            .catch(reject)
+export function fetchPrivacy(lang: Language) {
+    const url = api(`/api/privacy-policy?lang=${lang}`)
+    return CachedPromise<string>(
+        url,
+        fetch(url).then((r) => r.json())
     )
-    return promise
 }
