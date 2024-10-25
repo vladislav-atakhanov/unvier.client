@@ -11,10 +11,11 @@
     import type { Router } from "./@types.ts"
     import { useApp } from "../../app.svelte"
     let {
-        children, home="/", drawer
+        children, home="/", drawer, navigation
     }: {
         children?: Snippet<[Router]>,
         drawer?: Snippet,
+        navigation?: Snippet
         home?: string
     } = $props()
 
@@ -79,21 +80,25 @@
 
 </script>
 
+
+
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div onclick={links} class="router" bind:this={router.element} {onscroll}>
+<div
+    onclick={links}
+    class="router flex w-full overflow-x-hidden items-start relative"
+    bind:this={router.element}
+    {onscroll}
+>
     {@render drawer?.()}
     {#each router.history as item}
         {@render children?.(new ItemRouter(router, item))}
     {/each}
+    {@render navigation?.()}
 </div>
 
 <style>
     .router {
-        display: flex;
-        width: 100%;
-        overflow-x: auto;
-        align-items: start;
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
     }

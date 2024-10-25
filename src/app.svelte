@@ -9,6 +9,7 @@
 
     export class App {
         drawer = $state<HTMLElement>()
+        navigationHeight = $state(0)
         router = $state<Router>()
         drawerState = $state<"open" | "close">("close")
         isAuth = $state(false)
@@ -74,6 +75,7 @@
     import Settings from "./pages/settings.svelte"
     import { Toaster } from "$lib/components/ui/sonner";
     import Profile from "./pages/profile.svelte"
+    import Navigation from "$lib/components/navigation.svelte"
 
     const app = new App()
     const isAuth = (router: Router, navigate=false) => {
@@ -118,6 +120,11 @@
         <Faq />
     {:else if faqParams}
         <FaqItem id={faqParams.id} />
+    {/if}
+    {/snippet}
+    {#snippet navigation()}
+    {#if app.isAuth}
+        <div bind:clientHeight={app.navigationHeight} class="fixed bottom-0 left-0 right-0 "><Navigation /></div>
     {/if}
     {/snippet}
 </Wrapper>
