@@ -3,7 +3,7 @@
     export const useRadio = () => getContext<{value: string, name: string}>(KEY)
 </script>
 
-<script>
+<script lang="ts">
     import { getContext, setContext, type Snippet } from "svelte"
 
     let { value = $bindable(), children, name }: {value?: string, children?: Snippet, name?: string} = $props()
