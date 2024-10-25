@@ -12,7 +12,7 @@
 
         </AppBar>
     {/snippet}
-    <div class="content max-w-3xl mx-auto pt-6">
+    <div class="content max-w-3xl mx-auto p-4">
         {#await fetchPrivacy(i18n.language)}
             <Loader />
         {:then privacy}
