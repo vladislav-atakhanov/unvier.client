@@ -27,7 +27,9 @@ export class HistoryRouter implements Router {
     navigate(path: string, { mode = "push" } = {}) {
         tick().then(() => {
             if (mode === "replace") {
-                this.history = [this.#item(path)]
+                const history = [this.#item(path)]
+                if (this.history.length !== 1) this.history = history
+                if (this.history[0].path !== path) this.history = history
             } else {
                 if (this.history.findIndex(({ path: p }) => p === path) === -1)
                     this.history.push(this.#item(path))

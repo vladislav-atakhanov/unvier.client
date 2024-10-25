@@ -44,7 +44,7 @@
             username,
         })
         if (s === 200) {
-            router.navigate(routes.home)
+            router.navigate(routes.home, {mode: "replace"})
             return
         }
         status = "ready"
