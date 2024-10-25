@@ -7,7 +7,7 @@
     import { useApp } from "../../app.svelte"
 
     const router = useRouter()
-    const { title, left, right }: {title?: Snippet | string, left?: Snippet, right?: Snippet} = $props()
+    const { title, left, right, onTitleClick }: {title?: Snippet | string, left?: Snippet, right?: Snippet, onTitleClick?: (title: string) => unknown} = $props()
 
     let canBack = $state(false)
     let element: HTMLElement
@@ -19,6 +19,12 @@
     })
 
     const app = useApp()
+
+    const onTitleElementClick = onTitleClick ? (event: any) => {
+        const title = (event.target as HTMLElement)?.closest("h1")
+        if (!title?.textContent) return
+        onTitleClick?.(title.textContent)
+    } : undefined
 </script>
 
 <header class="" bind:this={element}>
@@ -42,7 +48,9 @@
         </div>
         <div class="relative w-full">
             {#if title}
-                <h1 class="text-xl font-bold whitespace-nowrap text-ellipsis absolute w-full top-0 block overflow-hidden">
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                <h1 class="text-xl font-bold whitespace-nowrap text-ellipsis absolute w-full top-0 block overflow-hidden" onclick={onTitleElementClick}>
                     {#if typeof title === "string"}
                         {title}
                     {:else}
