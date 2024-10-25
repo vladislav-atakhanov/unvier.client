@@ -14,7 +14,7 @@ export const checkAuth = () => secureStorage.getItem("password") !== null
 
 const authFetchUrl = (apiUrl: string) => {
     const url = new URL(apiUrl)
-    url.searchParams.append("lang", i18n.language)
+    url.searchParams.set("lang", i18n.language)
     return url
 }
 export const authFetch = async <T>(

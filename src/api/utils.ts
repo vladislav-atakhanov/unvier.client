@@ -25,8 +25,8 @@ export const singleFetch = <T>(
 export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
 const cache = new Map<string, Promise<unknown>>()
-export const CachedPromise = <T>(key: string, promise: Promise<T>) => {
+export const CachedPromise = <T>(key: string, load: () => Promise<T>) => {
     if (cache.has(key)) return cache.get(key) as Promise<T>
-    cache.set(key, promise)
-    return promise
+    cache.set(key, load())
+    return load
 }

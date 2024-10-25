@@ -5,8 +5,7 @@ import { CachedPromise } from "./utils"
 
 export function fetchTranscript(lang: Language) {
     const url = api(`/api/transcript?lang=${lang}`)
-    return CachedPromise(
-        url,
+    return CachedPromise(url, () =>
         authFetch<{
             fullname: string
             faculty: string
