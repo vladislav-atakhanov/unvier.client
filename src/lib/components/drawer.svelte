@@ -16,12 +16,13 @@
 </script>
 
 {#snippet Item(path: string, label: string, Icon: IconComponent)}
+{@const active = router.path === path}
 <Button
     href={path}
     target={hostMatches(path) ? "_self" : "_blank"}
-    size="sm"
-    variant={router.path === path ? "default" : "ghost"}
-    class="justify-start dark:bg-muted dark:hover:bg-muted dark:text-white dark:hover:text-white gap-2"
+    size="lg"
+    variant={active ? "default" : "ghost"}
+    class="{active ? "" : "bg-transparent"} justify-start gap-2"
     mode="replace"
     onclick={() => app.drawerState = "close"}
 >
