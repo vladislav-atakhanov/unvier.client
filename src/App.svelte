@@ -1,5 +1,5 @@
 <script module lang="ts">
-    import { getContext } from "svelte"
+    import { getContext, onMount } from "svelte"
     import { useQuery } from "$lib/query"
     import { BadRequest, NotFound, RequestTimeout, ServerError, Unauthorized } from "$api/errors"
 
@@ -11,6 +11,7 @@
         drawer = $state<HTMLElement>()
         router = $state<Router>()
         drawerState = $state<"open" | "close">("close")
+        isAuth = $state(false)
         #openDrawer() {
             this.drawerState = "open"
             this.router?.element?.scrollTo({
@@ -28,11 +29,15 @@
         toggleDrawer() {
             this.drawerState === "close" ? this.#openDrawer() : this.#closeDrawer()
         }
+        logout() {
+            this.router?.navigate(routes.login, { mode: "replace" })
+            logout()
+            this.isAuth = false
+        }
         #catch(error: unknown) {
             if (error instanceof Unauthorized) {
                 toast(_("error.invalid-credentials"))
-                this.router?.navigate(routes.login, { mode: "replace" })
-                logout()
+                this.logout()
             } else if (error instanceof BadRequest) {
                 toast(_("version.update-required"))
             } else if (error instanceof NotFound || error instanceof ServerError) {
@@ -54,7 +59,7 @@
 </script>
 
 <script lang="ts">
-    import { checkAuth, logout } from "$api"
+    import { logout, checkAuth } from "$api"
     import colorScheme from "$lib/color-scheme"
     import Drawer from "$lib/components/drawer.svelte"
     import { _, i18n } from "$lib/i18n"
@@ -68,18 +73,23 @@
     import Schedule from "./pages/schedule.svelte"
     import Settings from "./pages/settings.svelte"
     import { Toaster } from "$lib/components/ui/sonner";
+    import Profile from "./pages/profile.svelte"
 
+    const app = new App()
     const isAuth = (router: Router, navigate=false) => {
-        if (checkAuth() === false) {
+        const auth = checkAuth()
+        if (!auth) {
             router.navigate(routes.login, {mode: "replace"})
-            return false
+            return auth
         }
         if (navigate) {
             router.navigate(routes.home, {mode: "replace"})
         }
-        return true
+        return auth
     }
-    const app = new App()
+    onMount(() => {
+        app.isAuth = checkAuth()
+    })
     setContext(KEY, app)
 </script>
 
@@ -88,7 +98,7 @@
 
 <Wrapper home={routes.home}>
     {#snippet drawer()}
-    {#if checkAuth()}
+    {#if app.isAuth}
         <Drawer />
     {/if}
     {/snippet}
@@ -102,6 +112,8 @@
         <Privacy />
     {:else if router.pattern(routes.schedule) && isAuth(router)}
         <Schedule />
+    {:else if router.pattern(routes.profile) && isAuth(router)}
+        <Profile />
     {:else if router.pattern(routes.faq)}
         <Faq />
     {:else if faqParams}

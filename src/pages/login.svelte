@@ -14,6 +14,7 @@
     import AppBar from "$lib/components/app-bar.svelte"
     import { useRouter } from "$lib/router"
     import { onMount } from "svelte"
+    import { useApp } from "../app.svelte"
 
     const univers = {
         kstu: "KSTU",
@@ -29,6 +30,7 @@
     let active = $derived(username.length && agree && password.length && univer)
     let disabled = $derived(status == "loading" ? true : !active)
     const router = useRouter()
+    const app = useApp()
 
     onMount(() => {
         univer = (localStorage.getItem("univer") as any) ?? "kstu"
@@ -45,6 +47,7 @@
         })
         if (s === 200) {
             router.navigate(routes.home, {mode: "replace"})
+            app.isAuth = true
             return
         }
         status = "ready"

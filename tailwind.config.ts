@@ -64,6 +64,7 @@ const config: Config = {
             gridTemplateRows: {
                 "min-auto-min": "min-content 1fr min-content",
                 "min-auto": "min-content 1fr",
+                "auto-min": "1fr min-content",
             },
         },
     },
