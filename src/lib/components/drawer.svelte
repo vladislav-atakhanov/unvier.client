@@ -10,11 +10,12 @@
     import Loader from "$lib/components/loader.svelte"
     import Telegram from "$lib/icons/telegram.svelte"
 
+    type IconComponent = typeof BookA | typeof Telegram
     const router = useRouter()
     const app = useApp()
 </script>
 
-{#snippet Item(path: string, label: string, Icon: ConstructorOfATypedSvelteComponent)}
+{#snippet Item(path: string, label: string, Icon: IconComponent)}
 <Button
     href={path}
     target={hostMatches(path) ? "_self" : "_blank"}
