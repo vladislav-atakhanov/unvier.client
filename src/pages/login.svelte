@@ -13,6 +13,7 @@
     import Page from "$lib/layouts/page.svelte"
     import AppBar from "$lib/components/app-bar.svelte"
     import { useRouter } from "$lib/router"
+    import { onMount } from "svelte"
 
     const univers = {
         kstu: "KSTU",
@@ -28,6 +29,11 @@
     let active = $derived(username.length && agree && password.length && univer)
     let disabled = $derived(status == "loading" ? true : !active)
     const router = useRouter()
+
+    onMount(() => {
+        univer = (localStorage.getItem("univer") as any) ?? "kstu"
+        username = localStorage.getItem("username") ?? ""
+    })
 
     const onsubmit = async (event: SubmitEvent) => {
         event.preventDefault()
