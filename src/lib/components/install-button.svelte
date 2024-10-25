@@ -56,7 +56,7 @@
 {#if !disabled && canInstall}
 <svelte:element
     this={tag}
-    class="install-button"
+    class="install-button {class_}"
 >
     {@render children(onclick)}
 </svelte:element>
