@@ -44,9 +44,9 @@
             <p>
                 {_("version.server")}:
                 {#if version.loading}
-                <Loader />
+                    <Loader />
                 {:else}
-                <b>{version.server}</b>
+                    <b>{version.server}</b>
                 {/if}
             </p>
             <p>{_("version.client")}: <b>{version.client}</b></p>

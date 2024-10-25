@@ -91,10 +91,11 @@
 <style>
     .router {
         display: flex;
-        width: 100vw;
-        overflow-x: scroll;
-
+        width: 100%;
+        overflow-x: auto;
+        align-items: start;
         scroll-snap-type: x mandatory;
+        scrollbar-width: none;
     }
     .router > :global(.page) {
         width: 100vw;
