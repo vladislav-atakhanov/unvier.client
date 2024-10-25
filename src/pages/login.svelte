@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { CircleHelp, Settings, Eye, EyeOff } from "lucide-svelte"
+    import { CircleHelp, Settings, Eye, EyeOff, MonitorDown } from "lucide-svelte"
     import { Button } from "$lib/components/ui/button"
     import * as Radio from "$lib/components/ui/segmented-radio"
     import { Input } from "$lib/components/ui/input"
@@ -15,6 +15,8 @@
     import { useRouter } from "$lib/router"
     import { onMount } from "svelte"
     import { useApp } from "../app.svelte"
+    import InstallButton from "$lib/components/install-button.svelte"
+    import Telegram from "$lib/icons/telegram.svelte"
 
     const univers = {
         kstu: "KSTU",
@@ -69,9 +71,21 @@
         >
         {/snippet}
         {#snippet right()}
-        <Button variant="ghost" size="icon" href={routes.settings}
-            ><Settings /></Button
-        >
+        <div class="flex gap-2">
+            <InstallButton>
+                {#snippet children(onclick)}
+                    <Button variant="ghost" size="icon" {onclick}>
+                        <MonitorDown />
+                    </Button>
+                {/snippet}
+            </InstallButton>
+            <Button variant="ghost" size="icon" href={routes.telegram} target="_blank">
+                <Telegram />
+            </Button>
+            <Button variant="ghost" size="icon" href={routes.settings}>
+                <Settings />
+            </Button>
+        </div>
         {/snippet}
     </AppBar>
     {/snippet}
