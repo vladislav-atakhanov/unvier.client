@@ -4,9 +4,10 @@ import en from "./en.json"
 
 export const locales = { ru, kk, en }
 type Locale = (typeof locales)[keyof typeof locales]
+export type Language = keyof typeof locales
 
 class Translation {
-    language: keyof typeof locales = $state("ru")
+    language: Language = $state("ru")
     obj: Locale = $derived(locales[this.language])
     constructor(public translations: Record<string, Locale>) {}
     translate(key: keyof Locale, ...params: unknown[]) {

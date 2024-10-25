@@ -3,7 +3,7 @@
     import AppBar from "$lib/components/app-bar.svelte"
     import Loader from "$lib/components/loader.svelte"
     import { Button } from "$lib/components/ui/button"
-    import { _ }from "$lib/i18n"
+    import { _, i18n }from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
     import { routes } from "../url"
 </script>
@@ -14,7 +14,7 @@
     {/snippet}
 
     <div class="grid mx-auto p-4 gap-2 max-w-md">
-        {#await fetchFAQ()}
+        {#await fetchFAQ(i18n.language)}
             <Loader />
         {:then faq}
             {#each faq as {id, label} (id)}

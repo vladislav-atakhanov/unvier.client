@@ -1,14 +1,9 @@
 <script>
     import { fetchPrivacy } from "$api"
     import Page from "$lib/layouts/page.svelte"
-    import { onMount } from "svelte"
-    import { _ } from "$lib/i18n/index.ts"
+    import { _, i18n } from "$lib/i18n/index.ts"
     import AppBar from "$lib/components/app-bar.svelte"
-
-    let privacy = $state("")
-    onMount(() => {
-        fetchPrivacy().then((p) => (privacy = p))
-    })
+    import Loader from "$lib/components/loader.svelte"
 </script>
 
 <Page>
@@ -18,9 +13,11 @@
         </AppBar>
     {/snippet}
     <div class="content max-w-3xl mx-auto pt-6">
-        {#if privacy}
+        {#await fetchPrivacy(i18n.language)}
+            <Loader />
+        {:then privacy}
             {@html privacy}
-        {/if}
+        {/await}
     </div>
 </Page>
 

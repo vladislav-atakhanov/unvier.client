@@ -2,18 +2,21 @@
     import { fetchFAQItem } from "$api/faq"
     import AppBar from "$lib/components/app-bar.svelte"
     import Loader from "$lib/components/loader.svelte"
-    import { _ } from "$lib/i18n"
+    import { _, i18n } from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
     import { tick } from "svelte"
 
     let {id}: {id: string} = $props()
 
-    let promise = fetchFAQItem(id)
+    let promise = $derived(fetchFAQItem(id, i18n.language))
     let title = $state(_("loading"))
     let content: HTMLElement
-    promise.then(() => tick().then(() => {
-        title = content.querySelector("h1")?.textContent ?? _("faq")
-    }))
+
+    $effect(() => {
+        promise.then(() => tick().then(() => {
+            title = content.querySelector("h1")?.textContent ?? _("faq")
+        }))
+    })
 </script>
 
 <Page>
