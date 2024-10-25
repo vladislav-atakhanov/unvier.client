@@ -68,6 +68,7 @@
     import { setContext } from "svelte"
     import { routes } from "./pages"
     import Faq from "./pages/faq/index.svelte"
+    import Attestation from "./pages/attestation/index.svelte"
     import FaqItem from "./pages/faq/item.svelte"
     import Login from "./pages/login.svelte"
     import Privacy from "./pages/privacy.svelte"
@@ -116,6 +117,8 @@
         <Schedule />
     {:else if router.pattern(routes.profile) && isAuth(router)}
         <Profile />
+    {:else if router.pattern(routes.attestation) && isAuth(router)}
+        <Attestation />
     {:else if router.pattern(routes.faq)}
         <Faq />
     {:else if faqParams}
