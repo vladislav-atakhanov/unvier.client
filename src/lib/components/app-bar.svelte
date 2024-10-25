@@ -50,7 +50,10 @@
             {#if title}
                 <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                <h1 class="text-xl font-bold whitespace-nowrap text-ellipsis absolute w-full top-0 block overflow-hidden" onclick={onTitleElementClick}>
+                <h1 class="text-xl font-bold whitespace-nowrap text-ellipsis absolute w-full top-1/2 block overflow-hidden"
+                    style:transform="translateY(-50%)"
+                    onclick={onTitleElementClick}
+                >
                     {#if typeof title === "string"}
                         {title}
                     {:else}
