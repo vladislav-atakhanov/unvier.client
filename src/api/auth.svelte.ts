@@ -1,5 +1,6 @@
 import { _, i18n } from "$lib/i18n"
 import { api } from "./config"
+import { HTTPError, Unauthorized } from "./errors"
 import { secureStorage } from "./secure-storage"
 import { singleFetch, sleep } from "./utils"
 
@@ -16,14 +17,6 @@ const authFetchUrl = (apiUrl: string) => {
     url.searchParams.append("lang", i18n.language)
     return url
 }
-const addSnack = console.log
-
-export class AuthError extends Error {
-    constructor(public status: number) {
-        super()
-    }
-}
-
 export const authFetch = async <T>(
     url: string,
     reader?: (r: Response) => unknown
@@ -38,27 +31,13 @@ export const authFetch = async <T>(
         if (status === 401) {
             await sleep(1000)
             const status = await refreshToken()
-            if (status === 401) {
-                logout()
-                throw new AuthError(status)
-            }
+            if (status === 401) throw new Unauthorized()
             continue
         }
-        if (status === 403) {
-            addSnack(_("error.invalid-credentials"))
-            logout()
-            throw new AuthError(status)
-        }
-
-        if (status === 400) addSnack(_("version.update-required"))
-        if (status === 404 || (status >= 500 && status < 600))
-            addSnack(_("error.server-error"))
-        else if (status === 408) addSnack(_("error.univer-error"))
-        else addSnack(_("error.unknown-error", status))
-
-        throw new AuthError(status)
+        if (status === 403) throw new Unauthorized()
+        throw HTTPError(status)
     }
-    throw new AuthError(404)
+    throw HTTPError(404)
 }
 
 export const refreshToken = async () => {
