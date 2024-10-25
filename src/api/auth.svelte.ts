@@ -18,30 +18,36 @@ const authFetchUrl = (apiUrl: string) => {
 }
 const addSnack = console.log
 
+export class AuthError extends Error {
+    constructor(public status: number) {
+        super()
+    }
+}
+
 export const authFetch = async <T>(
     url: string,
     reader?: (r: Response) => unknown
-): Promise<T | null> => {
+): Promise<T> => {
     while (1) {
         const [data, status] = await singleFetch<T>(
             authFetchUrl(url),
             { credentials: "include" },
             reader
         )
-        if (status === 200) return data
+        if (data) return data
         if (status === 401) {
             await sleep(1000)
             const status = await refreshToken()
             if (status === 401) {
                 logout()
-                return null
+                throw new AuthError(status)
             }
             continue
         }
         if (status === 403) {
             addSnack(_("error.invalid-credentials"))
             logout()
-            return null
+            throw new AuthError(status)
         }
 
         if (status === 400) addSnack(_("version.update-required"))
@@ -49,9 +55,10 @@ export const authFetch = async <T>(
             addSnack(_("error.server-error"))
         else if (status === 408) addSnack(_("error.univer-error"))
         else addSnack(_("error.unknown-error", status))
-        return null
+
+        throw new AuthError(status)
     }
-    return null
+    throw new AuthError(404)
 }
 
 export const refreshToken = async () => {
