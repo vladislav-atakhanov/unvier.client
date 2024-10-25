@@ -48,8 +48,11 @@ export class HistoryRouter implements Router {
     }
     back() {
         if (!this.element) return
-        const pagesCount = this.element.querySelectorAll(".page").length
-        this.#scrollTo((pagesCount - 2) * window.innerWidth)
+        const pages = this.element.querySelectorAll(".page")
+        const targetPage = pages[pages.length - 2]
+        targetPage?.scrollIntoView({
+            behavior: "smooth",
+        })
     }
 
     pattern(...args: ParametersExceptFirst<typeof pattern>) {
