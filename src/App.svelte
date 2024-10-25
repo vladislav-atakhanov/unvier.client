@@ -3,10 +3,9 @@
     import { useQuery } from "$lib/query"
     import { BadRequest, NotFound, RequestTimeout, ServerError, Unauthorized } from "$api/errors"
 
+    import { toast } from "svelte-sonner"
+
     const KEY = Symbol()
-
-
-    const addSnack = console.log
 
     export class App {
         drawer = $state<HTMLElement>()
@@ -31,17 +30,17 @@
         }
         #catch(error: unknown) {
             if (error instanceof Unauthorized) {
-                addSnack(_("error.invalid-credentials"))
+                toast(_("error.invalid-credentials"))
                 this.router?.navigate(routes.login, { mode: "replace" })
                 logout()
             } else if (error instanceof BadRequest) {
-                addSnack(_("version.update-required"))
+                toast(_("version.update-required"))
             } else if (error instanceof NotFound || error instanceof ServerError) {
-                addSnack(_("error.server-error"))
+                toast(_("error.server-error"))
             } else if (error instanceof RequestTimeout) {
-                addSnack(_("error.univer-error"))
+                toast(_("error.univer-error"))
             } else if (error instanceof Error) {
-                addSnack(_("error.unknown-error", error.message))
+                toast(_("error.unknown-error", error.message))
             }
         }
         query = $derived(<T>(promise: Parameters<typeof useQuery<T>>["0"]) => {
@@ -68,6 +67,7 @@
     import Privacy from "./pages/privacy.svelte"
     import Schedule from "./pages/schedule.svelte"
     import Settings from "./pages/settings.svelte"
+    import { Toaster } from "$lib/components/ui/sonner";
 
     const isAuth = (router: Router, navigate=false) => {
         if (checkAuth() === false) {
@@ -84,6 +84,7 @@
 </script>
 
 <svelte:body use:colorScheme.apply use:i18n.apply />
+<Toaster />
 
 <Wrapper home={routes.home}>
     {#snippet drawer()}
