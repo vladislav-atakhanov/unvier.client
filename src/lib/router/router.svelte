@@ -86,7 +86,7 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
     onclick={links}
-    class="router flex w-full overflow-x-hidden items-start relative"
+    class="router flex w-full overflow-x-auto items-start relative"
     bind:this={router.element}
     {onscroll}
 >
