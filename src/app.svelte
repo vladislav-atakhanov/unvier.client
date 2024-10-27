@@ -77,6 +77,7 @@
     import { Toaster } from "$lib/components/ui/sonner";
     import Profile from "./pages/profile.svelte"
     import Navigation from "$lib/components/navigation.svelte"
+    import Calculator from "./pages/calculator.svelte"
 
     const app = new App()
     const isAuth = (router: Router, navigate=false) => {
@@ -119,6 +120,8 @@
         <Profile />
     {:else if router.pattern(routes.attestation) && isAuth(router)}
         <Attestation />
+    {:else if router.pattern(routes.calculator) && isAuth(router)}
+        <Calculator />
     {:else if router.pattern(routes.faq)}
         <Faq />
     {:else if faqParams}
