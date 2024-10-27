@@ -25,30 +25,48 @@
         <AppBar title={_("calculator")} />
     {/snippet}
     <div class="grid mx-auto p-4 gap-4 max-w-md">
-        {#each calculator as mark, index}
-            {@const label = mark.isExam
-                ? _("calculator.exam")
-                : _("calculator.part", index + 1)}
-            <div class="grid gap-4 items-center" style:grid-template-columns="1fr auto">
-                <Input
-                    disabled={mark.freeze}
-                    placeholder={label}
-                    aria-label={label}
-                    inputmode="numeric"
-                    bind:value={mark.value}
-                />
-                <label>
-                    <Switch bind:checked={mark.freeze} class="mx-auto" />
-                    <p class="text-sm">{_("calculator.freeze")}</p>
-                </label>
-            </div>
-        {/each}
-        <Input
-            placeholder={_("total")}
-            aria-label={_("total")}
-            inputmode="numeric"
-            bind:value={calculator.total}
-        />
+        <table class="space">
+            <tbody>
+                {#each calculator as mark, index}
+                    {@const label = mark.isExam
+                        ? _("calculator.exam")
+                        : _("calculator.part", index + 1)}
+                    {@const id = `mark-${index}`}
+                    <tr>
+                        <td>
+                            <label for={id}>{label}</label>
+                        </td>
+                        <td>
+                            <Input
+                                disabled={mark.freeze}
+                                placeholder={label}
+                                {id}
+                                inputmode="numeric"
+                                bind:value={mark.value}
+                            />
+                        </td>
+                        <td>
+                            <label>
+                                <Switch bind:checked={mark.freeze} class="mx-auto" />
+                                <p class="text-sm text-center">{_("calculator.freeze")}</p>
+                            </label>
+                        </td>
+                    </tr>
+                {/each}
+                <tr>
+                    <td><label for="total">{_("total")}</label></td>
+                    <td colspan="2">
+                        <Input
+                            placeholder={_("total")}
+                            id="total"
+                            inputmode="numeric"
+                            bind:value={calculator.total}
+                        />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
         {#if message.length > 0 || hint.length > 0}
         <div>
             {#if message.length > 0}
@@ -65,3 +83,12 @@
         <Button disabled={calculator.disabled} onclick={() => calculator.recalculate()}>{_("calculator.recalculate")}</Button>
     </div>
 </Page>
+
+<style>
+    td {
+        @apply p-0
+    }
+    tr:not(:last-of-type) td {
+        @apply pb-4
+    }
+</style>
