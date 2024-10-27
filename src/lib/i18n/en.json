@@ -9,7 +9,7 @@
     "calculator": "Calculator",
     "calculator.freeze": "freeze",
     "total": "Total",
-    "calculator.inaccessibility": "Non-admission to the exam",
+    "calculator.inadmissibility": "Non-admission to the exam",
     "calculator.sum-less-than": "Amount of PK less than {}",
     "calculator.stipend": "Preserve stipend",
     "calculator.get-a": "Get A",
