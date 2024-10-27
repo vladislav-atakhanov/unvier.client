@@ -2,42 +2,43 @@ type Promisify<T> = () => Promise<T>
 type Params<T> = {
     onReject?: (reason: unknown) => unknown
     onResolve?: (value: T) => unknown
+    enabled?: boolean
 }
 
-class Query<T> {
-    loading = $state(true)
+export class Query<T> {
+    state = $state<"load" | "update" | "ready">("load")
+    data = $state<T>()
+    loading = $derived(this.state !== "ready")
+
     private promisify = $state<Promisify<T>>()
-    private promise = $derived.by<Promise<T>>(() => this.#derive())
 
     constructor(
         promisify: Promisify<T> | Promise<T>,
-        private params: Params<T> = {}
+        private params: Params<T> = { enabled: true }
     ) {
         this.promisify =
             typeof promisify === "function" ? promisify : () => promisify
+        this.load()
     }
-    async #derive() {
+    async #fetch() {
+        if (!this.params.enabled) return
         if (!this.promisify) return Promise.reject()
         try {
-            const value = await this.promisify()
-            this.params.onResolve?.(value)
-            return value
+            this.data = await this.promisify()
+            this.state = "ready"
+            this.params.onResolve?.(this.data)
+            return this.data
         } catch (error) {
             this.params.onReject?.(error)
             return Promise.reject(error)
         }
     }
-    then(...args: Parameters<Promise<T>["then"]>) {
-        return this.promise.then(...args)
+    load() {
+        this.state = "load"
+        return this.#fetch()
     }
-    catch(...args: Parameters<Promise<T>["catch"]>) {
-        return this.promise.catch(...args)
+    update() {
+        this.state = "update"
+        return this.#fetch()
     }
-}
-
-export function useQuery<T>(
-    promisify: Promisify<T> | Promise<T>,
-    params?: Params<T>
-) {
-    return new Query(promisify, params)
 }

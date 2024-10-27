@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { version } from "$api"
+    import { useApi } from "$api"
     import AppBar from "$lib/components/app-bar.svelte"
     import { Label } from "$lib/components/ui/label"
     import * as Radio from "$lib/components/ui/segmented-radio"
@@ -12,7 +12,7 @@
     import { routes } from "./url"
     import colorScheme from "$lib/color-scheme"
 
-
+    const { version } = useApi()
     onMount(() => version.fetch())
 
 </script>

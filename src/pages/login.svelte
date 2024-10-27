@@ -7,7 +7,7 @@
     import { Checkbox } from "$lib/components/ui/checkbox"
 
     import { routes } from "./url"
-    import { login, version } from "../api"
+    import { useApi } from "../api"
 
     import { _ } from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
@@ -22,6 +22,7 @@
         kstu: "KSTU",
         kaznu: "KazNU",
     }
+    const api = useApi()
     let univer = $state<keyof typeof univers>("kstu")
     let username = $state("")
     let password = $state("")
@@ -42,7 +43,7 @@
     const onsubmit = async (event: SubmitEvent) => {
         event.preventDefault()
         status = "loading"
-        const s = await login({
+        const s = await api.login({
             password,
             univer,
             username,
@@ -120,7 +121,7 @@
                     type={showPassword ? "text" : "password"}
                     bind:value={password}
                     name="password"
-                    placeholder={showPassword ? version.client : "●●●●●●●●●" }
+                    placeholder={showPassword ? api.version.client : "●●●●●●●●●" }
                 />
                 <Button
                     variant="ghost"
@@ -153,7 +154,7 @@
             >{status === "loading" ? _("loading") : _("login")}</Button
         >
     </form>
-    <p class="m-0 p-4 text-center text-muted-foreground">{version.client}</p>
+    <p class="m-0 p-4 text-center text-muted-foreground">{api.version.client}</p>
 </Page>
 
 <style>

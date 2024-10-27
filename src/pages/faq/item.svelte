@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { useApi } from "$api"
     import { fetchFAQItem } from "$api/faq"
     import AppBar from "$lib/components/app-bar.svelte"
     import Loader from "$lib/components/loader.svelte"
@@ -7,15 +8,17 @@
     import { tick } from "svelte"
 
     let {id}: {id: string} = $props()
+    const api = useApi()
+    const query = api.fetchFAQItem(id)
 
-    let promise = $derived(fetchFAQItem(id, i18n.language))
     let title = $state(_("loading"))
     let content: HTMLElement
 
     $effect(() => {
-        promise.then(() => tick().then(() => {
+        if (!query.data) return
+        tick().then(() => {
             title = content.querySelector("h1")?.textContent ?? _("faq")
-        }))
+        })
     })
 </script>
 
@@ -25,10 +28,10 @@
     {/snippet}
 
     <div class="content mx-auto p-4 max-w-3xl" bind:this={content}>
-        {#await promise}
+        {#if query.loading}
             <Loader />
-        {:then text}
-            {@html text}
-        {/await}
+        {:else if query.data}
+            {@html query.data}
+        {/if}
     </div>
 </Page>

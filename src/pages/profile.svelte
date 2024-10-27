@@ -1,5 +1,5 @@
 <script>
-    import { fetchTranscript, logout } from "$api"
+    import { useApi } from "$api"
     import AppBar from "$lib/components/app-bar.svelte"
     import Loader from "$lib/components/loader.svelte"
     import * as AlertDialog from "$lib/components/ui/alert-dialog"
@@ -11,14 +11,14 @@
     import { useApp } from "../app.svelte"
 
     const app = useApp()
+    const api = useApi()
 
     let username = $state("")
     onMount(() => {
         username = localStorage.getItem("username") ?? ""
     })
 
-    let promise = $derived(app.query(() => fetchTranscript(i18n.language)))
-
+    let query = api.fetchTranscript()
     const onLogoutClick = () => app.logout()
 </script>
 <Page class="grid grid-rows-min-auto">
@@ -26,21 +26,23 @@
         <AppBar title={_("profile")} />
     {/snippet}
 
-    <div class="grid grid-rows-auto-min mx-auto p-4 max-w-xl">
+    <div class="grid grid-rows-auto-min mx-auto p-4 max-w-md w-full">
         <div class="flex flex-col gap-4">
-            {#await promise}
+            {#if query.loading}
                 <Loader />
-            {:then {fullname, education_program}}
+            {:else if query.data}
+                {@const {fullname, education_program} = query.data}
                 <div>
                     <p class="font-bold">{fullname}</p>
                     <p>{education_program}</p>
                 </div>
-            {/await}
+            {/if}
             <p>{_("username")}: <b>{username}</b></p>
 
-            {#await promise}
+            {#if query.loading}
                 <Loader />
-            {:then {year_of_study, length_of_program, language, graid_point, avarage_point}}
+            {:else if query.data}
+                {@const {year_of_study, length_of_program, language, graid_point, avarage_point} = query.data}
                 <div>
                     <p class="profile__year">
                         {_("transcript.year-of-study")}:
@@ -62,26 +64,28 @@
                         <b>{avarage_point}</b>
                     </p>
                 </div>
-            {/await}
+            {/if}
         </div>
         <AlertDialog.Root>
-            <AlertDialog.Trigger let:builder><Button class="w-full" builders={[builder]}>{_("logout")}</Button></AlertDialog.Trigger>
+            <AlertDialog.Trigger let:builder>
+                <Button class="w-full" builders={[builder]}>{_("logout")}</Button>
+            </AlertDialog.Trigger>
             <AlertDialog.Content>
-              <AlertDialog.Header>
-                <AlertDialog.Title>{_("logout.sure")}</AlertDialog.Title>
-                <AlertDialog.Description>
-                    {_("logout.message")}
-                </AlertDialog.Description>
-              </AlertDialog.Header>
-              <AlertDialog.Footer>
-                <AlertDialog.Cancel onclick={onLogoutClick}>
-                    {_("logout")}
-                </AlertDialog.Cancel>
-                <AlertDialog.Action>
-                    {_("cancel")}
-                </AlertDialog.Action>
-              </AlertDialog.Footer>
+                <AlertDialog.Header>
+                    <AlertDialog.Title>{_("logout.sure")}</AlertDialog.Title>
+                    <AlertDialog.Description>
+                        {_("logout.message")}
+                    </AlertDialog.Description>
+                </AlertDialog.Header>
+                <AlertDialog.Footer>
+                    <AlertDialog.Cancel onclick={onLogoutClick}>
+                        {_("logout")}
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action>
+                        {_("cancel")}
+                    </AlertDialog.Action>
+                </AlertDialog.Footer>
             </AlertDialog.Content>
-          </AlertDialog.Root>
+        </AlertDialog.Root>
     </div>
 </Page>

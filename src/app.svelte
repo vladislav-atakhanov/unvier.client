@@ -1,18 +1,17 @@
 <script module lang="ts">
     import { getContext, onMount } from "svelte"
-    import { useQuery } from "$lib/query"
-    import { BadRequest, NotFound, RequestTimeout, ServerError, Unauthorized } from "$api/errors"
 
-    import { toast } from "svelte-sonner"
-
-    const KEY = Symbol()
-
+    const APP = Symbol()
     export class App {
         drawer = $state<HTMLElement>()
         navigationHeight = $state(0)
         router = $state<Router>()
         drawerState = $state<"open" | "close">("close")
         isAuth = $state(false)
+        api: Api
+        constructor() {
+            this.api = new Api(this)
+        }
         #openDrawer() {
             this.drawerState = "open"
             this.router?.element?.scrollTo({
@@ -31,36 +30,16 @@
             this.drawerState === "close" ? this.#openDrawer() : this.#closeDrawer()
         }
         logout() {
+            this.api.logout()
             this.router?.navigate(routes.login, { mode: "replace" })
-            logout()
             this.isAuth = false
         }
-        #catch(error: unknown) {
-            if (error instanceof Unauthorized) {
-                toast(_("error.invalid-credentials"))
-                this.logout()
-            } else if (error instanceof BadRequest) {
-                toast(_("version.update-required"))
-            } else if (error instanceof NotFound || error instanceof ServerError) {
-                toast(_("error.server-error"))
-            } else if (error instanceof RequestTimeout) {
-                toast(_("error.univer-error"))
-            } else if (error instanceof Error) {
-                toast(_("error.unknown-error", error.message))
-            }
-        }
-        query = $derived(<T>(promise: Parameters<typeof useQuery<T>>["0"]) => {
-            if (!i18n.language) return new Promise<T>(() => {})
-            return useQuery<T>(promise, {
-                onReject: (error) => this.#catch(error)
-            })
-        })
     }
-    export const useApp = () => getContext<App>(KEY)
+    export const useApp = () => getContext<App>(APP)
 </script>
 
 <script lang="ts">
-    import { logout, checkAuth } from "$api"
+    import { Api, setApi } from "$api"
     import colorScheme from "$lib/color-scheme"
     import Drawer from "$lib/components/drawer.svelte"
     import { _, i18n } from "$lib/i18n"
@@ -81,7 +60,7 @@
 
     const app = new App()
     const isAuth = (router: Router, navigate=false) => {
-        const auth = checkAuth()
+        const auth = app.api.checkAuth()
         if (!auth) {
             router.navigate(routes.login, {mode: "replace"})
             return auth
@@ -92,9 +71,10 @@
         return auth
     }
     onMount(() => {
-        app.isAuth = checkAuth()
+        app.isAuth = app.api.checkAuth()
     })
-    setContext(KEY, app)
+    setContext(APP, app)
+    setApi(app.api)
 </script>
 
 <svelte:body use:colorScheme.apply use:i18n.apply />

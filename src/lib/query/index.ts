@@ -1,1 +1,1 @@
-export { useQuery } from "./query.svelte.ts"
+export { Query } from "./query.svelte.ts"

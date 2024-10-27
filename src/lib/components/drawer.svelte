@@ -2,17 +2,20 @@
     import { routes } from "../../pages"
     import { Button } from "./ui/button"
     import { Separator } from "./ui/separator"
-    import { _, i18n } from "$lib/i18n"
+    import { _ } from "$lib/i18n"
     import { BookA, CalendarDays, Calculator, FileText, ListCheck, CircleUserRound, Settings, CircleHelp } from "lucide-svelte"
     import { hostMatches, useRouter } from "$lib/router"
     import { useApp } from "../../app.svelte"
-    import { fetchTranscript } from "$api"
+    import { useApi } from "$api"
     import Loader from "$lib/components/loader.svelte"
     import Telegram from "$lib/icons/telegram.svelte"
 
     type IconComponent = typeof BookA | typeof Telegram
     const router = useRouter()
     const app = useApp()
+    const api = useApi()
+
+    const transcript = api.fetchTranscript()
 </script>
 
 {#snippet Item(path: string, label: string, Icon: IconComponent)}
@@ -35,14 +38,15 @@
     <div
         class="justify-start w-full bg-muted p-4 h-48 grid items-end gap-2"
     >
-        {#await app.query(() => fetchTranscript(i18n.language))}
-            <Loader />
-        {:then {fullname, education_program}}
+        {#if transcript.state === "ready" && transcript.data}
+        {@const {fullname, education_program} = transcript.data}
             <div>
                 <p class="font-bold">{fullname}</p>
                 <p class="text-sm">{education_program}</p>
             </div>
-        {/await}
+        {:else}
+            <Loader />
+        {/if}
     </div>
     <div class="grid gap-1 p-4">
         {@render Item(routes.schedule, _("schedule"), CalendarDays)}
