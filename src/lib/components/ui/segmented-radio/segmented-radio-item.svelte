@@ -13,7 +13,7 @@
 </div>
 
 <style>
-    label:focus-visible {
+    div:focus-visible {
         @apply ring-ring outline-none ring-2 ring-offset-2
     }
     input:checked + span {
