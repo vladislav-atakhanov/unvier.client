@@ -2,9 +2,9 @@
     import { useApi } from "$api"
     import AppBar from "$lib/components/app-bar.svelte"
     import Loader from "$lib/components/loader.svelte"
-    import * as AlertDialog from "$lib/components/ui/alert-dialog"
+    import * as Drawer from "$lib/components/ui/drawer"
     import Button from "$lib/components/ui/button/button.svelte"
-    import { _, i18n } from "$lib/i18n"
+    import { _ } from "$lib/i18n"
 
     import Page from "$lib/layouts/page.svelte"
     import { onMount } from "svelte"
@@ -66,26 +66,26 @@
                 </div>
             {/if}
         </div>
-        <AlertDialog.Root>
-            <AlertDialog.Trigger let:builder>
+        <Drawer.Root>
+            <Drawer.Trigger let:builder>
                 <Button class="w-full" builders={[builder]}>{_("logout")}</Button>
-            </AlertDialog.Trigger>
-            <AlertDialog.Content>
-                <AlertDialog.Header>
-                    <AlertDialog.Title>{_("logout.sure")}</AlertDialog.Title>
-                    <AlertDialog.Description>
+            </Drawer.Trigger>
+            <Drawer.Content class="mx-auto w-[90%] max-w-sm">
+                <Drawer.Header>
+                    <Drawer.Title>{_("logout.sure")}</Drawer.Title>
+                    <Drawer.Description>
                         {_("logout.message")}
-                    </AlertDialog.Description>
-                </AlertDialog.Header>
-                <AlertDialog.Footer>
-                    <AlertDialog.Cancel onclick={onLogoutClick}>
+                    </Drawer.Description>
+                </Drawer.Header>
+                <Drawer.Footer class="flex justify-end flex-row">
+                    <Button variant="outline" onclick={onLogoutClick}>
                         {_("logout")}
-                    </AlertDialog.Cancel>
-                    <AlertDialog.Action>
-                        {_("cancel")}
-                    </AlertDialog.Action>
-                </AlertDialog.Footer>
-            </AlertDialog.Content>
-        </AlertDialog.Root>
+                    </Button>
+                    <Drawer.Close>
+                        <Button>{_("cancel")}</Button>
+                    </Drawer.Close>
+                </Drawer.Footer>
+            </Drawer.Content>
+        </Drawer.Root>
     </div>
 </Page>
