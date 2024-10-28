@@ -57,6 +57,7 @@
     import Profile from "./pages/profile.svelte"
     import Navigation from "$lib/components/navigation.svelte"
     import Calculator from "./pages/calculator.svelte"
+    import Exams from "./pages/exams.svelte"
 
     const app = new App()
     const isAuth = (router: Router, navigate=false) => {
@@ -104,6 +105,8 @@
         <Calculator />
     {:else if router.pattern(routes.faq)}
         <Faq />
+    {:else if router.pattern(routes.exams)}
+        <Exams />
     {:else if faqParams}
         <FaqItem id={faqParams.id} />
     {/if}

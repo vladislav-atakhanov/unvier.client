@@ -1,4 +1,4 @@
-import { login, logout, checkAuth } from "./auth.svelte.ts"
+import { login, logout, checkAuth, authFetch } from "./auth.svelte.ts"
 import { Version } from "./version.svelte.ts"
 import { fetchPrivacy } from "./privacy.ts"
 import { fetchFAQ, fetchFAQItem } from "./faq.ts"
@@ -17,6 +17,7 @@ import { toast } from "svelte-sonner"
 import { _, i18n, type Language } from "$lib/i18n/index.ts"
 import type { App } from "../app.svelte"
 import { getContext, setContext } from "svelte"
+import { api } from "./config.ts"
 
 export class Api {
     version = new Version("Ps9Oynpy")
@@ -55,6 +56,20 @@ export class Api {
     }
     fetchFAQItem(id: string) {
         return this.#languageQuery((lang) => fetchFAQItem(id, lang))
+    }
+    fetchExams() {
+        return this.#languageQuery(() =>
+            authFetch<
+                {
+                    date: number
+                    subject: string
+                    teacher: string
+                    teacher_link?: string
+                    audience: string
+                    type: "consultation" | "exam"
+                }[]
+            >(api("/api/exams"))
+        )
     }
     login(...args: Parameters<typeof login>) {
         return login(...args)
