@@ -1,6 +1,5 @@
 import { login, logout, checkAuth, authFetch } from "./auth.svelte.ts"
 import { Version } from "./version.svelte.ts"
-import { fetchPrivacy } from "./privacy.ts"
 import { fetchFAQ, fetchFAQItem } from "./faq.ts"
 
 import { Query } from "$lib/query"
@@ -54,9 +53,15 @@ export class Api {
         )
     }
     fetchPrivacy() {
-        return this.#languageQuery(fetchPrivacy, {
-            key: "privacy",
-        })
+        return this.#languageQuery<string>(
+            (lang) =>
+                fetch(api(`/api/privacy-policy?lang=${lang}`)).then((r) =>
+                    r.json()
+                ),
+            {
+                key: "privacy",
+            }
+        )
     }
     fetchFAQ() {
         return this.#languageQuery(fetchFAQ, {
