@@ -35,11 +35,9 @@
 {/snippet}
 
 <aside class="h-screen relative max-w-xs bg-background z-10" bind:this={app.drawer}>
-    <div
-        class="justify-start w-full bg-muted p-4 h-48 grid items-end gap-2"
-    >
+    <div class="justify-start w-full p-4 h-48 grid items-end gap-2">
         {#if transcript.state === "ready" && transcript.data}
-        {@const {fullname, education_program} = transcript.data}
+            {@const {fullname, education_program} = transcript.data}
             <div>
                 <p class="font-bold">{fullname}</p>
                 <p class="text-sm">{education_program}</p>
@@ -48,6 +46,7 @@
             <Loader />
         {/if}
     </div>
+    <Separator />
     <div class="grid gap-1 p-4">
         {@render Item(routes.schedule, _("schedule"), CalendarDays)}
         {@render Item(routes.attestation, _("attestation"), BookA)}
@@ -55,12 +54,13 @@
         {@render Item(routes.files, _("umkd"), FileText)}
         {@render Item(routes.exams, _("exams"), ListCheck)}
         {@render Item(routes.profile, _("profile"), CircleUserRound)}
-        <Separator class="my-2" />
+    </div>
+    <Separator />
+    <div class="grid gap-1 p-4">
         {@render Item(routes.telegram, "Telegram", Telegram)}
         {@render Item(routes.settings, _("settings"), Settings)}
         {@render Item(routes.faq, _("faq"), CircleHelp)}
     </div>
-
     <Separator
         orientation="vertical"
         class="absolute right-0 z-1 h-full top-0"

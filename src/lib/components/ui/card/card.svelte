@@ -26,8 +26,8 @@
     {href}
     class="p-2 border rounded block border-border {class_}"
     class:transition-all={href || active}
-    class:card--button={href}
-    class:card--active={active}
+    class:hover:bg-border={href}
+    class:active
     {...props}
 >
     <h2>{title}</h2>
@@ -41,10 +41,7 @@
     h2 {
         word-wrap: break-word;
     }
-    .card--button:hover {
-        @apply bg-border
-    }
-    .card--active {
+    .active {
         @apply border-primary bg-primary bg-opacity-10;
         --border: var(--primary);
     }

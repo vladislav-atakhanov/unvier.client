@@ -32,7 +32,7 @@
         <AppBar title={title} onTitleClick={(title) => toast(title)} />
     {/snippet}
 
-    <div class="mx-auto p-2 max-w-3xl grid gap-2">
+    <div class="mx-auto p-2 max-w-md grid gap-2">
         {#if query.loading}
             <Loader />
         {:else if query.data}
