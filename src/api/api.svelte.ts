@@ -15,7 +15,7 @@ import { _, i18n, type Language } from "$lib/i18n/index.ts"
 import type { App } from "../app.svelte"
 import { getContext, onDestroy, setContext } from "svelte"
 import { api } from "./config.ts"
-import type { FAQ, Transcript } from "./@types.ts"
+import type { Exam, FAQ, Transcript } from "./@types.ts"
 
 export class Api {
     version = new Version("Ps9Oynpy")
@@ -80,22 +80,9 @@ export class Api {
         )
     }
     fetchExams() {
-        return this.#languageQuery(
-            () =>
-                authFetch<
-                    {
-                        date: number
-                        subject: string
-                        teacher: string
-                        teacher_link?: string
-                        audience: string
-                        type: "consultation" | "exam"
-                    }[]
-                >(api("/api/exams")),
-            {
-                key: "exams",
-            }
-        )
+        return this.#languageQuery(() => authFetch<Exam[]>(api("/api/exams")), {
+            key: "exams",
+        })
     }
     login(...args: Parameters<typeof login>) {
         return login(...args)
