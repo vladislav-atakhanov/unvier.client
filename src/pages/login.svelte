@@ -17,6 +17,7 @@
     import { useApp } from "../app.svelte"
     import InstallButton from "$lib/components/install-button.svelte"
     import Telegram from "$lib/icons/telegram.svelte"
+    import Loader from "$lib/components/loader.svelte"
 
     const univers = {
         kstu: "KSTU",
@@ -38,6 +39,7 @@
     onMount(() => {
         univer = (localStorage.getItem("univer") as any) ?? "kstu"
         username = localStorage.getItem("username") ?? ""
+        api.version.fetch()
     })
 
     const onsubmit = async (event: SubmitEvent) => {
@@ -154,7 +156,15 @@
             >{status === "loading" ? _("loading") : _("login")}</Button
         >
     </form>
-    <p class="m-0 p-4 text-center text-muted-foreground">{api.version.client}</p>
+    <div class="flex justify-center p-4">
+        {#if api.version.update}
+            <p class="text-destructive">{_("version.update-required")}</p>
+        {:else if api.version.loading}
+            <Loader class="text-muted-foreground" />
+        {:else}
+            <p class="text-muted-foreground">{api.version.client}</p>
+        {/if}
+    </div>
 </Page>
 
 <style>
