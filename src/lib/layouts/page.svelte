@@ -1,9 +1,12 @@
-
 <script lang="ts">
     import { useApp } from "../../app.svelte"
     import { type Snippet } from "svelte"
 
-    let { class: class_ = "", children, header }: {
+    let {
+        class: class_ = "",
+        children,
+        header,
+    }: {
         children?: Snippet
         class?: string
         header?: Snippet

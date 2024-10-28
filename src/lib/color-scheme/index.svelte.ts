@@ -16,6 +16,8 @@ class StoredValue<T extends string> {
 }
 
 export class ColorScheme extends StoredValue<"auto" | "dark" | "light"> {
+    #matched = $state<"light" | "dark">("light")
+    scheme = $derived(this.value === "auto" ? this.#matched : this.value)
     constructor() {
         super("color-theme", "auto")
     }
@@ -28,6 +30,19 @@ export class ColorScheme extends StoredValue<"auto" | "dark" | "light"> {
             }
             node.classList.remove(this.value === "dark" ? "light" : "dark")
             node.classList.add(this.value)
+        })
+
+        const update = ({ matches }: Pick<MediaQueryList, "matches">) => {
+            this.#matched = matches ? "dark" : "light"
+        }
+        $effect(() => {
+            const media = matchMedia("(prefers-color-scheme: dark)")
+            update(media)
+
+            media.addEventListener("change", update)
+            return () => {
+                media.removeEventListener("change", update)
+            }
         })
     }
 }

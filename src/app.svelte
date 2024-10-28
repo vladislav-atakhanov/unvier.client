@@ -1,5 +1,5 @@
 <script module lang="ts">
-    import { getContext, onMount } from "svelte"
+    import { getContext, onMount, tick } from "svelte"
 
     const APP = Symbol()
     export class App {
@@ -9,6 +9,20 @@
         drawerState = $state<"open" | "close">("close")
         isAuth = $state(false)
         api: Api
+
+        themeColor = $state<string>()
+        updateThemeColor(..._: unknown[]) {
+            tick().then(() => {
+                const pages = document.querySelectorAll(".page")
+                const page = pages[pages.length - 1]
+                const header = page?.querySelector("header.header")
+                if (!header) return
+                const background = getComputedStyle(header).getPropertyValue("background-color")
+                this.themeColor = background
+            })
+
+            return () => this.updateThemeColor()
+        }
         constructor() {
             this.api = new Api(this)
         }
@@ -76,9 +90,17 @@
     })
     setContext(APP, app)
     setApi(app.api)
+
+    $effect(() => app.updateThemeColor(colorScheme.scheme))
 </script>
 
 <svelte:body use:colorScheme.apply use:i18n.apply />
+<svelte:head>
+    {#if app.themeColor}
+        <meta name="msapplication-TileColor" content={app.themeColor} />
+        <meta name="theme-color" content={app.themeColor} />
+    {/if}
+</svelte:head>
 <Toaster />
 
 <Wrapper home={routes.home}>

@@ -3,7 +3,7 @@
     import { Button } from "$lib/components/ui/button"
     import { ArrowLeft, Menu, X } from "lucide-svelte"
     import { Separator } from "$lib/components/ui/separator"
-    import type { Snippet } from "svelte"
+    import { onMount, type Snippet } from "svelte"
     import { useApp } from "../../app.svelte"
 
     const router = useRouter()
@@ -19,6 +19,7 @@
     })
 
     const app = useApp()
+    onMount(() => app.updateThemeColor())
 
     const onTitleElementClick = onTitleClick ? (event: any) => {
         const title = (event.target as HTMLElement)?.closest("h1")
@@ -27,9 +28,8 @@
     } : undefined
 </script>
 
-<header class="" bind:this={element}>
+<header class="bg-background header" bind:this={element}>
     <div class="grid items-center gap-2 p-2 h-14">
-
         <div>
             {#if canBack}
                 <Button size="icon" variant="ghost" onclick={() => router.back()}>
