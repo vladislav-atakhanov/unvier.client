@@ -65,16 +65,17 @@ export class HistoryRouter implements Router {
             this.app.drawerState = "open"
             return
         }
-        const drawerWidth = this.app?.drawer?.clientWidth ?? 0
         if (
             this.app?.drawer &&
             this.app.drawerState === "open" &&
-            scrollLeft === drawerWidth
+            scrollLeft === this.app.drawer.clientWidth
         ) {
             this.app.drawerState = "close"
             return
         }
+        if (this.history.length === 1) return
 
+        const drawerWidth = this.app?.drawer?.clientWidth ?? 0
         const index = Math.round((scrollLeft - drawerWidth) / window.innerWidth)
         if (index + 1 !== this.history.length) {
             this.history = this.history.slice(0, index + 1)
