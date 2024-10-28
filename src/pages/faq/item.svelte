@@ -1,9 +1,8 @@
 <script lang="ts">
     import { useApi } from "$api"
-    import { fetchFAQItem } from "$api/faq"
     import AppBar from "$lib/components/app-bar.svelte"
     import Loader from "$lib/components/loader.svelte"
-    import { _, i18n } from "$lib/i18n"
+    import { _ } from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
     import { tick } from "svelte"
 

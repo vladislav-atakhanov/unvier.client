@@ -12,3 +12,8 @@ export type Transcript = {
     avarage_point: number
     form_of_study: string
 }
+
+export type FAQ = {
+    id: string
+    label: string
+}

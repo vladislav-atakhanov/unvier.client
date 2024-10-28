@@ -1,6 +1,5 @@
 import { login, logout, checkAuth, authFetch } from "./auth.svelte.ts"
 import { Version } from "./version.svelte.ts"
-import { fetchFAQ, fetchFAQItem } from "./faq.ts"
 
 import { Query } from "$lib/query"
 import {
@@ -16,7 +15,7 @@ import { _, i18n, type Language } from "$lib/i18n/index.ts"
 import type { App } from "../app.svelte"
 import { getContext, onDestroy, setContext } from "svelte"
 import { api } from "./config.ts"
-import type { Transcript } from "./@types.ts"
+import type { FAQ, Transcript } from "./@types.ts"
 
 export class Api {
     version = new Version("Ps9Oynpy")
@@ -64,14 +63,21 @@ export class Api {
         )
     }
     fetchFAQ() {
-        return this.#languageQuery(fetchFAQ, {
-            key: "faq",
-        })
+        return this.#languageQuery<FAQ[]>(
+            (lang) => fetch(api(`/faq?lang=${lang}`)).then((r) => r.json()),
+            {
+                key: "faq",
+            }
+        )
     }
     fetchFAQItem(id: string) {
-        return this.#languageQuery((lang) => fetchFAQItem(id, lang), {
-            key: `faq-${id}`,
-        })
+        return this.#languageQuery<string>(
+            (lang) =>
+                fetch(api(`/faq/${id}?lang=${lang}`)).then((r) => r.text()),
+            {
+                key: `faq-${id}`,
+            }
+        )
     }
     fetchExams() {
         return this.#languageQuery(
