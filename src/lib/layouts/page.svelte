@@ -13,7 +13,12 @@
     const app = useApp()
 </script>
 
-<div class="page min-h-screen {class_} w-screen overflow-x-hidden" style:padding-bottom="{app.navigationHeight ?? 0}px">
-    {@render header?.()}
+<div
+    class="page h-screen overflow-y-auto {class_} w-screen overflow-x-hidden"
+    style:padding-bottom="{app.navigationHeight ?? 0}px"
+>
+    {#if header}
+        <div class="sticky left-0 right-0 top-0">{@render header()}</div>
+    {/if}
     {@render children?.()}
 </div>
