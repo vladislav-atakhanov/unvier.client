@@ -25,6 +25,7 @@
     this={href ? "a" : "article"}
     {href}
     class="p-2 border rounded block border-border {class_}"
+    class:transition-all={href || active}
     class:card--button={href}
     class:card--active={active}
     {...props}
@@ -37,13 +38,9 @@
 </svelte:element>
 
 <style>
-    .card--button {
-        transition: transform 0.2s;
+    .card--button:hover {
+        @apply bg-border
     }
-    .card--button:active {
-        transform: scale(0.95);
-    }
-    .card--button:hover,
     .card--active {
         @apply border-primary bg-primary bg-opacity-10;
         --border: var(--primary);

@@ -87,7 +87,7 @@
             {/snippet}
         </AppBar>
     {/snippet}
-    <div class="grid mx-auto py-4 px-2 gap-4 max-w-md">
+    <div class="grid mx-auto p-2 gap-2 max-w-md">
         {#if query.data}
             {#each query.data as {audience, date, subject, teacher, type, teacher_link}}
                 {@const delta = relativeTime(date, now)}
