@@ -24,7 +24,7 @@
 <svelte:element
     this={href ? "a" : "article"}
     {href}
-    class="p-2 border rounded block {class_}"
+    class="p-2 border rounded block border-border {class_}"
     class:card--button={href}
     class:card--active={active}
     {...props}
