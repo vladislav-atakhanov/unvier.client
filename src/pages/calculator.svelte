@@ -25,7 +25,7 @@
         <AppBar title={_("calculator")} />
     {/snippet}
     <div class="grid mx-auto p-4 gap-4 max-w-md">
-        <table class="space">
+        <table>
             <tbody>
                 {#each calculator as mark, index}
                     {@const label = mark.isExam
