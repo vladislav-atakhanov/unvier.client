@@ -2,7 +2,6 @@ import { login, logout, checkAuth, authFetch } from "./auth.svelte.ts"
 import { Version } from "./version.svelte.ts"
 import { fetchPrivacy } from "./privacy.ts"
 import { fetchFAQ, fetchFAQItem } from "./faq.ts"
-import { fetchTranscript } from "./transcript.ts"
 
 import { Query } from "$lib/query"
 import {
@@ -18,6 +17,7 @@ import { _, i18n, type Language } from "$lib/i18n/index.ts"
 import type { App } from "../app.svelte"
 import { getContext, onDestroy, setContext } from "svelte"
 import { api } from "./config.ts"
+import type { Transcript } from "./@types.ts"
 
 export class Api {
     version = new Version("Ps9Oynpy")
@@ -46,9 +46,12 @@ export class Api {
         }
     }
     fetchTranscript() {
-        return this.#languageQuery(fetchTranscript, {
-            key: "transcript",
-        })
+        return this.#languageQuery(
+            () => authFetch<Transcript>(api("/api/transcript")),
+            {
+                key: "transcript",
+            }
+        )
     }
     fetchPrivacy() {
         return this.#languageQuery(fetchPrivacy, {
