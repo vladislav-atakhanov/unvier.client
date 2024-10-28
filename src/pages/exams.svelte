@@ -4,9 +4,9 @@
     import Loader from "$lib/components/loader.svelte"
     import TeacherLink from "$lib/components/teacher-link.svelte"
     import Card from "$lib/components/ui/card"
-    import { Separator } from "$lib/components/ui/separator"
     import { _, i18n } from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
+    import { nullish } from "$lib/utils"
     import { onMount } from "svelte"
 
 
@@ -88,7 +88,7 @@
         </AppBar>
     {/snippet}
     <div class="grid mx-auto p-2 gap-2 max-w-md">
-        {#if query.data}
+        {#if !nullish(query.data)}
             {#each query.data as {audience, date, subject, teacher, type, teacher_link}}
                 {@const delta = relativeTime(date, now)}
                 <Card title={getDate(date)} active={isActive(date, now)}>
@@ -108,7 +108,7 @@
                     {/if}
                 </Card>
             {:else}
-            {_("no-data")}
+                {_("no-data")}
             {/each}
         {:else}
             <Loader />

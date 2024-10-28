@@ -60,3 +60,6 @@ export const flyAndScale = (
 		easing: cubicOut
 	};
 };
+
+export const nullish = <T>(data: T | undefined | null): data is undefined =>
+    data === undefined || data === null

@@ -2,10 +2,10 @@
     import { useApi } from "$api"
     import AppBar from "$lib/components/app-bar.svelte"
     import Loader from "$lib/components/loader.svelte"
-    import { Button } from "$lib/components/ui/button"
     import Card from "$lib/components/ui/card"
-    import { _, i18n }from "$lib/i18n"
+    import { _ }from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
+    import { nullish } from "$lib/utils"
     import { routes } from "../url"
 
     const api = useApi()
@@ -20,9 +20,11 @@
     <div class="grid mx-auto py-4 px-2 gap-2 max-w-md">
         {#if query.loading }
             <Loader />
-        {:else if query.data}
+        {:else if !nullish(query.data)}
             {#each query.data as {id, label} (id)}
                 <Card href="{routes.faq}/{id}" title={label} />
+            {:else}
+                {_("no-data")}
             {/each}
         {/if}
     </div>
