@@ -16,12 +16,12 @@ import {
 import { toast } from "svelte-sonner"
 import { _, i18n, type Language } from "$lib/i18n/index.ts"
 import type { App } from "../app.svelte"
-import { getContext, setContext } from "svelte"
+import { getContext, onDestroy, setContext } from "svelte"
 import { api } from "./config.ts"
 
 export class Api {
     version = new Version("Ps9Oynpy")
-    #queries = new Set<Query<any>>()
+    #queries = new Map<string, Query<any>>()
     constructor(private app: App) {
         $effect(() => {
             i18n.language
@@ -46,29 +46,41 @@ export class Api {
         }
     }
     fetchTranscript() {
-        return this.#languageQuery(fetchTranscript)
+        return this.#languageQuery(fetchTranscript, {
+            key: "transcript",
+        })
     }
     fetchPrivacy() {
-        return this.#languageQuery(fetchPrivacy)
+        return this.#languageQuery(fetchPrivacy, {
+            key: "privacy",
+        })
     }
     fetchFAQ() {
-        return this.#languageQuery(fetchFAQ)
+        return this.#languageQuery(fetchFAQ, {
+            key: "faq",
+        })
     }
     fetchFAQItem(id: string) {
-        return this.#languageQuery((lang) => fetchFAQItem(id, lang))
+        return this.#languageQuery((lang) => fetchFAQItem(id, lang), {
+            key: `faq-${id}`,
+        })
     }
     fetchExams() {
-        return this.#languageQuery(() =>
-            authFetch<
-                {
-                    date: number
-                    subject: string
-                    teacher: string
-                    teacher_link?: string
-                    audience: string
-                    type: "consultation" | "exam"
-                }[]
-            >(api("/api/exams"))
+        return this.#languageQuery(
+            () =>
+                authFetch<
+                    {
+                        date: number
+                        subject: string
+                        teacher: string
+                        teacher_link?: string
+                        audience: string
+                        type: "consultation" | "exam"
+                    }[]
+                >(api("/api/exams")),
+            {
+                key: "exams",
+            }
         )
     }
     login(...args: Parameters<typeof login>) {
@@ -80,14 +92,22 @@ export class Api {
     checkAuth() {
         return checkAuth()
     }
-    #languageQuery<T>(fetch: (lang: Language) => Promise<T>) {
+    #languageQuery<T>(
+        fetch: (lang: Language) => Promise<T>,
+        { key }: { key: string }
+    ) {
+        const cached = this.#queries.get(key)
+        if (cached) return cached as Query<T>
         const query = new Query(() => fetch(i18n.language), {
             onReject: (error) => this.#catch(error),
             get enabled() {
                 return i18n.language.length > 0
             },
         })
-        this.#queries.add(query)
+        this.#queries.set(key, query)
+        onDestroy(() => {
+            this.#queries.delete(key)
+        })
         return query
     }
 }
