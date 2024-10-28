@@ -34,7 +34,7 @@
 </Button>
 {/snippet}
 
-<aside class="h-screen relative max-w-xs bg-background z-10" bind:this={app.drawer}>
+<aside class="h-screen overflow-y-auto relative max-w-xs bg-background z-10" bind:this={app.drawer}>
     <div class="justify-start w-full p-4 h-48 grid items-end gap-2">
         {#if transcript.state === "ready" && transcript.data}
             {@const {fullname, education_program} = transcript.data}
