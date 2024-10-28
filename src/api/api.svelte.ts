@@ -15,7 +15,7 @@ import { _, i18n, type Language } from "$lib/i18n/index.ts"
 import type { App } from "../app.svelte"
 import { getContext, onDestroy, setContext } from "svelte"
 import { api } from "./config.ts"
-import type { Exam, FAQ, Transcript } from "./@types.ts"
+import type { Exam, FAQ, Transcript, Folder, File } from "./@types.ts"
 
 export class Api {
     version = new Version("Ps9Oynpy")
@@ -27,6 +27,9 @@ export class Api {
                 q.update()
             })
         })
+    }
+    url(...args: Parameters<typeof api>) {
+        return api(...args)
     }
     #catch(error: unknown) {
         if (error instanceof Unauthorized) {
@@ -70,12 +73,33 @@ export class Api {
             }
         )
     }
-    fetchFAQItem(id: string) {
+    fetchFAQItem(id: FAQ["id"]) {
         return this.#languageQuery<string>(
             (lang) =>
                 fetch(api(`/faq/${id}?lang=${lang}`)).then((r) => r.text()),
             {
                 key: `faq-${id}`,
+            }
+        )
+    }
+    fetchFolders() {
+        return this.#languageQuery(
+            () =>
+                authFetch<Folder[]>(api("/api/umkd")).then((data) =>
+                    data.sort(({ subject: a }, { subject: b }) =>
+                        a.localeCompare(b)
+                    )
+                ),
+            {
+                key: "files",
+            }
+        )
+    }
+    fetchFiles(id: Folder["id"]) {
+        return this.#languageQuery(
+            () => authFetch<File[]>(api(`/api/umkd/${id}`)),
+            {
+                key: `files-${id}`,
             }
         )
     }

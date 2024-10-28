@@ -26,3 +26,21 @@ export type Exam = {
     audience: string
     type: "consultation" | "exam"
 }
+
+export type Folder = {
+    subject: string
+    id: string
+    type: string
+}
+export type File = {
+    name: string
+    description: string
+    type: string
+    language: string | null
+    size: string
+    date: number
+    downloads_count: number
+    teacher: string
+    teacher_link?: string
+    url: string
+}

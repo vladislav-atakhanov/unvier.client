@@ -52,7 +52,7 @@
         {@render Item(routes.schedule, _("schedule"), CalendarDays)}
         {@render Item(routes.attestation, _("attestation"), BookA)}
         {@render Item(routes.calculator, _("calculator"), Calculator)}
-        {@render Item(routes.umkd, _("umkd"), FileText)}
+        {@render Item(routes.files, _("umkd"), FileText)}
         {@render Item(routes.exams, _("exams"), ListCheck)}
         {@render Item(routes.profile, _("profile"), CircleUserRound)}
         <Separator class="my-2" />

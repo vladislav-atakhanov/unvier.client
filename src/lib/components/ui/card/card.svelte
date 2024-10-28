@@ -38,6 +38,9 @@
 </svelte:element>
 
 <style>
+    h2 {
+        word-wrap: break-word;
+    }
     .card--button:hover {
         @apply bg-border
     }
