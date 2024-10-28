@@ -44,3 +44,16 @@ export type File = {
     teacher_link?: string
     url: string
 }
+
+export type Mark = [title: string, value: number | string, active?: boolean]
+
+export type Attestation = {
+    subject: string
+    attestation: Mark[]
+    attendance: {
+        type: string // лекция | срсп
+        part: string // рк1 | рк2
+        marks: Mark[]
+    }[]
+    sum: Mark
+}

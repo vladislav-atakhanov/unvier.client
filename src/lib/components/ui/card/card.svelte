@@ -9,6 +9,7 @@
         title,
         class: class_ = "",
         children,
+        onclick,
         ...props
     }: {
         active?: boolean
@@ -16,18 +17,23 @@
         title: string
         class?: string
         children?: Snippet
+        onclick?: () => unknown
     } & HTMLAnchorAttributes = $props()
 
     let hasSlot = $derived(typeof children === "function")
+
+    let tag = $derived(href ? "a" : onclick ? "button" : "article")
 </script>
 
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <svelte:element
-    this={href ? "a" : "article"}
+    this={tag}
     {href}
-    class="p-2 border rounded block border-border {class_}"
-    class:transition-all={href || active}
-    class:hover:bg-border={href}
+    class="p-2 border rounded block border-border {class_} text-left"
+    class:transition-all={href || active || onclick}
+    class:hover:bg-border={href || onclick}
     class:active
+    {onclick}
     {...props}
 >
     <h2>{title}</h2>

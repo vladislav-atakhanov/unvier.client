@@ -15,7 +15,14 @@ import { _, i18n, type Language } from "$lib/i18n/index.ts"
 import type { App } from "../app.svelte"
 import { getContext, onDestroy, setContext } from "svelte"
 import { api } from "./config.ts"
-import type { Exam, FAQ, Transcript, Folder, File } from "./@types.ts"
+import type {
+    Exam,
+    FAQ,
+    Transcript,
+    Folder,
+    File,
+    Attestation,
+} from "./@types.ts"
 
 export class Api {
     version = new Version("Ps9Oynpy")
@@ -31,20 +38,32 @@ export class Api {
     url(...args: Parameters<typeof api>) {
         return api(...args)
     }
-    #catch(error: unknown) {
-        if (error instanceof Unauthorized) {
-            toast(_("error.invalid-credentials"))
-            logout()
-            this.app.logout()
-        } else if (error instanceof BadRequest) {
-            toast(_("version.update-required"))
-        } else if (error instanceof NotFound || error instanceof ServerError) {
-            toast(_("error.server-error"))
-        } else if (error instanceof RequestTimeout) {
-            toast(_("error.univer-error"))
-        } else if (error instanceof Error) {
-            toast(_("error.unknown-error", error.message))
-        }
+    fetchAttestation() {
+        return this.#languageQuery(
+            () =>
+                authFetch<Attestation[]>(api("/api/attestation")).then((data) =>
+                    data
+                        .sort(({ subject: a }, { subject: b }) =>
+                            a.localeCompare(b)
+                        )
+                        .map((a) => {
+                            a.attendance.map((v) => {
+                                v.marks = v.marks.filter(
+                                    ([_, value]) =>
+                                        typeof value === "string" || value > 0
+                                )
+                                return v
+                            })
+                            a.attendance = a.attendance.filter(
+                                ({ marks }) => marks.length > 0
+                            )
+                            return a
+                        })
+                ),
+            {
+                key: "attestation",
+            }
+        )
     }
     fetchTranscript() {
         return this.#languageQuery(
@@ -134,6 +153,21 @@ export class Api {
             this.#queries.delete(key)
         })
         return query
+    }
+    #catch(error: unknown) {
+        if (error instanceof Unauthorized) {
+            toast(_("error.invalid-credentials"))
+            logout()
+            this.app.logout()
+        } else if (error instanceof BadRequest) {
+            toast(_("version.update-required"))
+        } else if (error instanceof NotFound || error instanceof ServerError) {
+            toast(_("error.server-error"))
+        } else if (error instanceof RequestTimeout) {
+            toast(_("error.univer-error"))
+        } else if (error instanceof Error) {
+            toast(_("error.unknown-error", error.message))
+        }
     }
 }
 

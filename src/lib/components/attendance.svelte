@@ -1,0 +1,86 @@
+<script lang="ts">
+    import * as Drawer from "./ui/drawer"
+    import * as Tabs from "./ui/tabs"
+
+    import { _ } from "$lib/i18n"
+    import type { Attestation } from "$api"
+    import Marks from "./marks.svelte"
+
+    let attestation = $state<Attestation>()
+    let isOpen = $state(false)
+    export function open(value: Attestation) {
+        attestation = value
+        isOpen = true
+    }
+    export function close() {
+        attestation = undefined
+    }
+    let groups = $derived(
+        attestation
+            ? Map.groupBy(
+                  attestation.attendance,
+                  ({ part }) => part.split("(")[0],
+              )
+            : new Map<string, Attestation["attendance"]>(),
+    )
+
+    let activeTab = $derived(
+        groups
+            .keys()
+            .reduce((active, value) =>
+                active.localeCompare(value) === 1 ? active : value,
+            ),
+    )
+</script>
+
+<Drawer.Root onClose={close} bind:open={isOpen}>
+    <Drawer.Content class="mx-auto w-[90%] max-h-[96%] max-w-sm">
+        {#if attestation}
+            <Drawer.Header class="px-4">
+                <Drawer.Title class="text-balance text-left"
+                    >{attestation.subject}</Drawer.Title
+                >
+            </Drawer.Header>
+            {#snippet content(attendance: Attestation["attendance"])}
+                <div>
+                    {#each attendance as { marks, type }}
+                        <div>
+                            <p class="px-4">{type}</p>
+                            <Marks class="px-4 py-2" {marks} />
+                        </div>
+                    {/each}
+                </div>
+            {/snippet}
+            {#if groups.size > 1}
+                <Tabs.Root value={activeTab}>
+                    {#each groups as [key, value]}
+                        <Tabs.Content value={key}>
+                            {@render content(value)}
+                        </Tabs.Content>
+                    {/each}
+                    <Drawer.Footer class="px-4">
+                        <Tabs.List>
+                            {#each groups as [key]}
+                                <Tabs.Trigger class="flex-1" value={key}>{key}</Tabs.Trigger>
+                            {/each}
+                        </Tabs.List>
+                    </Drawer.Footer>
+                </Tabs.Root>
+            {:else}
+                {#each groups as [_, value]}
+                    {@render content(value)}
+                {/each}
+                <Drawer.Footer class="px-4">
+                    <div class="bg-muted text-muted-foreground inline-flex h-10 items-center justify-center rounded-md p-1">
+                        {#each groups as [key]}
+                            {key}
+                        {/each}
+                    </div>
+                </Drawer.Footer>
+            {/if}
+
+        {:else}
+            {_("no-data")}
+        {/if}
+    </Drawer.Content>
+</Drawer.Root>

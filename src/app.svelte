@@ -61,7 +61,7 @@
     import { setContext } from "svelte"
     import { routes } from "./pages"
     import Faq from "./pages/faq/index.svelte"
-    import Attestation from "./pages/attestation/index.svelte"
+    import Attestation from "./pages/attestation.svelte"
     import FaqItem from "./pages/faq/item.svelte"
     import Login from "./pages/login.svelte"
     import Privacy from "./pages/privacy.svelte"
