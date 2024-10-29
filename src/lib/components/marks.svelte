@@ -30,14 +30,14 @@
     <table>
         <tbody>
             <tr>
-                <th>{_("day")}</th>
+                <th class="pl-4">{_("day")}</th>
                 {#each months as { month, values }}
                     <td colspan={values.length} class="text-primary">{month}</td
                     >
                 {/each}
             </tr>
             <tr>
-                <th>{_("month")}</th>
+                <th class="pl-4">{_("month")}</th>
                 {#each months as { values }}
                     {#each values as { day }}
                         <td class="text-muted-foreground">{day}</td>
@@ -45,7 +45,7 @@
                 {/each}
             </tr>
             <tr>
-                <th>{_("grade")}</th>
+                <th class="pl-4">{_("grade")}</th>
                 {#each months as { values }}
                     {#each values as { value }}
                         <td>{value}</td>
