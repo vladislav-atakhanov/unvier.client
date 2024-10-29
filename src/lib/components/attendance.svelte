@@ -76,7 +76,7 @@
                     {#each groups as [_, value]}
                         {@render content(value)}
                     {/each}
-                    <div class="mx-4 mb-4 mt-2 bg-muted flex text-muted-foreground h-10 items-center justify-center rounded-md p-1">
+                    <div class="mx-4 mb-4 mt-2 bg-foreground text-background flex h-10 items-center justify-center rounded-md p-1">
                         {#each groups as [key]}
                             {key}
                         {/each}
