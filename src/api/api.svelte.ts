@@ -22,6 +22,7 @@ import type {
     Folder,
     File,
     Attestation,
+    Schedule,
 } from "./@types.ts"
 
 export class Api {
@@ -62,6 +63,14 @@ export class Api {
                 ),
             {
                 key: "attestation",
+            }
+        )
+    }
+    fetchSchedule() {
+        return this.#languageQuery(
+            () => authFetch<Schedule>(api("/api/schedule")),
+            {
+                key: "schedule",
             }
         )
     }

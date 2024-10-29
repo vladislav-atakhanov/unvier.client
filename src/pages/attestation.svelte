@@ -100,7 +100,7 @@
         {#if query.state === "load"}
             <Loader />
         {:else if !nullish(query.data)}
-            {#snippet mark(v: {title: string, missing: number, active: boolean, value: number})}
+            {#snippet mark(v: {title: string, missing: number, active: boolean, value: any})}
             <li class="grid" class:text-primary={v.active}>
                 <p class="summary__label">
                     <span class="summary__title"
@@ -113,10 +113,10 @@
             {/snippet}
 
             {#each query.data as a (a.subject)}
-                {@const { subject, attestation, attendance, sum } = a}
+                {@const { subject, attestation, sum } = a}
                 {@const total = getTotal(
-                    attestation.map(([_, m]) => m),
-                    sum[1],
+                    attestation.map(([_, m]) => m).filter(m => typeof m === "number"),
+                    parseInt(`${sum[1]}`),
                 )}
                 {@const missing = getMissing(attestation, wish)}
                 {@const missingTotal = Math.max(wish - total, 0)}

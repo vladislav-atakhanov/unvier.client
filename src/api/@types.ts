@@ -57,3 +57,21 @@ export type Attestation = {
     }[]
     sum: Mark
 }
+
+export type Lesson = {
+    subject: string
+    teacher: string
+    teacher_link?: string
+    audience: string
+    period: string
+    day: number
+    time: string
+    factor: boolean
+    id: string
+}
+
+export type Schedule = {
+    lessons: Lesson[]
+    factor: boolean | null
+    week: number
+}

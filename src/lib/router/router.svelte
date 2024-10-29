@@ -65,17 +65,27 @@
         }
     }
 
-    const onscroll = debounce(() => tick().then(() => {
-        if (!router.element) return
+    const routerEnd = debounce(() => tick().then(() => {() => {
         router.onScrollEnd()
-    }), 100)
+    }}), 100)
 
-    onMount(() => {
+    const onscroll = (event: Event) => {
+        routerEnd()
+        router.onscroll(event)
+    }
+
+    onMount(() => tick().then(() => {
+        const children = Array.from(router.element?.children ?? [])
+        const pages = children.filter(element => !element.classList.contains("fixed"))
+        const page = pages[pages.length - 1]
+
+        if (!page) return
+        const {x} = page.getBoundingClientRect()
         router.element?.scrollTo({
-            left: router.element.clientWidth,
+            left: x,
             behavior: "instant"
         })
-    })
+    }))
 
 
 </script>
@@ -101,10 +111,6 @@
     .router {
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
-    }
-    .router > :global(.page) {
-        width: 100vw;
-        flex: 0 0 100vw;
     }
     .router > :global(*) {
         scroll-snap-align: start;

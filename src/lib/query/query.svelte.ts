@@ -24,10 +24,11 @@ export class Query<T> {
         if (!this.params.enabled) return
         if (!this.promisify) return Promise.reject()
         try {
-            this.data = await this.promisify()
+            const data = await this.promisify()
             this.state = "ready"
-            this.params.onResolve?.(this.data)
-            return this.data
+            this.params.onResolve?.(data)
+            this.data = data
+            return data
         } catch (error) {
             this.params.onReject?.(error)
             return Promise.reject(error)

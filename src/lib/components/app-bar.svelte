@@ -7,7 +7,7 @@
     import { useApp } from "../../app.svelte"
 
     const router = useRouter()
-    const { title, left, right, onTitleClick }: {title?: Snippet | string, left?: Snippet, right?: Snippet, onTitleClick?: (title: string) => unknown} = $props()
+    const { title, left, right, onTitleClick, bottom }: {title?: Snippet | string, left?: Snippet, right?: Snippet, onTitleClick?: (title: string) => unknown, bottom?: Snippet} = $props()
 
     let canBack = $state(false)
     let element: HTMLElement
@@ -29,7 +29,7 @@
 </script>
 
 <header class="bg-background header" bind:this={element}>
-    <div class="grid items-center gap-2 p-2 h-14">
+    <div class="grid items-center gap-2 p-2" class:h-14={!bottom} class:h-12={bottom} class:pb-0={bottom}>
         <div>
             {#if canBack}
                 <Button size="icon" variant="ghost" onclick={() => router.back()}>
@@ -65,6 +65,9 @@
 
         <div>{@render right?.()}</div>
     </div>
+    {#if bottom}
+        <div class="p-2 pt-0">{@render bottom()}</div>
+    {/if}
     <Separator />
 </header>
 <style>

@@ -3,6 +3,7 @@ import type { HistoryItem, ParametersExceptFirst, Router } from "./@types"
 import { pattern } from "./pattern"
 import type { App } from "../../app.svelte"
 
+type ScrollHandler = (event: { x: number }) => unknown
 export class HistoryRouter implements Router {
     path = $state("")
     query = $state("")
@@ -11,6 +12,7 @@ export class HistoryRouter implements Router {
     app?: App
 
     element?: HTMLElement
+    #scrollHandlers = new Set<ScrollHandler>()
     constructor(home: string) {
         this.history.push(this.#item(home))
         this.path = home
@@ -84,6 +86,17 @@ export class HistoryRouter implements Router {
             this.fragment = fragment
             this.query = query
         }
+    }
+    onscroll() {
+        if (!this.element) return
+        const event: Parameters<ScrollHandler>[0] = {
+            x: this.element.scrollLeft,
+        }
+        this.#scrollHandlers.forEach((handler) => handler(event))
+    }
+    addOnScroll(handler: ScrollHandler) {
+        this.#scrollHandlers.add(handler)
+        return () => this.#scrollHandlers.delete(handler)
     }
 }
 export class ItemRouter implements Router {
