@@ -70,7 +70,7 @@ export class HistoryRouter implements Router {
         if (
             this.app?.drawer &&
             this.app.drawerState === "open" &&
-            scrollLeft === this.app.drawer.clientWidth
+            scrollLeft >= this.app.drawer.clientWidth
         ) {
             this.app.drawerState = "close"
             return

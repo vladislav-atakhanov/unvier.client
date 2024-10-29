@@ -65,13 +65,11 @@
         }
     }
 
-    const routerEnd = debounce(() => tick().then(() => {() => {
-        router.onScrollEnd()
-    }}), 100)
+    const routerEnd = debounce(() => tick().then(() => router.onScrollEnd()), 100)
 
-    const onscroll = (event: Event) => {
+    const onscroll = () => {
         routerEnd()
-        router.onscroll(event)
+        router.onscroll()
     }
 
     onMount(() => tick().then(() => {
