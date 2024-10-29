@@ -3,7 +3,7 @@
     import * as Tabs from "./ui/tabs"
 
     import { _ } from "$lib/i18n"
-    import type { Attestation } from "$api"
+    import type { Attestation, Mark } from "$api"
     import Marks from "./marks.svelte"
 
     let attestation = $state<Attestation>()
@@ -31,6 +31,8 @@
                 active.localeCompare(value) === 1 ? active : value,
             ),
     )
+    const getSum = (marks: Mark[]) =>
+        marks.reduce((sum, [_, value]) => sum + (parseInt(`${value}`) || 0), 0)
 </script>
 
 <Drawer.Root onClose={close} bind:open={isOpen}>
@@ -42,11 +44,14 @@
                 >
             </Drawer.Header>
             {#snippet content(attendance: Attestation["attendance"])}
-                <div>
+                <div class="grid gap-2">
                     {#each attendance as { marks, type }}
                         <div>
                             <p class="px-4">{type}</p>
-                            <Marks class="px-4 py-2" {marks} />
+                            <p class="px-4">
+                                {_("sum")}: <b>{getSum(marks)}</b>
+                            </p>
+                            <Marks class="px-4 pb-2" {marks} />
                         </div>
                     {/each}
                 </div>
@@ -54,7 +59,7 @@
             {#if groups.size > 1}
                 <Tabs.Root value={activeTab}>
                     {#each groups as [key, value]}
-                        <Tabs.Content value={key}>
+                        <Tabs.Content class="mt-0" value={key}>
                             {@render content(value)}
                         </Tabs.Content>
                     {/each}
