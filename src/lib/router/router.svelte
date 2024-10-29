@@ -10,6 +10,7 @@
     import { HistoryRouter, ItemRouter } from "./router.svelte.ts"
     import type { Router } from "./@types.ts"
     import { useApp } from "../../app.svelte"
+    import { sleep } from "$lib/utils.ts"
     let {
         children, home="/", drawer, navigation
     }: {
@@ -24,19 +25,6 @@
     app.router = router
     router.app = app
     setContext(ROUTER_KEY, router)
-
-    $inspect(router.history).with((type, value) => {
-        console.log("history", type, '[',value.map(({path, query, fragment}) => {
-            if (query) {
-                path += `?${query}`
-            }
-            if (fragment) {
-                path += `#${fragment}`
-            }
-            return path
-        }).join(", "), ']');
-    })
-
 
     const links: (event: any) => void = (event: PointerEvent) => {
         const anchor = findClosest<HTMLAnchorElement>("A", event.target as any)
@@ -73,18 +61,17 @@
     }
 
     const scrollToLastPage = () => {
-        const children = Array.from(router.element?.children ?? [])
-        const pages = children.filter(element => !element.classList.contains("fixed"))
-        const page = pages[pages.length - 1]
+        if (!drawer) return
+        const pages = router.element?.querySelectorAll(".page") ?? []
+        const page = pages[pages.length - 1] as HTMLElement
 
         if (!page) return
+        if (page.dataset.page) return
         const {x} = page.getBoundingClientRect()
-
         if (x <= 0) {
-            tick().then(scrollToLastPage)
+            sleep(1).then(scrollToLastPage)
             return
         }
-
         router.element?.scrollTo({
             left: x,
             behavior: "instant"

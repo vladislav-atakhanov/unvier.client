@@ -60,7 +60,6 @@
     ])
 
     const scrollTo = (factor: string) => () => {
-        console.log("schedule");
         const week = document.getElementById(factor)
         week?.scrollIntoView({
             behavior: "smooth",
