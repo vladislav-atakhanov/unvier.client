@@ -30,16 +30,11 @@
     )}
     style:padding-bottom="{app.navigationHeight ?? 0}px"
     style:scroll-padding-block="{headerHeight}px"
-    style:padding-top="{headerHeight}px"
     data-vaul-drawer-wrapper
     {...props}
 >
     {#if header}
-        {#if headerClass.split(" ").includes("fixed")}
-            <div class={cn("sticky left-0 w-screen top-0", headerClass)} bind:clientHeight={headerHeight}>{@render header()}</div>
-        {:else}
-            <div class={cn("sticky left-0 w-screen top-0", headerClass)}>{@render header()}</div>
-        {/if}
+        <div class={cn("sticky left-0 w-screen top-0", headerClass)} bind:clientHeight={headerHeight}>{@render header()}</div>
     {/if}
     {@render children?.()}
 </div>

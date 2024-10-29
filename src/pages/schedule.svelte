@@ -79,6 +79,9 @@
             if (x < min || x > max) return
             const percent = (x - min) / (max - min)
             indicator.style.transform = `translateX(${percent * 100}%)`
+            const header = document.querySelector(".schedule__header")
+            if (!header) return
+            (header as HTMLElement).style.transform = `translateX(${percent * 100}%)`
         }))
     })
 
@@ -145,7 +148,7 @@
         {/if}
     </Page>
 {:else}
-    <Page class="basis-[200vw]" headerClass="fixed">
+    <Page class="basis-[200vw]" headerClass="schedule__header">
         {#snippet header()}
             <AppBar {title} {right}>
                 {#snippet bottom()}
