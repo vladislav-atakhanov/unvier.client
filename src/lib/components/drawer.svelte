@@ -3,7 +3,7 @@
     import { Button } from "./ui/button"
     import { Separator } from "./ui/separator"
     import { _ } from "$lib/i18n"
-    import { BookA, CalendarDays, Calculator, FileText, ListCheck, CircleUserRound, Settings, CircleHelp } from "lucide-svelte"
+    import { BookA, CalendarDays, Calculator, FileText, ListCheck, CircleUserRound, Settings, CircleHelp, Menu, X } from "lucide-svelte"
     import { hostMatches, useRouter } from "$lib/router"
     import { useApp } from "../../app.svelte"
     import { useApi } from "$api"
@@ -34,38 +34,47 @@
 </Button>
 {/snippet}
 
-<aside class="h-screen overflow-y-auto relative max-w-xs bg-background z-10" bind:this={app.drawer}>
-    <div class="justify-start w-full p-4 h-48 grid items-end gap-2">
-        {#if transcript.state === "ready" && transcript.data}
-            {@const {fullname, education_program} = transcript.data}
-            <div>
-                <p class="font-bold">{fullname}</p>
-                <p class="text-sm">{education_program}</p>
-            </div>
+<div class="relative z-10">
+    <Button size="icon" variant="ghost" class="absolute m-2 left-full" onclick={() => app.toggleDrawer()}>
+        {#if app.drawerState === "close"}
+            <Menu />
         {:else}
-            <Loader />
+            <X />
         {/if}
-    </div>
-    <Separator />
-    <div class="grid gap-1 p-4">
-        {@render Item(routes.schedule, _("schedule"), CalendarDays)}
-        {@render Item(routes.attestation, _("attestation"), BookA)}
-        {@render Item(routes.calculator, _("calculator"), Calculator)}
-        {@render Item(routes.files, _("umkd"), FileText)}
-        {@render Item(routes.exams, _("exams"), ListCheck)}
-        {@render Item(routes.profile, _("profile"), CircleUserRound)}
-    </div>
-    <Separator />
-    <div class="grid gap-1 p-4">
-        {@render Item(routes.telegram, "Telegram", Telegram)}
-        {@render Item(routes.settings, _("settings"), Settings)}
-        {@render Item(routes.faq, _("faq"), CircleHelp)}
-    </div>
-    <Separator
-        orientation="vertical"
-        class="absolute right-0 z-1 h-full top-0"
-    />
-</aside>
+    </Button>
+    <aside class="h-screen overflow-y-auto max-w-xs bg-background" bind:this={app.drawer}>
+        <div class="justify-start w-full p-4 h-48 grid items-end gap-2">
+            {#if transcript.state === "ready" && transcript.data}
+                {@const {fullname, education_program} = transcript.data}
+                <div>
+                    <p class="font-bold">{fullname}</p>
+                    <p class="text-sm">{education_program}</p>
+                </div>
+            {:else}
+                <Loader />
+            {/if}
+        </div>
+        <Separator />
+        <div class="grid gap-1 p-4">
+            {@render Item(routes.schedule, _("schedule"), CalendarDays)}
+            {@render Item(routes.attestation, _("attestation"), BookA)}
+            {@render Item(routes.calculator, _("calculator"), Calculator)}
+            {@render Item(routes.files, _("umkd"), FileText)}
+            {@render Item(routes.exams, _("exams"), ListCheck)}
+            {@render Item(routes.profile, _("profile"), CircleUserRound)}
+        </div>
+        <Separator />
+        <div class="grid gap-1 p-4">
+            {@render Item(routes.telegram, "Telegram", Telegram)}
+            {@render Item(routes.settings, _("settings"), Settings)}
+            {@render Item(routes.faq, _("faq"), CircleHelp)}
+        </div>
+        <Separator
+            orientation="vertical"
+            class="absolute right-0 z-1 h-full top-0"
+        />
+    </aside>
+</div>
 
 <style>
     aside {
