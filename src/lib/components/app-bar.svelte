@@ -13,8 +13,9 @@
     let element: HTMLElement
     $effect(() => {
         const page = element.closest(".page")
+        if (!page) return
         const pages = page?.parentElement?.querySelectorAll(".page") ?? []
-        const index = Array.from(pages).findIndex((p) => p === page)
+        const index = Array.from(pages as HTMLElement[]).findIndex((p) => p === page)
         canBack = index !== 0
     })
 
@@ -36,13 +37,13 @@
                     <ArrowLeft />
                 </Button>
             {:else if app.drawer}
-            <Button size="icon" variant="ghost" onclick={() => app.toggleDrawer()}>
-                {#if app.drawerState === "close"}
-                    <Menu />
-                {:else}
-                    <X />
-                {/if}
-            </Button>
+                <Button size="icon" variant="ghost" onclick={() => app.toggleDrawer()}>
+                    {#if app.drawerState === "close"}
+                        <Menu />
+                    {:else}
+                        <X />
+                    {/if}
+                </Button>
             {/if}
             {@render left?.()}
         </div>
