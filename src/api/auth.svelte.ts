@@ -1,8 +1,9 @@
 import { _, i18n } from "$lib/i18n"
+import { sleep } from "$lib/utils"
 import { api } from "./config"
 import { HTTPError, Unauthorized } from "./errors"
 import { secureStorage } from "./secure-storage"
-import { singleFetch, sleep } from "./utils"
+import { singleFetch } from "./utils"
 
 interface User {
     username: string

@@ -22,4 +22,3 @@ export const singleFetch = <T>(
     singleCache.set(url, promise)
     return promise as _Promise<T>
 }
-export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
