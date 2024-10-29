@@ -149,8 +149,8 @@
         {#snippet header()}
             <AppBar {title} {right}>
                 {#snippet bottom()}
-                    <div class="flex relative">
-                        <div bind:this={indicator} class="w-1/{factors.length} bg-primary rounded absolute top-0 bottom-0 opacity-15"></div>
+                    <div class="flex relative mt-2">
+                        <div bind:this={indicator} style:width="{100 / factors.length}%" class="bg-primary rounded absolute -top-1 -bottom-1 opacity-15"></div>
                         {#each factors as {title, value}}
                             <button class="flex-1 z-10" onclick={scrollTo(`factor-${value}`)}>
                                 {#if value === query.data?.factor}
