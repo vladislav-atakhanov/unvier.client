@@ -12,7 +12,7 @@
     import Page from "$lib/layouts/page.svelte"
     import { useRouter } from "$lib/router"
     import { nullish } from "$lib/utils"
-    import { onMount } from "svelte"
+    import { onMount, tick, type ComponentProps, type Snippet } from "svelte"
 
     const router = useRouter()
     const api = useApi()
@@ -60,6 +60,7 @@
     ])
 
     const scrollTo = (factor: string) => () => {
+        console.log("schedule");
         const week = document.getElementById(factor)
         week?.scrollIntoView({
             behavior: "smooth",
@@ -67,25 +68,41 @@
             block: "start"
         })
     }
+
+    const updateIndicatorPosition = (x: number, min: number, max: number) => {
+        if (x < min || x > max) return
+        const percent = (x - min) / (max - min)
+        indicator.style.transform = `translateX(${percent * 100}%)`
+    }
+    const updateHeaderPosition = (x: number, min: number, max: number) => {
+        if (x < min) return header.style.transform = `translateX(${min-x}px)`
+        if (x > max) return header.style.transform = `translateX(${max-x}px)`
+        header.style.transform = "none"
+    }
+
     let isSingle = $derived(query.data?.factor === null)
     $effect(() => {
         if (isSingle) return
         onMount(() => router.addOnScroll(({x}) => {
-            if (!indicator) return
+            if (!indicator) return [0, 0]
             const positions = factors.map(({value}) => document.getElementById(`factor-${value}`)?.offsetLeft).filter(x => !nullish(x))
-            if (positions.length < 1) return
+            if (positions.length < 1) return [0, 0]
             const min = Math.min(...positions)
             const max = Math.max(...positions)
-            if (x < min || x > max) return
-            const percent = (x - min) / (max - min)
-            indicator.style.transform = `translateX(${percent * 100}%)`
-            const header = document.querySelector(".schedule__header")
-            if (!header) return
-            (header as HTMLElement).style.transform = `translateX(${percent * 100}%)`
+
+            updateIndicatorPosition(x, min, max)
+            updateHeaderPosition(x, min, max)
         }))
+    })
+    $effect(() => {
+        if (!isSingle && query.data) {
+            tick().then(scrollTo(`factor-${query.data.factor}`))
+        }
     })
 
     let indicator: HTMLElement
+    let header: HTMLElement
+    let headerHeight = $state(0)
 
 </script>
 
@@ -100,99 +117,91 @@
     <p>{query.data?.week}</p>
 {/snippet}
 
-{#snippet week(getLessons: (day: number) => Lesson[], active: (day: number) => boolean, id?: string)}
-    <div class="space-y-4 p-4 week" {id}>
-        {#each DAYS as weekday, day}
-            {@const lessons = getLessons(day)}
-            <Card title={weekday} active={active(day)}>
-                {#each lessons as { subject, time, audience, teacher, teacher_link, id }, index (id)}
-                    <section class="lesson">
-                        <div class="flex content-between gap-4">
-                            <h3>{subject}</h3>
-                            <p class="whitespace-nowrap">{time}</p>
-                        </div>
-                        <p class="font-bold">{audience}</p>
-                        <p><TeacherLink {teacher} {teacher_link} /></p>
-                    </section>
-                    {#if index !== lessons.length - 1}
-                        <Separator class="my-2" />
-                    {/if}
-                {:else}
-                    <p>{_("schedule.no-lessons")}</p>
-                {/each}
-            </Card>
-        {/each}
-    </div>
+{#snippet week({getLessons, active, header, ...props}: {
+    getLessons: (day: number) => Lesson[],
+    active: (day: number) => boolean,
+    header?: Snippet
+} & ComponentProps<typeof Page>)}
+    <Page {header} {...props}>
+        <div class="mx-auto p-4 max-w-md space-y-4" style:padding-top="calc(1rem + {headerHeight}px)">
+            {#each DAYS as weekday, day}
+                {@const lessons = getLessons(day)}
+                <Card title={weekday} active={active(day)}>
+                    {#each lessons as { subject, time, audience, teacher, teacher_link, id }, index (id)}
+                        <section class="lesson">
+                            <div class="flex content-between gap-4">
+                                <h3>{subject}</h3>
+                                <p class="whitespace-nowrap">{time}</p>
+                            </div>
+                            <p class="font-bold">{audience}</p>
+                            <p><TeacherLink {teacher} {teacher_link} /></p>
+                        </section>
+                        {#if index !== lessons.length - 1}
+                            <Separator class="my-2" />
+                        {/if}
+                    {:else}
+                        <p>{_("schedule.no-lessons")}</p>
+                    {/each}
+                </Card>
+            {/each}
+        </div>
+    </Page>
 {/snippet}
 
-{#if isSingle}
-    <Page>
-        {#snippet header()}
-            <AppBar {title} {right} />
-        {/snippet}
-        {#if query.state === "load"}
-            <Loader class="p-4" />
-        {:else if !nullish(query.data)}
-            {#if query.data.lessons.length === 0}
-                <p class="p-4">{_("no-data")}</p>
-            {:else}
-                {@render week(
-                    (day) => getLessonsByDay(
-                        query?.data,
-                        null,
-                        day,
-                    ),
-                    (day) => isActiveDay(day, true)
-                )}
-            {/if}
-        {/if}
-    </Page>
+{#if nullish(query.data)}
+<Page data-page="schedule">
+    {#snippet header()}
+        <AppBar title={_("schedule")} />
+    {/snippet}
+    <div class="mx-auto p-4 max-w-md">
+        <Loader class="p-4" />
+    </div>
+</Page>
+{:else if isSingle}
+    {#snippet header()}
+        <AppBar {title} {right} />
+    {/snippet}
+    {@render week({
+        getLessons: (day) => getLessonsByDay(
+            query?.data,
+            null,
+            day,
+        ),
+        active: (day) => isActiveDay(day, true),
+        header
+    })}
 {:else}
-    <Page class="basis-[200vw]" headerClass="schedule__header">
-        {#snippet header()}
-            <AppBar {title} {right}>
-                {#snippet bottom()}
-                    <div class="flex relative mt-2">
-                        <div bind:this={indicator} style:width="{100 / factors.length}%" class="bg-primary rounded absolute -top-1 -bottom-1 opacity-15"></div>
-                        {#each factors as {title, value}}
-                            <button class="flex-1 z-10" onclick={scrollTo(`factor-${value}`)}>
-                                {#if value === query.data?.factor}
-                                    <span class="opacity-50">{_("schedule.current")}</span>
-                                {/if}
-                                {title}
-                            </button>
-                        {/each}
-                    </div>
-                {/snippet}
-            </AppBar>
-        {/snippet}
-        {#if query.state === "load"}
-            <Loader class="p-4" />
-        {:else if !nullish(query.data)}
-            {#if query.data.lessons.length === 0}
-                <p class="p-4">{_("no-data")}</p>
-            {:else}
-                <div class="grid mx-auto justify-center items-start grid-cols-2">
-                    {#each factors as {value}}
-                        {@render week(
-                            (day) => getLessonsByDay(
-                                query?.data,
-                                value,
-                                day,
-                            ),
-                            (day) => isActiveDay(day, value === query.data?.factor),
-                            `factor-${value}`
-                        )}
+    <div class="fixed top-0 left-0 w-full" bind:clientHeight={headerHeight} bind:this={header}>
+        <AppBar {title} {right}>
+            {#snippet bottom()}
+                <div class="flex relative mt-2 mx-auto max-w-sm">
+                    {#each factors as {title, value}}
+                        <button class="flex-1" onclick={scrollTo(`factor-${value}`)}>
+                            {#if value === query.data?.factor}
+                                <span class="opacity-50">{_("schedule.current")}</span>
+                            {/if}
+                            {title}
+                        </button>
                     {/each}
+                    <div
+                        class="bg-white mix-blend-difference rounded absolute -top-1 -bottom-1 z-10"
+                        bind:this={indicator}
+                        style:width="{100 / factors.length}%"
+                    ></div>
                 </div>
-            {/if}
-        {/if}
-    </Page>
+            {/snippet}
+        </AppBar>
+    </div>
+    {#each factors as {value}}
+        {@render week({
+            getLessons: (day) => getLessonsByDay(
+                query?.data,
+                value,
+                day,
+            ),
+            active: (day) => isActiveDay(day, value === query.data?.factor),
+            id: `factor-${value}`,
+            "data-page": "schedule"
+        })}
+    {/each}
 {/if}
-
-<style>
-    .week {
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-    }
-</style>
