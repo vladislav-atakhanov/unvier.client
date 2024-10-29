@@ -72,18 +72,26 @@
         router.onscroll()
     }
 
-    onMount(() => tick().then(() => {
+    const scrollToLastPage = () => {
         const children = Array.from(router.element?.children ?? [])
         const pages = children.filter(element => !element.classList.contains("fixed"))
         const page = pages[pages.length - 1]
 
         if (!page) return
         const {x} = page.getBoundingClientRect()
+
+        if (x <= 0) {
+            tick().then(scrollToLastPage)
+            return
+        }
+
         router.element?.scrollTo({
             left: x,
             behavior: "instant"
         })
-    }))
+    }
+
+    onMount(() => tick().then(scrollToLastPage))
 
 
 </script>
