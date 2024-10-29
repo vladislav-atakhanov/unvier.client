@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Mark } from "$api"
-    import { i18n } from "$lib/i18n"
+    import { i18n, _ } from "$lib/i18n"
 
     let { marks, class: class_ = "" }: { marks: Mark[]; class?: string } =
         $props()
@@ -30,14 +30,14 @@
     <table>
         <tbody>
             <tr>
-                <th>Месяц</th>
+                <th>{_("day")}</th>
                 {#each months as { month, values }}
                     <td colspan={values.length} class="text-primary">{month}</td
                     >
                 {/each}
             </tr>
             <tr>
-                <th>День</th>
+                <th>{_("month")}</th>
                 {#each months as { values }}
                     {#each values as { day }}
                         <td class="text-muted-foreground">{day}</td>
@@ -45,7 +45,7 @@
                 {/each}
             </tr>
             <tr>
-                <th>Оценка</th>
+                <th>{_("grade")}</th>
                 {#each months as { values }}
                     {#each values as { value }}
                         <td>{value}</td>

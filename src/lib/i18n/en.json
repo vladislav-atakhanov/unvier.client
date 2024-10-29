@@ -65,5 +65,8 @@
     "cancel": "Cancel",
     "logout.sure": "Do you really want to logout?",
     "logout.message": "All data except settings will be deleted.",
-    "faq": "Help"
+    "faq": "Help",
+    "day": "Day",
+    "month": "Month",
+    "grade": "Grade"
 }
