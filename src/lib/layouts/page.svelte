@@ -19,7 +19,7 @@
 </script>
 
 <div
-    class="page h-screen overflow-y-auto {class_} w-screen overflow-x-hidden"
+    class="page h-screen overflow-y-auto {class_} w-screen overflow-x-hidden bg-background"
     style:padding-bottom="{app.navigationHeight ?? 0}px"
     data-vaul-drawer-wrapper
     {...props}
