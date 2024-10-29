@@ -148,7 +148,7 @@
 {/snippet}
 
 {#if nullish(query.data)}
-<Page data-page="schedule">
+<Page>
     {#snippet header()}
         <AppBar title={_("schedule")} />
     {/snippet}
