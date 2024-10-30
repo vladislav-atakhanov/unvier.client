@@ -33,6 +33,10 @@
     )
     const getSum = (marks: Mark[]) =>
         marks.reduce((sum, [_, value]) => sum + (parseInt(`${value}`) || 0), 0)
+
+    $effect(() => {
+        document.body.classList.toggle("overscroll-contain", isOpen)
+    })
 </script>
 
 <Drawer.Root onClose={close} bind:open={isOpen}>
