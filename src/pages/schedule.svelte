@@ -113,7 +113,7 @@
     {/if}
 {/snippet}
 {#snippet right()}
-    <p>{query.data?.week}</p>
+    <Button variant="ghost" size="icon" class="pointer-events-none">{query.data?.week}</Button>
 {/snippet}
 
 {#snippet week({getLessons, active, header, ...props}: {
