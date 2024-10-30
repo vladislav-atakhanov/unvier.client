@@ -9,6 +9,7 @@
     import { useApi } from "$api"
     import Loader from "$lib/components/loader.svelte"
     import Telegram from "$lib/icons/telegram.svelte"
+    import { onMount } from "svelte"
 
     type IconComponent = typeof BookA | typeof Telegram
     const router = useRouter()
@@ -16,6 +17,11 @@
     const api = useApi()
 
     const transcript = api.fetchTranscript()
+
+    onMount(() => router.addOnScroll(({x}) => {
+        const drawerWidth = app.drawer?.clientWidth ?? 0
+        app.drawerState = x < drawerWidth / 2 ? "open" : "close"
+    }))
 </script>
 
 {#snippet Item(path: string, label: string, Icon: IconComponent)}
