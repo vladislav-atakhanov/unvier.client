@@ -12,7 +12,7 @@
     import type { Attestation, Mark } from "$api"
     import Attendance from "$lib/components/attendance.svelte"
 
-    let wish_ = "70"
+    let wish_ = $state("70")
     let wish = $derived(parseFloat(wish_.replaceAll(",", ".")))
 
     const isExam = (index: number, count: number) => index === count - 1
@@ -85,6 +85,12 @@
                 {:else}
                     {_("attestation")}
                 {/if}
+            {/snippet}
+            {#snippet bottom()}
+                <label class="block mx-auto px-4 max-w-md">
+                    {_("attestation.wish")}
+                    <input type="text" inputmode="numeric" bind:value={wish_} class="bg-transparent text-foreground text-center w-10 border-b">
+                </label>
             {/snippet}
             {#snippet right()}
                 <Button size="icon" href={routes.calculator} variant="ghost">
