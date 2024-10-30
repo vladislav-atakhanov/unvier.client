@@ -1,7 +1,9 @@
 <script lang="ts">
     import { Separator } from "$lib/components/ui/separator"
+    import { cn } from "$lib/utils"
     import type { Snippet } from "svelte"
     import type { HTMLAnchorAttributes } from "svelte/elements"
+
 
     let {
         active = false,
@@ -10,13 +12,15 @@
         class: class_ = "",
         children,
         onclick,
+        separator,
         ...props
     }: {
         active?: boolean
         href?: string
-        title: string
+        title: Snippet | string,
         class?: string
         children?: Snippet
+        separator?: Snippet
         onclick?: () => unknown
     } & HTMLAnchorAttributes = $props()
 
@@ -29,16 +33,26 @@
 <svelte:element
     this={tag}
     {href}
-    class="p-2 border rounded block border-border {class_} text-left"
+    class={cn("p-2 border rounded block border-border text-left", class_)}
     class:transition-all={href || active || onclick}
     class:hover:bg-border={href || onclick}
     class:active
     {onclick}
     {...props}
 >
-    <h2>{title}</h2>
+    <h2>
+        {#if typeof title === "function"}
+            {@render title()}
+        {:else}
+            {title}
+        {/if}
+    </h2>
     {#if hasSlot}
-        <Separator class="my-2" />
+        {#if separator}
+            {@render separator()}
+        {:else}
+            <Separator class="my-2" />
+        {/if}
     {/if}
     {@render children?.()}
 </svelte:element>
