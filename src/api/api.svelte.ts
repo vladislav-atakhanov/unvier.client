@@ -23,11 +23,15 @@ import type {
     File,
     Attestation,
     Schedule,
+    Note,
 } from "./@types.ts"
+
+type Notes = { _list: Record<string, Note> }
 
 export class Api {
     version = new Version("Ps9Oynpy")
     #queries = new Map<string, Query<any>>()
+    notes = $state<Notes["_list"]>({})
     constructor(private app: App) {
         $effect(() => {
             i18n.language
@@ -35,9 +39,31 @@ export class Api {
                 q.update()
             })
         })
+        $effect(() => {
+            this.notes = this.#getNotesFromLocalStorage()._list
+        })
     }
     url(...args: Parameters<typeof api>) {
         return api(...args)
+    }
+    setNote(id: string, text: string) {
+        const notes = this.#getNotesFromLocalStorage()
+        if (text.length > 0) {
+            notes._list[id] = {
+                text: text.trim(),
+                date: Date.now(),
+                id,
+            }
+        } else {
+            delete notes._list[id]
+        }
+        localStorage.setItem("notes", JSON.stringify(notes))
+        this.notes = notes._list
+    }
+    #getNotesFromLocalStorage() {
+        const local = localStorage.getItem("notes")
+        if (!local) return { _list: {} } as Notes
+        return JSON.parse(local) as Notes
     }
     fetchAttestation() {
         return this.#languageQuery(

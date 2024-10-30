@@ -75,3 +75,9 @@ export type Schedule = {
     factor: boolean | null
     week: number
 }
+
+export type Note = {
+    text: string
+    date: number
+    id: string
+}

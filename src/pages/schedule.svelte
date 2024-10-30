@@ -4,15 +4,15 @@
     import Loader from "$lib/components/loader.svelte"
     import TeacherLink from "$lib/components/teacher-link.svelte"
     import Button from "$lib/components/ui/button/button.svelte"
+    import * as Hold from "$lib/components/ui/hold"
     import { Card } from "$lib/components/ui/card"
     import Separator from "$lib/components/ui/separator/separator.svelte"
-
-
     import { _, i18n } from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
     import { useRouter } from "$lib/router"
     import { nullish } from "$lib/utils"
     import { onMount, tick, type ComponentProps, type Snippet } from "svelte"
+    import Note from "$lib/components/note.svelte"
 
     const router = useRouter()
     const api = useApi()
@@ -103,6 +103,24 @@
     let header: HTMLElement
     let headerHeight = $state(0)
 
+    let selectedLesson = $state<string>()
+    const openNote = async ({id, subject}: Lesson) => {
+        selectedLesson = id
+        const text = await note.open(api.notes[id]?.text ?? "", subject)
+        api.setNote(id, text)
+        selectedLesson = undefined
+    }
+
+    let note: typeof Note
+
+    const getNotePreview = (id: string) => {
+        const note = api.notes[id]?.text ?? ""
+        const lines = note.split("\n")
+        let text = lines[0] || ""
+        if (lines.length > 1) text += "..."
+        return text
+    }
+
 </script>
 
 {#snippet title()}
@@ -116,6 +134,11 @@
     <Button variant="ghost" size="icon" class="pointer-events-none">{query.data?.week}</Button>
 {/snippet}
 
+
+{#snippet separator()}
+    <div class="px-2"><Separator /></div>
+{/snippet}
+
 {#snippet week({getLessons, active, header, ...props}: {
     getLessons: (day: number) => Lesson[],
     active: (day: number) => boolean,
@@ -125,21 +148,36 @@
         <div class="mx-auto p-2 max-w-md space-y-2" style:padding-top="calc(.5rem + {headerHeight}px)">
             {#each DAYS as weekday, day}
                 {@const lessons = getLessons(day)}
-                <Card title={weekday} active={active(day)}>
-                    {#each lessons as { subject, time, audience, teacher, teacher_link, id }, index (id)}
-                        <section class="lesson">
+                {@const isActive = active(day)}
+                <Card active={isActive} class="p-0" {separator}>
+                    {#snippet title()}
+                        <span class="p-2 inline-block">{weekday}</span>
+                    {/snippet}
+
+                    {#each lessons as lesson, index (lesson.id)}
+                        {@const { subject, time, audience, teacher, teacher_link, id } = lesson}
+                        {@const note = getNotePreview(id)}
+                        <Hold.Root
+                            tag="section"
+                            class="p-2 {id === selectedLesson ? "bg-primary bg-opacity-10" : ""}"
+                            onhold={() => openNote(lesson)}
+                        >
                             <div class="flex content-between gap-4">
                                 <h3>{subject}</h3>
                                 <p class="whitespace-nowrap">{time}</p>
                             </div>
                             <p class="font-bold">{audience}</p>
                             <p><TeacherLink {teacher} {teacher_link} /></p>
-                        </section>
+                            {#if note.length > 0}
+                                <p class="opacity-60">{note}</p>
+                            {/if}
+                            <Hold.Bubble class={isActive ? "text-primary" : ""} />
+                        </Hold.Root>
                         {#if index !== lessons.length - 1}
-                            <Separator class="my-2" />
+                            {@render separator()}
                         {/if}
                     {:else}
-                        <p>{_("schedule.no-lessons")}</p>
+                        <p class="p-2">{_("schedule.no-lessons")}</p>
                     {/each}
                 </Card>
             {/each}
@@ -170,7 +208,7 @@
         header
     })}
 {:else}
-    <div class="fixed top-0 left-0 w-full" bind:clientHeight={headerHeight} bind:this={header}>
+    <div class="fixed top-0 left-0 w-full z-10" bind:clientHeight={headerHeight} bind:this={header}>
         <AppBar {title} {right}>
             {#snippet bottom()}
                 <div class="flex relative mt-2 mx-auto max-w-sm">
@@ -204,3 +242,4 @@
         })}
     {/each}
 {/if}
+<Note bind:this={note} />
