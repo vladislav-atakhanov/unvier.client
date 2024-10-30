@@ -122,7 +122,7 @@
     header?: Snippet
 } & ComponentProps<typeof Page>)}
     <Page {header} {...props}>
-        <div class="mx-auto p-4 max-w-md space-y-4" style:padding-top="calc(1rem + {headerHeight}px)">
+        <div class="mx-auto p-2 max-w-md space-y-2" style:padding-top="calc(.5rem + {headerHeight}px)">
             {#each DAYS as weekday, day}
                 {@const lessons = getLessons(day)}
                 <Card title={weekday} active={active(day)}>
@@ -152,8 +152,8 @@
     {#snippet header()}
         <AppBar title={_("schedule")} />
     {/snippet}
-    <div class="mx-auto p-4 max-w-md">
-        <Loader class="p-4" />
+    <div class="mx-auto p-2 max-w-md">
+        <Loader />
     </div>
 </Page>
 {:else if isSingle}

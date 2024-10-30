@@ -21,7 +21,7 @@
         <AppBar title={_("settings")} />
     {/snippet}
 
-    <div class="max-w-xl mx-auto px-4 py-8 grid gap-y-8">
+    <div class="max-w-xl mx-auto px-2 py-4 grid gap-y-8">
         <Label class="grid gap-2">
             {_("color-scheme")}
             <Radio.Root bind:value={colorScheme.value}>

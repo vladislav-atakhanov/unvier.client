@@ -26,7 +26,7 @@
         <AppBar title={title} />
     {/snippet}
 
-    <div class="content mx-auto p-4 max-w-3xl" bind:this={content}>
+    <div class="content mx-auto px-4 max-w-3xl" bind:this={content}>
         {#if query.loading}
             <Loader />
         {:else if query.data}

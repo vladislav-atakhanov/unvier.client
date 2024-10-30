@@ -26,7 +26,7 @@
         <AppBar title={_("profile")} />
     {/snippet}
 
-    <div class="grid grid-rows-auto-min mx-auto p-4 max-w-md w-full">
+    <div class="grid grid-rows-auto-min mx-auto px-2 py-4 max-w-md w-full">
         <div class="flex flex-col gap-4">
             {#if query.loading}
                 <Loader />

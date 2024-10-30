@@ -17,7 +17,7 @@
         <AppBar title={_("faq")} />
     {/snippet}
 
-    <div class="grid mx-auto py-4 px-2 gap-2 max-w-md">
+    <div class="grid mx-auto p-2 gap-2 max-w-md">
         {#if query.loading }
             <Loader />
         {:else if !nullish(query.data)}

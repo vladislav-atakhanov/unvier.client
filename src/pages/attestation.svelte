@@ -102,7 +102,7 @@
 
 
 
-    <div class="grid mx-auto p-4 gap-2 max-w-md">
+    <div class="grid mx-auto p-2 gap-2 max-w-md">
         {#if query.state === "load"}
             <Loader />
         {:else if !nullish(query.data)}
