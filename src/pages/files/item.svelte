@@ -1,11 +1,13 @@
 <script lang="ts">
-    import { useApi } from "$api"
+    import { subject, useApi } from "$api"
     import AppBar from "$lib/components/app-bar.svelte"
     import Loader from "$lib/components/loader.svelte"
     import TeacherLink from "$lib/components/teacher-link.svelte"
     import { Card } from "$lib/components/ui/card"
+    import { Skeleton } from "$lib/components/ui/skeleton"
     import { _, i18n } from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
+    import { nullish, randInt } from "$lib/utils"
     import { Download } from "lucide-svelte"
     import { toast } from "svelte-sonner"
 
@@ -33,9 +35,20 @@
     {/snippet}
 
     <div class="mx-auto p-2 max-w-md grid gap-2">
-        {#if query.loading}
-            <Loader />
-        {:else if query.data}
+        {#if nullish(query.data)}
+            {#each {length: 8} as _}
+                <Card>
+                    {#snippet title()}
+                        <Skeleton symbols={subject()} />
+                    {/snippet}
+                    <p><Skeleton symbols={randInt(10, 30)} /></p>
+                    <div><Skeleton symbols={randInt(15, 25)} /></div>
+                    <div class="flex justify-end">
+                        <Skeleton symbols={randInt(15, 30)} />
+                    </div>
+                </Card>
+            {/each}
+        {:else}
             {@const groups = Map.groupBy(query.data, ({teacher}) => teacher)}
             {#each groups as [key, files] (key)}
                 <TeacherLink {...files[0]} class="px-2" />

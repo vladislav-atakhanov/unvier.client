@@ -27,7 +27,7 @@
     {/snippet}
 
     <div class="grid mx-auto p-2 gap-2 max-w-md">
-        {#if query.state === "load" }
+        {#if nullish(query.data)}
             {#each {length: 6} as _}
                 <Card>
                     {#snippet title()}
@@ -38,7 +38,7 @@
                     </p>
                 </Card>
             {/each}
-        {:else if !nullish(query.data)}
+        {:else}
             {#each query.data as {id, subject, type} (id)}
                 <Card title={subject} href="{routes.files}/{id}">
                     <p class="opacity-70">{type}</p>
