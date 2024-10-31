@@ -5,8 +5,8 @@
     import { _ }from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
     import { routes } from "./url"
-    import { useApi } from "$api"
-    import { nullish, randInt } from "$lib/utils"
+    import { subject, useApi } from "$api"
+    import { nullish } from "$lib/utils"
     import { Card } from "$lib/components/ui/card"
     import type { Attestation, Mark } from "$api"
     import Attendance from "$lib/components/attendance.svelte"
@@ -107,7 +107,7 @@
             {#each {length: 7} as __}
                 <Card>
                     {#snippet title()}
-                        <Skeleton symbols={randInt(40, 80)} />
+                        <Skeleton symbols={subject()} />
                     {/snippet}
                     <ul class="flex gap-1 justify-between">
                         {#each {length: 4} as __}

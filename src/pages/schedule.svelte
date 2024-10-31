@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { useApi, type Lesson, type Schedule } from "$api"
+    import { useApi, subject, type Lesson, type Schedule, teacher } from "$api"
     import AppBar from "$lib/components/app-bar.svelte"
     import TeacherLink from "$lib/components/teacher-link.svelte"
     import Button from "$lib/components/ui/button/button.svelte"
@@ -202,11 +202,11 @@
                         class="p-2"
                     >
                         <div class="grid grid-cols-[1fr_max-content] gap-4">
-                            <h3><Skeleton symbols={randInt(40, 60)} /></h3>
+                            <h3><Skeleton symbols={subject()} /></h3>
                             <p class="whitespace-nowrap"><Skeleton symbols={10} /></p>
                         </div>
                         <p class="font-bold"><Skeleton symbols={5} /></p>
-                        <p><Skeleton symbols={randInt(20, 30)} class="bg-primary" /></p>
+                        <p><Skeleton symbols={teacher()} class="bg-primary" /></p>
                     </section>
                     {#if index !== lessons}
                         {@render separator()}

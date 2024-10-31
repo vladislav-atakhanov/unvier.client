@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { useApi } from "$api"
+    import { subject, useApi } from "$api"
     import AppBar from "$lib/components/app-bar.svelte"
-    import Loader from "$lib/components/loader.svelte"
     import Card from "$lib/components/ui/card"
+    import { Skeleton } from "$lib/components/ui/skeleton"
     import { _ }from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
-    import { nullish } from "$lib/utils"
+    import { nullish, randInt } from "$lib/utils"
     import { routes } from "../url"
 
 
@@ -28,7 +28,16 @@
 
     <div class="grid mx-auto p-2 gap-2 max-w-md">
         {#if query.state === "load" }
-            <Loader />
+            {#each {length: 6} as _}
+                <Card>
+                    {#snippet title()}
+                        <Skeleton symbols={subject()} />
+                    {/snippet}
+                    <p class="opacity-70">
+                        <Skeleton symbols={randInt(10, 20)} />
+                    </p>
+                </Card>
+            {/each}
         {:else if !nullish(query.data)}
             {#each query.data as {id, subject, type} (id)}
                 <Card title={subject} href="{routes.files}/{id}">

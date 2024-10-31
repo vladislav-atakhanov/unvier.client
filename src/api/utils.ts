@@ -1,3 +1,5 @@
+import { randInt } from "$lib/utils"
+
 const singleCache = new Map<string | URL, Promise<unknown>>()
 
 type _Promise<T> = Promise<[T | null, number]>
@@ -22,3 +24,6 @@ export const singleFetch = <T>(
     singleCache.set(url, promise)
     return promise as _Promise<T>
 }
+
+export const subject = () => randInt(40, 80)
+export const teacher = () => randInt(20, 30)
