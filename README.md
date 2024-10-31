@@ -1,10 +1,10 @@
-[![Univer - расписание, оценки, УМКД](public/images/banner.png)](https://app.kstu.kz)
+[![Univer - расписание, оценки, УМКД](public/images/banner.png)](https://univer.eloh1m.com)
 
 # Univer
 
 Веб-приложение для просмотра оценок, расписания занятий и экзаменов, и другой  информации о студенте.
 
-Приложение доступно по ссылке — [app.kstu.kz](https://app.kstu.kz)
+Приложение доступно по ссылке — [univer.eloh1m.com](https://univer.eloh1m.com)
 
 ## Возможности
 
@@ -25,7 +25,7 @@
 
 ![Светлая тема](https://eloh1m.com/assets/univer/mobile-light.png)
 
-![Успеваемость](images/screens/desktop/attendance.jpg)
+![Успеваемость](public/images/screens/desktop/attendance.jpg)
 
 ![Тёмная тема](https://eloh1m.com/assets/univer/mobile-dark.png)
 
