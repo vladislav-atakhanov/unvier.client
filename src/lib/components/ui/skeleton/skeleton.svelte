@@ -11,7 +11,7 @@
 
 <div
     class={cn(
-        "bg-muted animate-pulse rounded-md text-transparent pointer-events-none inline",
+        "bg-muted animate-pulse rounded-md text-transparent pointer-events-none inline select-none box-decoration-clone",
         { "bg-foreground bg-opacity-20": symbols > 0 },
         class_,
     )}
