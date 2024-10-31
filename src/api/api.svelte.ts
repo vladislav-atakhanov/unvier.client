@@ -28,6 +28,14 @@ import type {
 
 type Notes = { _list: Record<string, Note> }
 
+import { get, set, del } from "idb-keyval"
+
+type Storage<K = IDBValidKey> = {
+    get: <T>(key: K) => Promise<T | undefined>
+    set: <T>(key: K, value: T) => Promise<void>
+    del: (key: K) => Promise<void>
+}
+const storage: Storage = { get, set, del }
 export class Api {
     version = new Version("Ps9Oynpy")
     #queries = new Map<string, Query<any>>()
@@ -89,6 +97,7 @@ export class Api {
                 ),
             {
                 key: "attestation",
+                storage,
             }
         )
     }
@@ -97,6 +106,7 @@ export class Api {
             () => authFetch<Schedule>(api("/api/schedule")),
             {
                 key: "schedule",
+                storage,
             }
         )
     }
@@ -105,6 +115,7 @@ export class Api {
             () => authFetch<Transcript>(api("/api/transcript")),
             {
                 key: "transcript",
+                storage,
             }
         )
     }
@@ -146,6 +157,7 @@ export class Api {
                 ),
             {
                 key: "files",
+                storage,
             }
         )
     }
@@ -154,12 +166,14 @@ export class Api {
             () => authFetch<File[]>(api(`/api/umkd/${id}`)),
             {
                 key: `files-${id}`,
+                storage,
             }
         )
     }
     fetchExams() {
         return this.#languageQuery(() => authFetch<Exam[]>(api("/api/exams")), {
             key: "exams",
+            storage,
         })
     }
     login(...args: Parameters<typeof login>) {
@@ -173,12 +187,17 @@ export class Api {
     }
     #languageQuery<T>(
         fetch: (lang: Language) => Promise<T>,
-        { key }: { key: string }
+        { key, storage }: { key: string; storage?: Storage }
     ) {
         const cached = this.#queries.get(key)
         if (cached) return cached as Query<T>
         const query = new Query(() => fetch(i18n.language), {
-            onReject: (error) => this.#catch(error),
+            onReject: (error) => {
+                storage?.del(key)
+                this.#catch(error)
+            },
+            onResolve: (data) => storage?.set(key, data),
+            preload: () => storage?.get(key),
             get enabled() {
                 return i18n.language.length > 0
             },

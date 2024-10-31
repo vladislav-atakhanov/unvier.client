@@ -30,6 +30,7 @@
     "vite-plugin-pwa": "^0.20.5"
   },
   "dependencies": {
+    "idb-keyval": "^6.2.1",
     "secure-web-storage": "^1.0.2"
   }
 }
