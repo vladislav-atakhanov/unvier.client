@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { useApi } from "$api"
+    import { subject, teacher, useApi } from "$api"
     import AppBar from "$lib/components/app-bar.svelte"
-    import Loader from "$lib/components/loader.svelte"
     import TeacherLink from "$lib/components/teacher-link.svelte"
     import Card from "$lib/components/ui/card"
+    import { Skeleton } from "$lib/components/ui/skeleton"
     import { _, i18n } from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
-    import { nullish } from "$lib/utils"
+    import { nullish, randInt } from "$lib/utils"
     import { onMount } from "svelte"
 
 
@@ -88,7 +88,19 @@
         </AppBar>
     {/snippet}
     <div class="grid mx-auto p-2 gap-2 max-w-md">
-        {#if !nullish(query.data)}
+        {#if nullish(query.data)}
+            {#each {length: 6} as _}
+                <Card>
+                    {#snippet title()}
+                        <Skeleton symbols={randInt(40, 60)} />
+                    {/snippet}
+                    <p><Skeleton symbols={subject()} /></p>
+                    <p><Skeleton symbols={5} /></p>
+                    <p><Skeleton symbols={teacher()} class="bg-primary" /></p>
+                    <p class="text-right"><Skeleton symbols={randInt(5, 15)} /></p>
+                </Card>
+            {/each}
+        {:else}
             {#each query.data as {audience, date, subject, teacher, type, teacher_link}}
                 {@const delta = relativeTime(date, now)}
                 <Card title={getDate(date)} active={isActive(date, now)}>
@@ -110,8 +122,6 @@
             {:else}
                 {_("no-data")}
             {/each}
-        {:else}
-            <Loader />
         {/if}
 
     </div>
