@@ -12,14 +12,21 @@ export class HistoryRouter implements Router {
     app?: App
 
     element?: HTMLElement
+    isBrowserBack = false
     #scrollHandlers = new Set<ScrollHandler>()
     constructor(home: string) {
         this.navigate(home, { mode: "replace" })
 
         const self = this
-        const onpopstate = () => self.back()
+        const onpopstate = () => {
+            this.isBrowserBack = true
+            self.back()
+            setTimeout(() => (this.isBrowserBack = false), 1000)
+        }
         $effect(() => {
-            this.navigate(window.location.pathname, { mode: "replace" })
+            if (window.location.pathname !== "/") {
+                this.navigate(window.location.pathname, { mode: "replace" })
+            }
             window.addEventListener("popstate", onpopstate)
             return () => window.removeEventListener("popstate", onpopstate)
         })
@@ -35,7 +42,7 @@ export class HistoryRouter implements Router {
 
     #updateLocation(mode: "push" | "replace" | "back", path?: string) {
         if (mode === "back") {
-            window.history.back()
+            if (!this.isBrowserBack) window.history.back()
             return
         }
         const action = mode === "push" ? "pushState" : "replaceState"
