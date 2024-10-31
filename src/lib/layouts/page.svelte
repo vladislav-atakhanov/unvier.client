@@ -34,7 +34,7 @@
     {...props}
 >
     {#if header}
-        <div class={cn("sticky left-0 w-screen top-0", headerClass)} bind:clientHeight={headerHeight}>{@render header()}</div>
+        <div class={cn("sticky left-0 w-screen top-0 z-10", headerClass)} bind:clientHeight={headerHeight}>{@render header()}</div>
     {/if}
     {@render children?.()}
 </div>
