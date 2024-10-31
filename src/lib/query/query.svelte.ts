@@ -5,7 +5,7 @@ type Params<T> = {
     onReject?: (reason: unknown) => unknown
     onResolve?: (value: T) => unknown
     enabled?: boolean
-    preload?: () => Promise<T | undefined> | undefined
+    preload?: () => Promise<T | undefined>
 }
 
 export class Query<T> {
@@ -22,14 +22,19 @@ export class Query<T> {
     ) {
         this.promisify =
             typeof promisify === "function" ? promisify : () => promisify
-        params
-            .preload?.()
-            ?.then((data) => {
-                if (nullish(data)) return
-                this.data = data
-                this.hasData = true
-            })
-            .then(() => this.fetch())
+
+        if (params.preload) {
+            params
+                .preload()
+                .then((data) => {
+                    if (nullish(data)) return
+                    this.data = data
+                    this.hasData = true
+                })
+                .then(() => this.fetch())
+        } else {
+            this.fetch()
+        }
     }
     async fetch() {
         if (!this.params.enabled) return

@@ -197,7 +197,7 @@ export class Api {
                 this.#catch(error)
             },
             onResolve: (data) => storage?.set(key, data),
-            preload: () => storage?.get(key),
+            preload: storage ? () => storage?.get(key) : undefined,
             get enabled() {
                 return i18n.language.length > 0
             },
