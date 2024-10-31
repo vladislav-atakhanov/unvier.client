@@ -59,7 +59,7 @@
             {/snippet}
             {#if groups.size > 1}
                 <Tabs.Root class="overflow-y-auto" value={activeTab}>
-                    {#each groups as [key, value]}
+                    {#each groups.entries() as [key, value]}
                         <Tabs.Content class="mt-0" value={key}>
                             {@render content(value)}
                         </Tabs.Content>

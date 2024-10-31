@@ -50,7 +50,7 @@
             {/each}
         {:else}
             {@const groups = groupBy(query.data, ({teacher}) => teacher)}
-            {#each groups as [key, files] (key)}
+            {#each groups.entries() as [key, files] (key)}
                 <TeacherLink {...files[0]} class="px-2" />
                 {#each files as { date, description, downloads_count, language, name, size, type, url }}
                     <Card href={api.url(url)} title={name}>
