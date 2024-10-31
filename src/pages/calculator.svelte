@@ -88,6 +88,9 @@
     td {
         @apply p-0
     }
+    td:first-of-type {
+        @apply pr-2
+    }
     tr:not(:last-of-type) td {
         @apply pb-4
     }
