@@ -14,8 +14,15 @@ export class HistoryRouter implements Router {
     element?: HTMLElement
     #scrollHandlers = new Set<ScrollHandler>()
     constructor(home: string) {
-        this.history.push(this.#item(home))
-        this.path = home
+        this.navigate(home, { mode: "replace" })
+
+        const self = this
+        const onpopstate = () => self.back()
+        $effect(() => {
+            this.navigate(window.location.pathname, { mode: "replace" })
+            window.addEventListener("popstate", onpopstate)
+            return () => window.removeEventListener("popstate", onpopstate)
+        })
     }
 
     #item(path: string): HistoryItem {
@@ -26,15 +33,33 @@ export class HistoryRouter implements Router {
         }
     }
 
+    #updateLocation(mode: "push" | "replace" | "back", path?: string) {
+        if (mode === "back") {
+            window.history.back()
+            return
+        }
+        const action = mode === "push" ? "pushState" : "replaceState"
+        window.history[action](null, "", path)
+    }
+
     navigate(path: string, { mode = "push" } = {}) {
         tick().then(() => {
             if (mode === "replace") {
                 const history = [this.#item(path)]
-                if (this.history.length !== 1) this.history = history
-                if (this.history[0].path !== path) this.history = history
+                if (
+                    this.history.length !== 1 ||
+                    this.history[0].path !== path
+                ) {
+                    this.history = history
+                    this.#updateLocation("replace", path)
+                }
             } else {
-                if (this.history.findIndex(({ path: p }) => p === path) === -1)
+                if (
+                    this.history.findIndex(({ path: p }) => p === path) === -1
+                ) {
                     this.history.push(this.#item(path))
+                    this.#updateLocation("push", path)
+                }
             }
             this.path = path
             tick().then(() => {
@@ -72,6 +97,7 @@ export class HistoryRouter implements Router {
             this.path = path
             this.fragment = fragment
             this.query = query
+            this.#updateLocation("back")
         }
     }
     onscroll() {
