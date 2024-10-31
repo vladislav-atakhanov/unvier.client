@@ -22,7 +22,7 @@
         children?: Snippet
         separator?: Snippet
         onclick?: () => unknown
-    } & HTMLAnchorAttributes = $props()
+    } & Omit<HTMLAnchorAttributes, "title"> = $props()
 
     let hasSlot = $derived(typeof children === "function")
 
