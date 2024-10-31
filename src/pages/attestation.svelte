@@ -6,11 +6,11 @@
     import Page from "$lib/layouts/page.svelte"
     import { routes } from "./url"
     import { useApi } from "$api"
-    import Loader from "$lib/components/loader.svelte"
-    import { nullish } from "$lib/utils"
+    import { nullish, randInt } from "$lib/utils"
     import { Card } from "$lib/components/ui/card"
     import type { Attestation, Mark } from "$api"
     import Attendance from "$lib/components/attendance.svelte"
+    import { Skeleton } from "$lib/components/ui/skeleton"
 
     let wish_ = $state("70")
     let wish = $derived(parseFloat(wish_.replaceAll(",", ".")))
@@ -67,7 +67,7 @@
             ? _("calculator.part", index + 1)
             : _("calculator.exam")
 
-    const onclick = (value: Attestation["attendance"]) => () => {
+    const onclick = (value: Attestation) => () => {
         attendance?.open(value)
     }
     let attendance: any
@@ -104,17 +104,29 @@
 
     <div class="grid mx-auto p-2 gap-2 max-w-md">
         {#if query.state === "load"}
-            <Loader />
+            {#each {length: 7} as __}
+                <Card>
+                    {#snippet title()}
+                        <Skeleton symbols={randInt(40, 80)} />
+                    {/snippet}
+                    <ul class="flex gap-1 justify-between">
+                        {#each {length: 4} as __}
+                            <li class="grid">
+                                <p><Skeleton symbols={8} /></p>
+                                <p><Skeleton symbols={5} /></p>
+                            </li>
+                        {/each}
+                    </ul>
+                </Card>
+            {/each}
         {:else if !nullish(query.data)}
             {#snippet mark(v: {title: string, missing: number, active: boolean, value: any})}
             <li class="grid" class:text-primary={v.active}>
-                <p class="summary__label">
-                    <span class="summary__title"
-                        >{v.title}:</span
-                    >
+                <p>
+                    <span>{v.title}:</span>
                     <span class="font-bold">{v.value}</span>
                 </p>
-                <p class="summary__wish">(+{v.missing})</p>
+                <p>(+{v.missing})</p>
             </li>
             {/snippet}
 
@@ -137,11 +149,11 @@
                             })}
                         {/each}
                         <li class="grid">
-                            <p class="summary__label">
-                                <span class="summary__title">{_("total")}:</span>
+                            <p>
+                                <span>{_("total")}:</span>
                                 <span class="font-bold">{total}</span>
                             </p>
-                            <p class="summary__wish">(+{missingTotal})</p>
+                            <p>(+{missingTotal})</p>
                         </li>
                     </ul>
                 </Card>

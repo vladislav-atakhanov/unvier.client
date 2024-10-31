@@ -65,3 +65,6 @@ export const flyAndScale = (
 
 export const nullish = <T>(data: T | undefined | null): data is undefined =>
     data === undefined || data === null
+
+export const randInt = (min: number, max: number) =>
+    Math.floor(min + Math.random() * (max - min))

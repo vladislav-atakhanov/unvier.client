@@ -9,7 +9,7 @@
     import { _, i18n } from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
     import { useRouter } from "$lib/router"
-    import { nullish } from "$lib/utils"
+    import { nullish, randInt } from "$lib/utils"
     import { onMount, tick, type ComponentProps, type Snippet } from "svelte"
     import Note from "$lib/components/note.svelte"
     import { Skeleton } from "$lib/components/ui/skeleton"
@@ -120,10 +120,6 @@
         if (lines.length > 1) text += "..."
         return text
     }
-
-    const randInt = (min: number, max: number) =>
-        Math.floor(min + (Math.random() * (max - min)))
-
 </script>
 
 {#snippet title()}
