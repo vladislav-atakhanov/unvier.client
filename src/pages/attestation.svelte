@@ -40,21 +40,17 @@
 
 
     const getMissing = (marks: Mark[], wish: number) => {
-        const activeValues = marks.filter(([t, v, active]) => active).length
+        const activeValues = marks.filter(([,, active]) => active).length
 
-        const values = marks.map(([_, value, active]) => (active ? 0 : value))
+        const values = marks.map(([_, value, active]) => (active ? 0 : value)).filter(v => typeof v === "number")
         if (activeValues === 0) values[values.length - 1] = 0
-        return _get(values, wish).map((v, index) =>
-            Math.max(v - marks[index][1], 0)
-        )
+        return _get(values, wish).map((v, index) => {
+            const other = marks[index][1]
+            return Math.max(v - (typeof other === "number" ? other : 0), 0)
+        })
     }
 
-    const getTotal = (marks: number[], sum: number) => {
-        const fullSum = marks.reduce((acc, i) => acc + i)
-        const examValue = marks[marks.length - 1]
-        if (examValue !== 0 && examValue === sum) return sum
-        const sumWithoutExam = fullSum - examValue
-        if (sumWithoutExam === 0) return sum
+    const getTotal = (marks: number[]) => {
         return Math.floor(
             marks.reduce(
                 (t, mark, index) => t + mark * getWeight(index, marks.length),
@@ -103,7 +99,7 @@
 
 
     <div class="grid mx-auto p-2 gap-2 max-w-md">
-        {#if query.state === "load"}
+        {#if nullish(query.data)}
             {#each {length: 7} as __}
                 <Card>
                     {#snippet title()}
@@ -119,7 +115,7 @@
                     </ul>
                 </Card>
             {/each}
-        {:else if !nullish(query.data)}
+        {:else}
             {#snippet mark(v: {title: string, missing: number, active: boolean, value: any})}
             <li class="grid" class:text-primary={v.active}>
                 <p>
@@ -131,10 +127,9 @@
             {/snippet}
 
             {#each query.data as a (a.subject)}
-                {@const { subject, attestation, sum } = a}
+                {@const { subject, attestation } = a}
                 {@const total = getTotal(
                     attestation.map(([_, m]) => m).filter(m => typeof m === "number"),
-                    parseInt(`${sum[1]}`),
                 )}
                 {@const missing = getMissing(attestation, wish)}
                 {@const missingTotal = Math.max(wish - total, 0)}
@@ -157,7 +152,6 @@
                         </li>
                     </ul>
                 </Card>
-
             {:else}
                 {_("no-data")}
             {/each}
