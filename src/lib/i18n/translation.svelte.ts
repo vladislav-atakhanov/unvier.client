@@ -6,8 +6,9 @@ export const locales = { ru, kk, en }
 export type Language = keyof typeof locales
 type Locale = (typeof locales)[Language]
 
+const defaultLanguage = "ru"
 class Translation {
-    language = $state("" as Language)
+    language = $state<Language>(defaultLanguage)
 
     obj: Locale = $derived(locales[this.language])
     constructor(public translations: Record<string, Locale>) {}
@@ -17,8 +18,18 @@ class Translation {
         for (const param of params) result = result.replace("{}", `${param}`)
         return result
     }
+    #localStorageLanguage(): Language | undefined {
+        return localStorage.getItem("lang") as Language
+    }
+    #navigatorLanguage(): Language | undefined {
+        const language = navigator.language.split("-")[0].toLowerCase()
+        for (const key in locales) if (language == key) return key as Language
+    }
     apply(_: unknown) {
-        this.language = (localStorage.getItem("lang") as any) ?? "ru"
+        this.language =
+            this.#localStorageLanguage() ??
+            this.#navigatorLanguage() ??
+            defaultLanguage
         $effect(() => {
             localStorage.setItem("lang", this.language)
             document.documentElement.setAttribute("lang", this.language)
