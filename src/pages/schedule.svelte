@@ -237,7 +237,7 @@
             {#snippet bottom()}
                 <div class="flex relative mt-2 mx-auto max-w-sm">
                     {#each factors as {title, value}}
-                        <button class="flex-1" onclick={scrollTo(`factor-${value}`)}>
+                        <button class="flex-1 z-10" onclick={scrollTo(`factor-${value}`)}>
                             {#if value === query.data?.factor}
                                 <span class="opacity-50">{_("schedule.current")}</span>
                             {/if}
@@ -245,7 +245,7 @@
                         </button>
                     {/each}
                     <div
-                        class="bg-white mix-blend-difference rounded absolute -top-1 -bottom-1 z-10"
+                        class="bg-muted rounded absolute -top-1 -bottom-1"
                         bind:this={indicator}
                         style:width="{100 / factors.length}%"
                     ></div>
