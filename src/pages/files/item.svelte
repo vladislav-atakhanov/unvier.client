@@ -7,7 +7,7 @@
     import { Skeleton } from "$lib/components/ui/skeleton"
     import { _, i18n } from "$lib/i18n"
     import Page from "$lib/layouts/page.svelte"
-    import { nullish, randInt } from "$lib/utils"
+    import { groupBy, nullish, randInt } from "$lib/utils"
     import { Download } from "lucide-svelte"
     import { toast } from "svelte-sonner"
 
@@ -49,7 +49,7 @@
                 </Card>
             {/each}
         {:else}
-            {@const groups = Map.groupBy(query.data, ({teacher}) => teacher)}
+            {@const groups = groupBy(query.data, ({teacher}) => teacher)}
             {#each groups as [key, files] (key)}
                 <TeacherLink {...files[0]} class="px-2" />
                 {#each files as { date, description, downloads_count, language, name, size, type, url }}

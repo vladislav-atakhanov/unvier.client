@@ -5,6 +5,7 @@
     import { _ } from "$lib/i18n"
     import type { Attestation, Mark } from "$api"
     import Marks from "./marks.svelte"
+    import { groupBy } from "$lib/utils"
 
     let attestation = $state<Attestation>()
     let isOpen = $state(false)
@@ -17,7 +18,7 @@
     }
     let groups = $derived(
         attestation
-            ? Map.groupBy(
+            ? groupBy(
                   attestation.attendance,
                   ({ part }) => part.split("(")[0],
               )

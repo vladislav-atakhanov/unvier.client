@@ -68,3 +68,20 @@ export const nullish = <T>(data: T | undefined | null): data is undefined =>
 
 export const randInt = (min: number, max: number) =>
     Math.floor(min + Math.random() * (max - min))
+
+export const groupBy = <T, K>(
+    iterable: Iterable<T>,
+    keySelector: (item: T, index: number) => K
+) => {
+    if (Map && typeof Map.groupBy === "function")
+        return Map.groupBy(iterable, keySelector)
+
+    const map = new Map<K, T[]>()
+    let index = 0
+    for (const item of iterable) {
+        const key = keySelector(item, index++)
+        if (!map.has(key)) map.set(key, [item])
+        else map.get(key)?.push(item)
+    }
+    return map
+}

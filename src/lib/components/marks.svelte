@@ -1,12 +1,13 @@
 <script lang="ts">
     import type { Mark } from "$api"
     import { i18n, _ } from "$lib/i18n"
+    import { groupBy } from "$lib/utils"
 
     let { marks, class: class_ = "" }: { marks: Mark[]; class?: string } =
         $props()
 
     let months = $derived(
-        Array.from(Map.groupBy(marks, ([date]) => date.split(".")[1]).entries())
+        Array.from(groupBy(marks, ([date]) => date.split(".")[1]).entries())
             .sort(([a], [b]) => parseInt(a) - parseInt(b))
             .map(([month, marks]) => ({
                 month: dtf.format(new Date(1, parseInt(month) - 1, 1)),
