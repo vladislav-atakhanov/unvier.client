@@ -1,7 +1,6 @@
 <script lang="ts">
     import { useApi, type Lesson, type Schedule } from "$api"
     import AppBar from "$lib/components/app-bar.svelte"
-    import Loader from "$lib/components/loader.svelte"
     import TeacherLink from "$lib/components/teacher-link.svelte"
     import Button from "$lib/components/ui/button/button.svelte"
     import * as Hold from "$lib/components/ui/hold"
@@ -13,6 +12,7 @@
     import { nullish } from "$lib/utils"
     import { onMount, tick, type ComponentProps, type Snippet } from "svelte"
     import Note from "$lib/components/note.svelte"
+    import { Skeleton } from "$lib/components/ui/skeleton"
 
     const router = useRouter()
     const api = useApi()
@@ -121,6 +121,9 @@
         return text
     }
 
+    const randInt = (min: number, max: number) =>
+        Math.floor(min + (Math.random() * (max - min)))
+
 </script>
 
 {#snippet title()}
@@ -162,7 +165,7 @@
                             class="p-2 {id === selectedLesson ? "bg-primary bg-opacity-10" : ""}"
                             onhold={() => openNote(lesson)}
                         >
-                            <div class="flex content-between gap-4">
+                            <div class="flex justify-between gap-4">
                                 <h3>{subject}</h3>
                                 <p class="whitespace-nowrap">{time}</p>
                             </div>
@@ -190,8 +193,33 @@
     {#snippet header()}
         <AppBar title={_("schedule")} />
     {/snippet}
-    <div class="mx-auto p-2 max-w-md">
-        <Loader />
+    <div class="mx-auto p-2 max-w-md space-y-2">
+        {#each DAYS as weekday}
+            {@const lessons = randInt(2, 4)}
+            <Card class="p-0" {separator}>
+                {#snippet title()}
+                    <span class="p-2 inline-block">{weekday}</span>
+                {/snippet}
+
+                {#each {length: lessons} as _, index}
+                    <section
+                        class="p-2"
+                    >
+                        <div class="grid grid-cols-[1fr_max-content] gap-4">
+                            <h3><Skeleton symbols={randInt(40, 60)} /></h3>
+                            <p class="whitespace-nowrap"><Skeleton symbols={10} /></p>
+                        </div>
+                        <p class="font-bold"><Skeleton symbols={5} /></p>
+                        <p><Skeleton symbols={randInt(20, 30)} class="bg-primary" /></p>
+                    </section>
+                    {#if index !== lessons}
+                        {@render separator()}
+                    {/if}
+                {:else}
+                    <p class="p-2">{_("schedule.no-lessons")}</p>
+                {/each}
+            </Card>
+        {/each}
     </div>
 </Page>
 {:else if isSingle}
