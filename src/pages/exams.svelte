@@ -9,26 +9,30 @@
     import { nullish, randInt } from "$lib/utils"
     import { onMount } from "svelte"
 
-
     const api = useApi()
     const query = api.fetchExams()
 
-    let rtf = $derived(new Intl.RelativeTimeFormat(i18n.language, { style: "long" }))
+    let rtf = $derived(
+        new Intl.RelativeTimeFormat(i18n.language, { style: "long" }),
+    )
 
     const SECOND = 1000
     const MINUTE = 60 * SECOND
     const HOUR = 60 * MINUTE
     const DAY = 24 * HOUR
 
-    let dtf = $derived(new Intl.DateTimeFormat(i18n.language, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-    }))
+    let dtf = $derived(
+        new Intl.DateTimeFormat(i18n.language, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        }),
+    )
 
-    const getDelta = (timestamp: number, now: number) => timestamp * SECOND - now
+    const getDelta = (timestamp: number, now: number) =>
+        timestamp * SECOND - now
     const getDate = (timestamp: number) => {
         const date = new Date(timestamp * 1000)
         return dtf.format(date)
@@ -89,7 +93,7 @@
     {/snippet}
     <div class="grid mx-auto p-2 gap-2 max-w-md">
         {#if nullish(query.data)}
-            {#each {length: 6} as _}
+            {#each { length: 6 } as _}
                 <Card>
                     {#snippet title()}
                         <Skeleton symbols={randInt(40, 60)} />
@@ -97,16 +101,18 @@
                     <p><Skeleton symbols={subject()} /></p>
                     <p><Skeleton symbols={5} /></p>
                     <p><Skeleton symbols={teacher()} class="bg-primary" /></p>
-                    <p class="text-right"><Skeleton symbols={randInt(5, 15)} /></p>
+                    <p class="text-right">
+                        <Skeleton symbols={randInt(5, 15)} />
+                    </p>
                 </Card>
             {/each}
         {:else}
-            {#each query.data as {audience, date, subject, teacher, type, teacher_link}}
+            {#each query.data as { audience, date, subject, teacher, type, teacher_link }}
                 {@const delta = relativeTime(date, now)}
                 <Card title={getDate(date)} active={isActive(date, now)}>
                     <p>{subject}</p>
                     <p class="font-bold">{audience}</p>
-                    <p><TeacherLink {teacher} {teacher_link} /> </p>
+                    <p><TeacherLink {teacher} {teacher_link} /></p>
                     {#if type === "consultation"}
                         <p class="text-right">{_("exams.consultation")}</p>
                     {/if}
@@ -123,7 +129,5 @@
                 {_("no-data")}
             {/each}
         {/if}
-
     </div>
 </Page>
-
