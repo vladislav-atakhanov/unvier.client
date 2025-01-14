@@ -7,7 +7,19 @@
     import { useApp } from "../../app.svelte"
 
     const router = useRouter()
-    const { title, left, right, onTitleClick, bottom }: {title?: Snippet | string, left?: Snippet, right?: Snippet, onTitleClick?: (title: string) => unknown, bottom?: Snippet} = $props()
+    const {
+        title,
+        left,
+        right,
+        onTitleClick,
+        bottom,
+    }: {
+        title?: Snippet | string
+        left?: Snippet
+        right?: Snippet
+        onTitleClick?: (title: string) => unknown
+        bottom?: Snippet
+    } = $props()
 
     let canBack = $state(false)
     let element: HTMLElement
@@ -15,34 +27,39 @@
         const page = element.closest(".page")
         if (!page) return
         const pages = page?.parentElement?.querySelectorAll(".page") ?? []
-        const index = Array.from(pages as HTMLElement[]).findIndex((p) => p === page)
+        const index = Array.from(pages as HTMLElement[]).findIndex(
+            (p) => p === page,
+        )
         canBack = index !== 0
     })
 
     const app = useApp()
     onMount(() => app.updateThemeColor())
 
-    const onTitleElementClick = onTitleClick ? (event: any) => {
-        const title = (event.target as HTMLElement)?.closest("h1")
-        if (!title?.textContent) return
-        onTitleClick?.(title.textContent)
-    } : undefined
+    const onTitleElementClick = onTitleClick
+        ? (event: any) => {
+              const title = (event.target as HTMLElement)?.closest("h1")
+              if (!title?.textContent) return
+              onTitleClick?.(title.textContent)
+          }
+        : undefined
 </script>
 
 <header class="bg-background header" bind:this={element}>
-    <div class="grid items-center gap-2 p-2" class:h-14={!bottom} class:h-12={bottom} class:pb-0={bottom}>
+    <div
+        class="grid items-center gap-2 p-2"
+        class:h-14={!bottom}
+        class:h-12={bottom}
+        class:pb-0={bottom}
+    >
         <div>
             {#if canBack}
-                <Button size="icon" variant="ghost" onclick={() => router.back()}>
+                <Button
+                    size="icon"
+                    variant="ghost"
+                    onclick={() => router.back()}
+                >
                     <ArrowLeft />
-                </Button>
-            {:else if app.drawer}
-                <Button size="icon" variant="ghost" onclick={() => app.toggleDrawer()}>
-                    {#if app.drawerState === "close"}
-                        <Menu />
-                    {:else}
-                        <X />
-                    {/if}
                 </Button>
             {/if}
             {@render left?.()}
@@ -51,7 +68,8 @@
             {#if title}
                 <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                <h1 class="text-xl font-bold whitespace-nowrap text-ellipsis absolute w-full top-1/2 block overflow-hidden"
+                <h1
+                    class="text-xl font-bold whitespace-nowrap text-ellipsis absolute w-full top-1/2 block overflow-hidden"
                     style:transform="translateY(-50%)"
                     onclick={onTitleElementClick}
                 >
@@ -71,6 +89,7 @@
     {/if}
     <Separator />
 </header>
+
 <style>
     .relative::before {
         content: "0";

@@ -96,8 +96,7 @@ export class HistoryRouter implements Router {
         if (!this.element) return
         if (this.history.length === 1) return
         const { scrollLeft } = this.element
-        const drawerWidth = this.app?.drawer?.clientWidth ?? 0
-        const index = Math.round((scrollLeft - drawerWidth) / window.innerWidth)
+        const index = Math.round(scrollLeft / window.innerWidth)
         if (index + 1 !== this.history.length) {
             this.history = this.history.slice(0, index + 1)
             const { path, fragment, query } = this.history.at(-1) as HistoryItem

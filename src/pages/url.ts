@@ -11,6 +11,7 @@ export const routes = {
     filesItem: "/files/:id",
     telegram: "https://t.me/univerapp",
     faq: "/faq",
+    menu: "/menu",
     faqItem: "/faq/:id",
 
     get home() {

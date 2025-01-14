@@ -5,17 +5,17 @@
 </script>
 
 <script lang="ts">
-    import { getContext, onMount, setContext, type Snippet, tick, } from "svelte"
+    import { getContext, setContext, type Snippet, tick } from "svelte"
     import { debounce, findClosest, hostMatches, shouldNavigate } from "./utils"
     import { HistoryRouter, ItemRouter } from "./router.svelte.ts"
     import type { Router } from "./@types.ts"
     import { useApp } from "../../app.svelte"
-    import { sleep } from "$lib/utils.ts"
     let {
-        children, home="/", drawer, navigation
+        children,
+        home = "/",
+        navigation,
     }: {
-        children?: Snippet<[Router]>,
-        drawer?: Snippet,
+        children?: Snippet<[Router]>
         navigation?: Snippet
         home?: string
     } = $props()
@@ -53,52 +53,35 @@
         }
     }
 
-    const routerEnd = debounce(() => tick().then(() => router.onScrollEnd()), 100)
+    const routerEnd = debounce(
+        () => tick().then(() => router.onScrollEnd()),
+        100,
+    )
 
     const onscroll = () => {
         routerEnd()
         router.onscroll()
     }
-
-    const scrollToLastPage = () => {
-        if (!drawer) return
-        const pages = router.element?.querySelectorAll(".page") ?? []
-        const page = pages[pages.length - 1] as HTMLElement
-
-        if (!page) return
-        if (page.dataset.page) return
-        const {x} = page.getBoundingClientRect()
-        if (x <= 0) {
-            sleep(1).then(scrollToLastPage)
-            return
-        }
-        router.element?.scrollTo({
-            left: x,
-            behavior: "instant"
-        })
-    }
-
-    onMount(() => tick().then(scrollToLastPage))
-
-
 </script>
 
-
-
-<!-- svelte-ignore a11y_click_events_have_key_events -->
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<div
-    onclick={links}
-    class="router flex w-full overflow-x-auto items-start relative"
-    bind:this={router.element}
-    {onscroll}
->
-    {@render drawer?.()}
-    {#each router.history as item}
-        {@render children?.(new ItemRouter(router, item))}
-    {/each}
-    {@render navigation?.()}
-</div>
+<svelte:boundary>
+    {#snippet failed(error)}
+        <pre>{error} er</pre>
+    {/snippet}
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div
+        onclick={links}
+        class="router flex w-full overflow-x-auto items-start relative"
+        bind:this={router.element}
+        {onscroll}
+    >
+        {#each router.history as item}
+            {@render children?.(new ItemRouter(router, item))}
+        {/each}
+        {@render navigation?.()}
+    </div>
+</svelte:boundary>
 
 <style>
     .router {

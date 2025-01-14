@@ -14,8 +14,8 @@ export const pattern = (
         blank?: boolean
         decode?: typeof decodeURIComponent
     } = {}
-): Record<string, string | undefined> | null => {
-    const blanks: Record<string, string | undefined> = {}
+): Record<string, string> | null => {
+    const blanks: Record<string, string> = {}
     const rgx =
         pattern instanceof RegExp
             ? pattern
@@ -23,7 +23,7 @@ export const pattern = (
                   if (seg) {
                       const pfx = seg[0]
                       if (pfx === "*") {
-                          blanks["wild"] = undefined
+                          delete blanks["wild"]
                           rgx += "/(?<wild>.*)"
                       } else if (pfx === ":") {
                           const opt = seg.indexOf("?", 1)
@@ -35,7 +35,7 @@ export const pattern = (
                               1,
                               isOpt ? opt : isExt ? ext : seg.length
                           )
-                          blanks[key] = undefined
+                          delete blanks[key]
 
                           rgx +=
                               isOpt && !isExt
