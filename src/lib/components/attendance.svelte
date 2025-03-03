@@ -26,8 +26,7 @@
     )
 
     let activeTab = $derived(
-        groups
-            .keys()
+        Array.from(groups.keys())
             .reduce((active, value) =>
                 active.localeCompare(value) === 1 ? active : value,
             ),
